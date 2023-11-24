@@ -11,6 +11,8 @@
 		45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BDA2B10EA72000FA293 /* ContentView.swift */; };
 		45669BDD2B10EA74000FA293 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45669BDC2B10EA74000FA293 /* Assets.xcassets */; };
 		45669BE12B10EA74000FA293 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45669BE02B10EA74000FA293 /* Preview Assets.xcassets */; };
+		45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BE92B10FD8D000FA293 /* ColorScheme.swift */; };
+		45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BEB2B10FDC8000FA293 /* LoginScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		45669BDC2B10EA74000FA293 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45669BDE2B10EA74000FA293 /* Pontentique.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pontentique.entitlements; sourceTree = "<group>"; };
 		45669BE02B10EA74000FA293 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		45669BE92B10FD8D000FA293 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
+		45669BEB2B10FDC8000FA293 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				45669BD82B10EA72000FA293 /* PontentiqueApp.swift */,
-				45669BDA2B10EA72000FA293 /* ContentView.swift */,
+				45669BE82B10ECE0000FA293 /* Views */,
 				45669BDC2B10EA74000FA293 /* Assets.xcassets */,
 				45669BDE2B10EA74000FA293 /* Pontentique.entitlements */,
 				45669BDF2B10EA74000FA293 /* Preview Content */,
@@ -67,6 +71,16 @@
 				45669BE02B10EA74000FA293 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		45669BE82B10ECE0000FA293 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				45669BDA2B10EA72000FA293 /* ContentView.swift */,
+				45669BE92B10FD8D000FA293 /* ColorScheme.swift */,
+				45669BEB2B10FDC8000FA293 /* LoginScreen.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +154,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */,
+				45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */,
+				45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
