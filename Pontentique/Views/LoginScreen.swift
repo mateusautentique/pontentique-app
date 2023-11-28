@@ -51,11 +51,7 @@ struct LoginScreen: View {
                     HStack {
                         Button(action: {
                             print("Login")
-                            print(textFieldLogin)
-                            print(textFieldPassword)
-                            if textFieldLogin == "admin" && textFieldPassword == "admin" {
-                                self.isAuthenticated = true
-                            }
+//                            validateLogin(textFieldLogin, textFieldPassword)
                         }) {
                             Text("Entrar")
                                 .padding(12)

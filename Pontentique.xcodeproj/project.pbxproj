@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4525C6682B16411300B2A799 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C6672B16411300B2A799 /* Errors.swift */; };
+		4525C66C2B16458C00B2A799 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66B2B16458C00B2A799 /* LoginViewController.swift */; };
+		4525C6702B165E0B00B2A799 /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */; };
+		4525C6722B166F1600B2A799 /* ValidateSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C6712B166F1600B2A799 /* ValidateSession.swift */; };
+		455C07792B1516A30055723C /* ValidateLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455C07782B1516A30055723C /* ValidateLogin.swift */; };
+		455C077B2B162B4A0055723C /* aaa_debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455C077A2B162B490055723C /* aaa_debug.swift */; };
 		45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BD82B10EA72000FA293 /* PontentiqueApp.swift */; };
 		45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BDA2B10EA72000FA293 /* ContentView.swift */; };
 		45669BDD2B10EA74000FA293 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45669BDC2B10EA74000FA293 /* Assets.xcassets */; };
@@ -14,10 +20,18 @@
 		45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BE92B10FD8D000FA293 /* ColorScheme.swift */; };
 		45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BEB2B10FDC8000FA293 /* LoginScreen.swift */; };
 		45669BEE2B111294000FA293 /* MainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BED2B111294000FA293 /* MainPanel.swift */; };
-		45669BF42B111CA7000FA293 /* LoginInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BF32B111CA7000FA293 /* LoginInfo.swift */; };
+		45669BF42B111CA7000FA293 /* SessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BF32B111CA7000FA293 /* SessionInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4525C6672B16411300B2A799 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		4525C66B2B16458C00B2A799 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4525C66D2B164C4700B2A799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4525C66E2B16560800B2A799 /* PontentiqueRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PontentiqueRelease.entitlements; sourceTree = "<group>"; };
+		4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
+		4525C6712B166F1600B2A799 /* ValidateSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateSession.swift; sourceTree = "<group>"; };
+		455C07782B1516A30055723C /* ValidateLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateLogin.swift; sourceTree = "<group>"; };
+		455C077A2B162B490055723C /* aaa_debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aaa_debug.swift; sourceTree = "<group>"; };
 		45669BD52B10EA72000FA293 /* Pontentique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pontentique.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45669BD82B10EA72000FA293 /* PontentiqueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PontentiqueApp.swift; sourceTree = "<group>"; };
 		45669BDA2B10EA72000FA293 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -27,7 +41,7 @@
 		45669BE92B10FD8D000FA293 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		45669BEB2B10FDC8000FA293 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 		45669BED2B111294000FA293 /* MainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPanel.swift; sourceTree = "<group>"; };
-		45669BF32B111CA7000FA293 /* LoginInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInfo.swift; sourceTree = "<group>"; };
+		45669BF32B111CA7000FA293 /* SessionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +74,8 @@
 		45669BD72B10EA72000FA293 /* Pontentique */ = {
 			isa = PBXGroup;
 			children = (
+				4525C66E2B16560800B2A799 /* PontentiqueRelease.entitlements */,
+				4525C66D2B164C4700B2A799 /* Info.plist */,
 				45669BD82B10EA72000FA293 /* PontentiqueApp.swift */,
 				45669BF22B111C95000FA293 /* Model */,
 				45669BF12B111C84000FA293 /* Controlers */,
@@ -82,10 +98,11 @@
 		45669BE82B10ECE0000FA293 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				455C077A2B162B490055723C /* aaa_debug.swift */,
 				45669BDA2B10EA72000FA293 /* ContentView.swift */,
-				45669BE92B10FD8D000FA293 /* ColorScheme.swift */,
-				45669BED2B111294000FA293 /* MainPanel.swift */,
 				45669BEB2B10FDC8000FA293 /* LoginScreen.swift */,
+				45669BED2B111294000FA293 /* MainPanel.swift */,
+				45669BE92B10FD8D000FA293 /* ColorScheme.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -93,6 +110,7 @@
 		45669BF12B111C84000FA293 /* Controlers */ = {
 			isa = PBXGroup;
 			children = (
+				4525C66B2B16458C00B2A799 /* LoginViewController.swift */,
 			);
 			path = Controlers;
 			sourceTree = "<group>";
@@ -100,7 +118,11 @@
 		45669BF22B111C95000FA293 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				45669BF32B111CA7000FA293 /* LoginInfo.swift */,
+				45669BF32B111CA7000FA293 /* SessionInfo.swift */,
+				455C07782B1516A30055723C /* ValidateLogin.swift */,
+				4525C6712B166F1600B2A799 /* ValidateSession.swift */,
+				4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */,
+				4525C6672B16411300B2A799 /* Errors.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -177,10 +199,16 @@
 			files = (
 				45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */,
 				45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */,
+				4525C6702B165E0B00B2A799 /* SessionDelegate.swift in Sources */,
+				455C07792B1516A30055723C /* ValidateLogin.swift in Sources */,
 				45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */,
-				45669BF42B111CA7000FA293 /* LoginInfo.swift in Sources */,
+				45669BF42B111CA7000FA293 /* SessionInfo.swift in Sources */,
+				455C077B2B162B4A0055723C /* aaa_debug.swift in Sources */,
 				45669BEE2B111294000FA293 /* MainPanel.swift in Sources */,
+				4525C6682B16411300B2A799 /* Errors.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,
+				4525C6722B166F1600B2A799 /* ValidateSession.swift in Sources */,
+				4525C66C2B16458C00B2A799 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +342,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pontentique/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "O aplicativo precisa acessar a máquina de ponto";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -344,7 +374,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Pontentique/Pontentique.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Pontentique/PontentiqueRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pontentique/Preview Content\"";
@@ -352,6 +382,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pontentique/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "O aplicativo precisa acessar a máquina de ponto";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
