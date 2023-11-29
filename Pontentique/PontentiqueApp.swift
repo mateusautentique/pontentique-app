@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct PontentiqueApp: App {
+    @StateObject var sessionInfo = SessionInfo(session: "")
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environmentObject(sessionInfo)
         }
     }
 }

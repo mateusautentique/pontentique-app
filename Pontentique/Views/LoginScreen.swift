@@ -11,6 +11,7 @@ struct LoginScreen: View {
     @State var textFieldLogin: String = ""
     @State var textFieldPassword: String = ""
     @Binding var isAuthenticated: Bool
+    @EnvironmentObject var sessionInfo: SessionInfo
     
     var body: some View {
         NavigationStack {
@@ -50,8 +51,18 @@ struct LoginScreen: View {
                     
                     HStack {
                         Button(action: {
-                            print("Login")
-//                            validateLogin(textFieldLogin, textFieldPassword)
+                            Task {
+                                do {
+                                    let newSessionInfo = try await userLogin(textFieldLogin, textFieldPassword)
+                                    print (newSessionInfo.session)
+                                    isAuthenticated = try await validateSession(newSessionInfo.session)
+
+                                    sessionInfo.session = newSessionInfo.session
+                                } catch {
+                                    print("An error occurred: \(error)")
+                                }
+                            }
+                            
                         }) {
                             Text("Entrar")
                                 .padding(12)

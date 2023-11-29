@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainPanel: View {
     @Binding var isAuthenticated: Bool
+    @EnvironmentObject var sessionInfo: SessionInfo
     
     var body: some View {
         NavigationStack {
@@ -16,7 +17,14 @@ struct MainPanel: View {
                 LoginScreen(isAuthenticated: $isAuthenticated)
             } else {
                 Button(action: {
-                    self.isAuthenticated = false
+                    Task {
+                        do {
+                            try await userLogout(sessionInfo.session)
+                            isAuthenticated = false
+                        } catch {
+                            print("An error occurred: \(error)")
+                        }
+                    }
                 }) {
                     Text("Logout")
                 }

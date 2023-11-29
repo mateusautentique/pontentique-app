@@ -17,6 +17,13 @@ struct debug: View {
                 } catch {
                     print("An error occurred: \(error)")
                 }
+                try await userLogout("mlZLTPetBBDTRmwkybcCffnL")
+                do {
+                    let sessionisValid = try await validateSession("mlZLTPetBBDTRmwkybcCffnL")
+                    print(sessionisValid)
+                } catch {
+                    print("An error occurred: \(error)")
+                }
             }
         }) {
             Text("Debug")

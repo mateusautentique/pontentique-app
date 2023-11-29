@@ -7,11 +7,14 @@
 
 import Foundation
 
-struct SessionInfo: Codable{
+class SessionInfo: Codable, ObservableObject{
     var session: String
+    
+    init(session: String) {
+        self.session = session
+    }
 }
 
-struct SessionValidationResponse: Codable {
+struct SessionValidationResponse: Codable{
     let sessionIsValid: Bool
 }
-
