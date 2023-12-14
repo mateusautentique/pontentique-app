@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 struct LoginScreen: View {
     @State var textFieldLogin: String = ""
     @State var textFieldPassword: String = ""
     @Binding var isAuthenticated: Bool
+    
+    @State private var showRegisterScreen = false
     
     var body: some View {
         NavigationStack {
@@ -44,6 +47,15 @@ struct LoginScreen: View {
                             .cornerRadius(10)
                             .frame(width: 220)
                             .padding(.bottom, 10)
+                            .onReceive(Just(textFieldLogin)) { newValue in
+                                let filtered = newValue.filter { "0123456789".contains($0) }
+                                if filtered != newValue {
+                                    self.textFieldLogin = filtered
+                                }
+                                if textFieldLogin.count > 11 {
+                                    textFieldLogin = String(textFieldLogin.prefix(11))
+                                }
+                            }
                         Text("Senha")
                             .font(.subheadline)
                             .padding(.bottom, 0)
@@ -73,11 +85,7 @@ struct LoginScreen: View {
                             .buttonStyle(PlainButtonStyle())
                             .padding(.trailing, 10)
                             
-                            
-                            
-                            Button(action: {
-                                print("Register")
-                            }) {
+                            NavigationLink(destination: RegisterScreen()) {
                                 Text("Registrar")
                                     .padding(12)
                                     .frame(width: 100)

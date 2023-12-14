@@ -13,11 +13,7 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            if isAuthenticated {
-                MainPanel(isAuthenticated: $isAuthenticated)
-            } else {
-                LoginScreen(isAuthenticated: $isAuthenticated)
-            }
+            LoginScreen(isAuthenticated: $isAuthenticated)
         }
     }
 }
