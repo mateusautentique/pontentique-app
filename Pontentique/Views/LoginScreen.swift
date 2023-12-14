@@ -11,7 +11,6 @@ struct LoginScreen: View {
     @State var textFieldLogin: String = ""
     @State var textFieldPassword: String = ""
     @Binding var isAuthenticated: Bool
-    @EnvironmentObject var sessionInfo: SessionInfo
     
     var body: some View {
         NavigationStack {
@@ -32,60 +31,61 @@ struct LoginScreen: View {
                     
                     Spacer()
                     
-                    TextField("Login", text: $textFieldLogin)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding(10)
-                        .background(ColorScheme.fieldBgColor)
-                        .foregroundColor(ColorScheme.textColor)
-                        .cornerRadius(10)
-                        .frame(width: 220)
-                    
-                    SecureField("Senha", text: $textFieldPassword)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding(10)
-                        .background(ColorScheme.fieldBgColor)
-                        .foregroundColor(ColorScheme.textColor)
-                        .cornerRadius(10)
-                        .frame(width: 220)
-                        .padding(.top, 10)
-                    
-                    HStack {
-                        Button(action: {
-                            Task {
-                                do {
-                                    let newSessionInfo = try await userLogin(textFieldLogin, textFieldPassword)
-                                    print (newSessionInfo.session)
-                                    isAuthenticated = try await validateSession(newSessionInfo.session)
-
-                                    sessionInfo.session = newSessionInfo.session
-                                } catch {
-                                    print("An error occurred: \(error)")
+                    VStack(alignment: .leading) {
+                        Text("CPF")
+                            .font(.subheadline)
+                            .padding(.bottom, 0)
+                            .padding(.leading, 5)
+                        TextField("CPF", text: $textFieldLogin)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding(10)
+                            .background(ColorScheme.fieldBgColor)
+                            .foregroundColor(ColorScheme.textColor)
+                            .cornerRadius(10)
+                            .frame(width: 220)
+                            .padding(.bottom, 10)
+                        Text("Senha")
+                            .font(.subheadline)
+                            .padding(.bottom, 0)
+                            .padding(.leading, 5)
+                        SecureField("Senha", text: $textFieldPassword)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding(10)
+                            .background(ColorScheme.fieldBgColor)
+                            .foregroundColor(ColorScheme.textColor)
+                            .cornerRadius(10)
+                            .frame(width: 220)
+                        
+                        HStack {
+                            Button(action: {
+                                Task {
+                                    print("login")
                                 }
+                            }) {
+                                Text("Entrar")
+                                    .padding(12)
+                                    .frame(width: 100)
+                                    .background(ColorScheme.primaryColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
                             }
                             
-                        }) {
-                            Text("Entrar")
-                                .padding(12)
-                                .frame(width: 100)
-                                .background(ColorScheme.primaryColor)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.trailing, 10)
+                            
+                            Button(action: {
+                                print("Register")
+                            }) {
+                                Text("Registrar")
+                                    .padding(12)
+                                    .frame(width: 100)
+                                    .background(ColorScheme.primaryColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        
-                        .buttonStyle(PlainButtonStyle())
-                        .padding(.trailing, 10)
-                        
-                        Button(action: {
-                            print("Register")
-                        }) {
-                            Text("Registrar")
-                                .padding(12)
-                                .frame(width: 100)
-                                .background(ColorScheme.primaryColor)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                        .padding(.top, 15)
                     }
                     .padding()
                     
@@ -97,11 +97,13 @@ struct LoginScreen: View {
                 Spacer()
             }
             .padding()
-        .background(ColorScheme.appBackgroudColor)
+            .background(ColorScheme.appBackgroudColor)
         }
     }
 }
 
-#Preview {
-    LoginScreen(isAuthenticated: .constant(false))
+struct LoginScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginScreen(textFieldLogin: "", isAuthenticated: .constant(false))
+    }
 }

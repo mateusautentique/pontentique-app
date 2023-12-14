@@ -9,21 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isAuthenticated = false
-    @EnvironmentObject var sessionInfo: SessionInfo
     
 
     var body: some View {
         NavigationStack {
             if isAuthenticated {
-                MainPanel(isAuthenticated: $isAuthenticated).environmentObject(sessionInfo)
+                MainPanel(isAuthenticated: $isAuthenticated)
             } else {
-                LoginScreen(isAuthenticated: $isAuthenticated).environmentObject(sessionInfo)
+                LoginScreen(isAuthenticated: $isAuthenticated)
             }
         }
     }
 }
 
 #Preview {
-    ContentView().environmentObject(SessionInfo(session: ""))
+    ContentView()
 }
 

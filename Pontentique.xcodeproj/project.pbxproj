@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4525C6682B16411300B2A799 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C6672B16411300B2A799 /* Errors.swift */; };
 		4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66B2B16458C00B2A799 /* AuthController.swift */; };
 		4525C6702B165E0B00B2A799 /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */; };
-		4525C6722B166F1600B2A799 /* SessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C6712B166F1600B2A799 /* SessionController.swift */; };
-		455C077B2B162B4A0055723C /* aaa_debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455C077A2B162B490055723C /* aaa_debug.swift */; };
 		45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BD82B10EA72000FA293 /* PontentiqueApp.swift */; };
 		45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BDA2B10EA72000FA293 /* ContentView.swift */; };
 		45669BDD2B10EA74000FA293 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45669BDC2B10EA74000FA293 /* Assets.xcassets */; };
@@ -23,13 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4525C6672B16411300B2A799 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		4525C66B2B16458C00B2A799 /* AuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthController.swift; sourceTree = "<group>"; };
 		4525C66D2B164C4700B2A799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4525C66E2B16560800B2A799 /* PontentiqueRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PontentiqueRelease.entitlements; sourceTree = "<group>"; };
 		4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
-		4525C6712B166F1600B2A799 /* SessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionController.swift; sourceTree = "<group>"; };
-		455C077A2B162B490055723C /* aaa_debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aaa_debug.swift; sourceTree = "<group>"; };
 		45669BD52B10EA72000FA293 /* Pontentique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pontentique.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45669BD82B10EA72000FA293 /* PontentiqueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PontentiqueApp.swift; sourceTree = "<group>"; };
 		45669BDA2B10EA72000FA293 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -96,7 +90,6 @@
 		45669BE82B10ECE0000FA293 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				455C077A2B162B490055723C /* aaa_debug.swift */,
 				45669BDA2B10EA72000FA293 /* ContentView.swift */,
 				45669BEB2B10FDC8000FA293 /* LoginScreen.swift */,
 				45669BED2B111294000FA293 /* MainPanel.swift */,
@@ -108,7 +101,6 @@
 		45669BF12B111C84000FA293 /* Controlers */ = {
 			isa = PBXGroup;
 			children = (
-				4525C6712B166F1600B2A799 /* SessionController.swift */,
 				4525C66B2B16458C00B2A799 /* AuthController.swift */,
 			);
 			path = Controlers;
@@ -119,7 +111,6 @@
 			children = (
 				45669BF32B111CA7000FA293 /* Session.swift */,
 				4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */,
-				4525C6672B16411300B2A799 /* Errors.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -199,11 +190,8 @@
 				4525C6702B165E0B00B2A799 /* SessionDelegate.swift in Sources */,
 				45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */,
 				45669BF42B111CA7000FA293 /* Session.swift in Sources */,
-				455C077B2B162B4A0055723C /* aaa_debug.swift in Sources */,
 				45669BEE2B111294000FA293 /* MainPanel.swift in Sources */,
-				4525C6682B16411300B2A799 /* Errors.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,
-				4525C6722B166F1600B2A799 /* SessionController.swift in Sources */,
 				4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
