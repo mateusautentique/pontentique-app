@@ -73,6 +73,8 @@ struct LoginScreen: View {
                             .buttonStyle(PlainButtonStyle())
                             .padding(.trailing, 10)
                             
+                            
+                            
                             Button(action: {
                                 print("Register")
                             }) {
