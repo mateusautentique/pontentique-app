@@ -30,9 +30,9 @@ struct LoginScreen: View {
                             .font(.subheadline)
                     }
                     .foregroundColor(ColorScheme.textColor)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 40)
                     
-                    Spacer()
+                    //Spacer()
                     
                     VStack(alignment: .leading) {
                         Text("CPF")
@@ -67,11 +67,22 @@ struct LoginScreen: View {
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
+                            .padding(.bottom, 10)
                         
                         HStack {
                             Button(action: {
                                 Task {
-                                    print("login")
+                                    userLogin(textFieldLogin, textFieldPassword) { (token, error) in
+                                        if let token = token {
+                                            // Handle token
+                                            print("Token: \(token)")
+                                            // Navigate to the next screen or save the token for future API requests
+                                        } else if let error = error {
+                                            // Handle error
+                                            print("Error: \(error.localizedDescription)")
+                                            // Show an alert to the user with the error message
+                                        }
+                                    }
                                 }
                             }) {
                                 Text("Entrar")

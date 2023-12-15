@@ -16,7 +16,7 @@ struct RegisterScreen: View {
     @State private var password_confirmation: String = ""
     let placeHolderEmail = "jair@tuamaeaquelaursa.com"
     
-    @State private var isRegistered = false
+    @State private var registerUser = false
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -123,7 +123,7 @@ struct RegisterScreen: View {
                     Button(action: {
                         Task {
                             // registerUser()
-                            isRegistered = true
+                            registerUser = true
                         }
                     }) {
                         Text("Registrar-se")
@@ -131,7 +131,7 @@ struct RegisterScreen: View {
                             .background(ColorScheme.primaryColor)
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                            .fullScreenCover(isPresented: $isRegistered) {
+                            .fullScreenCover(isPresented: $registerUser) {
                                 //PLACEHOLDER OBV
                                 LoginScreen(isAuthenticated: .constant(false))
                                     .foregroundColor(ColorScheme.textColor)

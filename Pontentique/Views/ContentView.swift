@@ -10,10 +10,14 @@ import SwiftUI
 struct ContentView: View {
     @State private var isAuthenticated = false
     
-
+    
     var body: some View {
         NavigationStack {
-            LoginScreen(isAuthenticated: $isAuthenticated)
+            if isAuthenticated {
+                MainPanel(isAuthenticated: $isAuthenticated)
+            } else {
+                LoginScreen(isAuthenticated: $isAuthenticated)
+            }
         }
     }
 }

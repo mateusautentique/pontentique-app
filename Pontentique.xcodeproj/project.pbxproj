@@ -10,6 +10,7 @@
 		4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66B2B16458C00B2A799 /* AuthController.swift */; };
 		4525C6702B165E0B00B2A799 /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */; };
 		455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */; };
+		455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A72B2C8E7700CB161C /* UserSession.swift */; };
 		45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BD82B10EA72000FA293 /* PontentiqueApp.swift */; };
 		45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BDA2B10EA72000FA293 /* ContentView.swift */; };
 		45669BDD2B10EA74000FA293 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45669BDC2B10EA74000FA293 /* Assets.xcassets */; };
@@ -17,7 +18,6 @@
 		45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BE92B10FD8D000FA293 /* ColorScheme.swift */; };
 		45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BEB2B10FDC8000FA293 /* LoginScreen.swift */; };
 		45669BEE2B111294000FA293 /* MainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BED2B111294000FA293 /* MainPanel.swift */; };
-		45669BF42B111CA7000FA293 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BF32B111CA7000FA293 /* Session.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +26,7 @@
 		4525C66E2B16560800B2A799 /* PontentiqueRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PontentiqueRelease.entitlements; sourceTree = "<group>"; };
 		4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
 		455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScreen.swift; sourceTree = "<group>"; };
+		455F82A72B2C8E7700CB161C /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		45669BD52B10EA72000FA293 /* Pontentique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pontentique.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45669BD82B10EA72000FA293 /* PontentiqueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PontentiqueApp.swift; sourceTree = "<group>"; };
 		45669BDA2B10EA72000FA293 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -35,7 +36,6 @@
 		45669BE92B10FD8D000FA293 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		45669BEB2B10FDC8000FA293 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 		45669BED2B111294000FA293 /* MainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPanel.swift; sourceTree = "<group>"; };
-		45669BF32B111CA7000FA293 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,8 +112,8 @@
 		45669BF22B111C95000FA293 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				45669BF32B111CA7000FA293 /* Session.swift */,
 				4525C66F2B165E0B00B2A799 /* SessionDelegate.swift */,
+				455F82A72B2C8E7700CB161C /* UserSession.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -193,8 +193,8 @@
 				4525C6702B165E0B00B2A799 /* SessionDelegate.swift in Sources */,
 				455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */,
 				45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */,
-				45669BF42B111CA7000FA293 /* Session.swift in Sources */,
 				45669BEE2B111294000FA293 /* MainPanel.swift in Sources */,
+				455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,
 				4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */,
 			);
