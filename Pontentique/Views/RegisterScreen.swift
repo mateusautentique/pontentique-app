@@ -135,6 +135,7 @@ struct RegisterScreen: View {
                                 //PLACEHOLDER OBV
                                 LoginScreen(isAuthenticated: .constant(false))
                                     .foregroundColor(ColorScheme.textColor)
+                                    .multilineTextAlignment(.leading)
                                 //PLACEHOLDER OBV
                             }
                     }
