@@ -12,6 +12,7 @@ struct LoginScreen: View {
     @State var textFieldLogin: String = ""
     @State var textFieldPassword: String = ""
     @Binding var isAuthenticated: Bool
+    @State private var errorMessage: String?
     
     @State private var showRegisterScreen = false
     
@@ -74,13 +75,12 @@ struct LoginScreen: View {
                                 Task {
                                     userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                         if let token = token {
+                                            self.errorMessage = nil
                                             // Handle token
                                             print("Token: \(token)")
                                             // Navigate to the next screen or save the token for future API requests
                                         } else if let error = error {
-                                            // Handle error
-                                            print("Error: \(error.localizedDescription)")
-                                            // Show an alert to the user with the error message
+                                            self.errorMessage = error.localizedDescription
                                         }
                                     }
                                 }
@@ -109,6 +109,16 @@ struct LoginScreen: View {
                         .padding(.top, 15)
                     }
                     .padding()
+                    
+                    HStack {
+                        Spacer()
+                        if let errorMessage = errorMessage {
+                            Text("ⓘ \(errorMessage)")
+                                .foregroundColor(.red)
+                                .padding(.top, 10)
+                        }
+                        Spacer()
+                    }
                     
                     Spacer()
                 }
