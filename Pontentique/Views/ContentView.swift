@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var isAuthenticated = false
-    
+    @StateObject var sessionInfo = SessionInfo()
     
     var body: some View {
-        NavigationStack {
-            if isAuthenticated {
-                MainPanel(isAuthenticated: $isAuthenticated)
+        NavigationView {
+            if sessionInfo.isLoggedIn {
+                UserMainPanel()
             } else {
-                LoginScreen(isAuthenticated: $isAuthenticated)
+                LoginScreen()
             }
         }
     }

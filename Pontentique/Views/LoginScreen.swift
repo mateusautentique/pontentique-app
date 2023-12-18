@@ -11,10 +11,11 @@ import Combine
 struct LoginScreen: View {
     @State var textFieldLogin: String = ""
     @State var textFieldPassword: String = ""
-    @Binding var isAuthenticated: Bool
     @State private var errorMessage: String?
     
     @State private var showRegisterScreen = false
+    @State private var isLoggedIn = false
+    
     
     var body: some View {
         NavigationStack {
@@ -76,9 +77,14 @@ struct LoginScreen: View {
                                     userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                         if let token = token {
                                             self.errorMessage = nil
-                                            // Handle token
-                                            print("Token: \(token)")
-                                            // Navigate to the next screen or save the token for future API requests
+                                            getLoggedUser(token){ (json, error) in
+                                                if let json = json {
+                                                    UserSession.current = .loggedIn(token: token, id: json["id"] as! Int, name: json["user_name"] as! String)
+                                                    isLoggedIn = true
+                                                } else if let error = error {
+                                                    self.errorMessage = error.localizedDescription
+                                                }
+                                            }
                                         } else if let error = error {
                                             self.errorMessage = error.localizedDescription
                                         }
@@ -92,17 +98,29 @@ struct LoginScreen: View {
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
                             }
-                            
                             .buttonStyle(PlainButtonStyle())
                             .padding(.trailing, 10)
+                            .navigationDestination(isPresented: $isLoggedIn) {
+                                UserMainPanel()
+                                    .navigationBarBackButtonHidden(true)
+                            }
                             
-                            NavigationLink(destination: RegisterScreen()) {
+                            Button(action: {
+                                showRegisterScreen = true
+                            }) {
                                 Text("Registrar")
                                     .padding(12)
                                     .frame(width: 100)
                                     .background(ColorScheme.primaryColor)
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
+                                    .fullScreenCover(isPresented: $showRegisterScreen) {
+                                        RegisterScreen()
+                                            .foregroundColor(ColorScheme.textColor)
+                                            .multilineTextAlignment(.leading)
+                                            .transition(.move(edge: .trailing))
+                                            .animation(.default, value: showRegisterScreen)
+                                    }
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -135,6 +153,6 @@ struct LoginScreen: View {
 
 struct LoginScreen_Previews: PreviewProvider {
     static var previews: some View {
-        LoginScreen(textFieldLogin: "", isAuthenticated: .constant(false))
+        LoginScreen()
     }
 }

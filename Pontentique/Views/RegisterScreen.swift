@@ -21,7 +21,7 @@ struct RegisterScreen: View {
     
     var body: some View {
         NavigationStack {
-            NavigationLink(destination: LoginScreen(isAuthenticated: .constant(false))){}
+            NavigationLink(destination: LoginScreen()){}
                 .navigationBarTitle("Retornar para o Login", displayMode: .inline)
                 .font(.subheadline)
                 .foregroundColor(ColorScheme.textColor)
@@ -133,7 +133,7 @@ struct RegisterScreen: View {
                             .cornerRadius(10)
                             .fullScreenCover(isPresented: $registerUser) {
                                 //PLACEHOLDER OBV
-                                LoginScreen(isAuthenticated: .constant(false))
+                                LoginScreen()
                                     .foregroundColor(ColorScheme.textColor)
                                     .multilineTextAlignment(.leading)
                                 //PLACEHOLDER OBV
