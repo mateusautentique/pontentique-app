@@ -19,6 +19,7 @@
 		455F82BC2B30D64800CB161C /* RowExampleData.json in Resources */ = {isa = PBXBuildFile; fileRef = 455F82BB2B30D64800CB161C /* RowExampleData.json */; };
 		455F82BE2B30DAA100CB161C /* ReportExampleData.json in Resources */ = {isa = PBXBuildFile; fileRef = 455F82BD2B30DAA100CB161C /* ReportExampleData.json */; };
 		455F82C32B3206A700CB161C /* UserMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82C22B3206A700CB161C /* UserMenu.swift */; };
+		455F82C52B32106200CB161C /* ClockReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82C42B32106200CB161C /* ClockReportController.swift */; };
 		45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BD82B10EA72000FA293 /* PontentiqueApp.swift */; };
 		45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BDA2B10EA72000FA293 /* ContentView.swift */; };
 		45669BDD2B10EA74000FA293 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45669BDC2B10EA74000FA293 /* Assets.xcassets */; };
@@ -42,6 +43,7 @@
 		455F82BB2B30D64800CB161C /* RowExampleData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RowExampleData.json; sourceTree = "<group>"; };
 		455F82BD2B30DAA100CB161C /* ReportExampleData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReportExampleData.json; sourceTree = "<group>"; };
 		455F82C22B3206A700CB161C /* UserMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMenu.swift; sourceTree = "<group>"; };
+		455F82C42B32106200CB161C /* ClockReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockReportController.swift; sourceTree = "<group>"; };
 		45669BD52B10EA72000FA293 /* Pontentique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pontentique.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45669BD82B10EA72000FA293 /* PontentiqueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PontentiqueApp.swift; sourceTree = "<group>"; };
 		45669BDA2B10EA72000FA293 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 		45669BF12B111C84000FA293 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				455F82C42B32106200CB161C /* ClockReportController.swift */,
 				4525C66B2B16458C00B2A799 /* AuthController.swift */,
 			);
 			path = Controllers;
@@ -231,6 +234,7 @@
 				45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */,
 				455F82B32B30B20500CB161C /* ClockEntry.swift in Sources */,
 				455F82AA2B307D9E00CB161C /* UserMainPanel.swift in Sources */,
+				455F82C52B32106200CB161C /* ClockReportController.swift in Sources */,
 				455F82B52B30B5EC00CB161C /* ClockReport.swift in Sources */,
 				455F82C32B3206A700CB161C /* UserMenu.swift in Sources */,
 				455F82AF2B30AF6F00CB161C /* ClockTableRow.swift in Sources */,

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UserMainPanel: View {
     //CLOCK INFO
-    let clockReport: ClockReport
+    @StateObject var clockReportController = ClockReportController()
     
     //DATE VARIABLES
     let formatter: DateFormatter = {
@@ -17,7 +17,7 @@ struct UserMainPanel: View {
         formatter.dateFormat = "dd/MM/yyyy"
         return formatter
     }()
-
+    
     var currentDate: String {
         formatter.string(from: Date())
     }
@@ -26,21 +26,30 @@ struct UserMainPanel: View {
         let sevenDaysAgo = Date().addingTimeInterval(-7 * 24 * 60 * 60)
         return formatter.string(from: sevenDaysAgo)
     }
-
-    init(clockReport: ClockReport) {
-        self.clockReport = clockReport
-    }
+    
+    //VIEW VARIABLES
+    @Environment(\.presentationMode) var presentationMode
     
     //VIEW
     var body: some View {
         NavigationStack{
-            
-            
+            NavigationLink(destination: UserMenu()){}
+                .navigationBarTitle("", displayMode: .inline)
+                .navigationBarItems(
+                    leading: HStack {
+                        Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "arrow.backward")
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(ColorScheme.primaryColor)
+                        }
+                        Text("\(weekAgoDate) - \(currentDate)")
+                            .font(.system(size: 25))
+                    }
+                )
+                .padding(.bottom, 15)
             VStack {
-                Text("\(weekAgoDate) - \(currentDate)")
-                    .padding(10)
-                    .fontWeight(.semibold)
-                
                 HStack{
                     Text("DATA")
                         .padding(.trailing, 6)
@@ -55,26 +64,26 @@ struct UserMainPanel: View {
                 .fontWeight(.semibold)
                 .padding(.bottom, 15)
                 
-                ForEach(clockReport.entries) { entry in
+                ForEach(clockReportController.clockReport?.entries ?? []) { entry in
                     ClockTableRow(clockEntry: entry)
-                        .padding(.bottom, 4)
+                        .padding(.bottom, 15)
                 }
-                .padding(.bottom, 10)
                 
                 HStack {
                     Spacer()
                     Text("BANCO TOTAL")
                         .padding(.trailing, 20)
                         .foregroundColor(ColorScheme.tableTextColor)
-                    BalanceValue(balanceHours: clockReport.totalHourBalance)
+                    BalanceValue(balanceHours: clockReportController.clockReport?.totalHourBalance ?? "")
                         .bold()
-                        .padding(.trailing, 6)
                         .frame(width: 60)
-
+                        .padding(.trailing, 6)
+                    
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
                 .background(ColorScheme.clockBtnBgColor)
+                .padding(.top, 10)
                 
                 Spacer()
                 
@@ -95,25 +104,15 @@ struct UserMainPanel: View {
             }
             .background(ColorScheme.appBackgroudColor)
         }
+        
     }
 }
+
 
 //PREVIEW
 struct UserMainPanel_Previews: PreviewProvider {
     static var previews: some View {
-        let clockReport: ClockReport
-        do {
-            let url = Bundle.main.url(forResource: "ReportExampleData", withExtension: "json")!
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMddHHmmss)
-            clockReport = try decoder.decode(ClockReport.self, from: data)
-        } catch {
-            print("Error decoding JSON: \(error)")
-            clockReport = ClockReport(userId: 1, userName: "", totalHoursWorked: "", totalNormalHoursWorked: "", totalHourBalance: "", entries: [])
-        }
-        
-        return UserMainPanel(clockReport: clockReport)
+        UserMainPanel()
+            .environmentObject(ClockReportController())
     }
 }

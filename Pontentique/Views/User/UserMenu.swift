@@ -8,8 +8,23 @@
 import SwiftUI
 
 struct UserMenu: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            NavigationLink(destination: UserMainPanel()){}
+                .navigationBarTitle("Retornar para o Login", displayMode: .inline)
+                .font(.subheadline)
+                .foregroundColor(ColorScheme.textColor)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "arrow.backward")
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(ColorScheme.textColor)
+                })
+        }
     }
 }
 

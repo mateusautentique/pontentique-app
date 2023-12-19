@@ -16,7 +16,6 @@ struct LoginScreen: View {
     @State private var showRegisterScreen = false
     @State private var isLoggedIn = false
     
-    
     var body: some View {
         NavigationStack {
             HStack {
@@ -80,7 +79,9 @@ struct LoginScreen: View {
                                             getLoggedUser(token){ (json, error) in
                                                 if let json = json {
                                                     UserSession.current = .loggedIn(token: token, id: json["id"] as! Int, name: json["user_name"] as! String)
-                                                    isLoggedIn = true
+                                                    DispatchQueue.main.async {
+                                                        isLoggedIn = true
+                                                    }
                                                 } else if let error = error {
                                                     self.errorMessage = error.localizedDescription
                                                 }
@@ -101,8 +102,9 @@ struct LoginScreen: View {
                             .buttonStyle(PlainButtonStyle())
                             .padding(.trailing, 10)
                             .navigationDestination(isPresented: $isLoggedIn) {
-                                //UserMainPanel(clockReport: <#ClockReport#>)
-                                    //.navigationBarBackButtonHidden(true)
+                                UserMainPanel()
+                                    .environmentObject(ClockReportController())
+                                    .navigationBarBackButtonHidden(true)
                             }
                             
                             Button(action: {
