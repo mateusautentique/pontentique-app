@@ -17,17 +17,19 @@ struct ClockTableRow: View {
     var body: some View {
         HStack (spacing: 0){
             Text(dateFormat(clockEntry.day))
+                .foregroundColor(ColorScheme.tableTextColor)
                 .padding(.leading, 6)
                 .padding(.trailing, 10)
                 .frame(width: 60)
             ForEach(clockEntry.events) {event in
                 Text(timeFormat(event.timestamp))
-                    .padding(5)
-                    .background(event.type == "clock_in" ? ColorScheme.fieldBgColor : ColorScheme.fieldBgColorDark)
+                    .padding(7)
+                    .background(ColorScheme.clockBtnBgColor)
                     .foregroundColor(ColorScheme.textColor)
                     .cornerRadius(10)
                     .frame(width: 60)
-                    .padding(.leading, 2)
+                    .frame(height: 24)
+                    .padding(.trailing, 4)
             }
             Spacer()
             BalanceValue(balanceHours: clockEntry.balanceHoursOnDay)

@@ -8,15 +8,39 @@
 import SwiftUI
 
 struct UserMainPanel: View {
+    //CLOCK INFO
     let clockReport: ClockReport
+    
+    //DATE VARIABLES
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter
+    }()
+
+    var currentDate: String {
+        formatter.string(from: Date())
+    }
+    
+    var weekAgoDate: String {
+        let sevenDaysAgo = Date().addingTimeInterval(-7 * 24 * 60 * 60)
+        return formatter.string(from: sevenDaysAgo)
+    }
 
     init(clockReport: ClockReport) {
         self.clockReport = clockReport
     }
     
+    //VIEW
     var body: some View {
         NavigationStack{
+            
+            
             VStack {
+                Text("\(weekAgoDate) - \(currentDate)")
+                    .padding(10)
+                    .fontWeight(.semibold)
+                
                 HStack{
                     Text("DATA")
                         .padding(.trailing, 6)
@@ -26,12 +50,14 @@ struct UserMainPanel: View {
                     Text("BANCO")
                         .padding(.trailing, 6)
                 }
-                .foregroundColor(ColorScheme.textColor)
+                .foregroundColor(ColorScheme.tableTextColor)
                 .background(ColorScheme.appBackgroudColor)
-
+                .fontWeight(.semibold)
+                .padding(.bottom, 15)
                 
                 ForEach(clockReport.entries) { entry in
                     ClockTableRow(clockEntry: entry)
+                        .padding(.bottom, 4)
                 }
                 .padding(.bottom, 10)
                 
@@ -39,6 +65,7 @@ struct UserMainPanel: View {
                     Spacer()
                     Text("BANCO TOTAL")
                         .padding(.trailing, 20)
+                        .foregroundColor(ColorScheme.tableTextColor)
                     BalanceValue(balanceHours: clockReport.totalHourBalance)
                         .bold()
                         .padding(.trailing, 6)
@@ -47,15 +74,31 @@ struct UserMainPanel: View {
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
-                .background(ColorScheme.fieldBgColorDark)
+                .background(ColorScheme.clockBtnBgColor)
                 
                 Spacer()
+                
+                Button(action: {
+                    //Mostrar popup e confirmar batida
+                    print("BONG BONG BONG")
+                }) {
+                    Text("Registrar ponto")
+                        .bold()
+                        .padding(15)
+                        .frame(maxWidth: .infinity)
+                        .background(ColorScheme.primaryColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding()
+                
             }
             .background(ColorScheme.appBackgroudColor)
         }
     }
 }
 
+//PREVIEW
 struct UserMainPanel_Previews: PreviewProvider {
     static var previews: some View {
         let clockReport: ClockReport

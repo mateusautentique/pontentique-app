@@ -11,6 +11,7 @@ struct ColorScheme {
     public static let primaryColor = Color("MainColor")
     public static let appBackgroudColor = Color("BackgroundColor")
     public static let textColor = Color("TextColor")
+    public static let tableTextColor = Color("TableTextColor")
     public static let fieldBgColor = Color("FieldBackgroundColor")
-    public static let fieldBgColorDark = Color("FieldBackgroundColorDark")
+    public static let clockBtnBgColor = Color("ClockBtnBackgroundColor")
 }

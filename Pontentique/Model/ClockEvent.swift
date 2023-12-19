@@ -12,11 +12,4 @@ struct ClockEvent: Codable, Identifiable{
     let timestamp: String
     let justification: String
     let type: String
-    
-//    init(id: Int, timestamp: String, justification: String?, type: String) {
-//        self.id = id
-//        self.timestamp = timestamp
-//        self.justification = justification ?? ""
-//        self.type = type
-//    }
 }
