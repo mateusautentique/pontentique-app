@@ -122,7 +122,7 @@ struct RegisterScreen: View {
                     
                     Button(action: {
                         Task {
-                            // registerUser()
+                            //Validar o registro e criar usuário no banco
                             registerUser = true
                         }
                     }) {
@@ -131,6 +131,13 @@ struct RegisterScreen: View {
                             .background(ColorScheme.primaryColor)
                             .foregroundColor(.white)
                             .cornerRadius(10)
+                            /*
+                             Usar isso aqui na versão completa após o registro
+                             .navigationDestination(isPresented: $isLoggedIn) {
+                                 UserMainPanel()
+                                     .navigationBarBackButtonHidden(true)
+                             }
+                             */
                             .fullScreenCover(isPresented: $registerUser) {
                                 //PLACEHOLDER OBV
                                 LoginScreen()

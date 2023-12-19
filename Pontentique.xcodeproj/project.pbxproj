@@ -11,6 +11,13 @@
 		455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */; };
 		455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A72B2C8E7700CB161C /* UserSession.swift */; };
 		455F82AA2B307D9E00CB161C /* UserMainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A92B307D9E00CB161C /* UserMainPanel.swift */; };
+		455F82AF2B30AF6F00CB161C /* ClockTableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82AE2B30AF6F00CB161C /* ClockTableRow.swift */; };
+		455F82B12B30B0A700CB161C /* ClockEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82B02B30B0A700CB161C /* ClockEvent.swift */; };
+		455F82B32B30B20500CB161C /* ClockEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82B22B30B20500CB161C /* ClockEntry.swift */; };
+		455F82B52B30B5EC00CB161C /* ClockReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82B42B30B5EC00CB161C /* ClockReport.swift */; };
+		455F82B72B30D04D00CB161C /* BalanceValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82B62B30D04D00CB161C /* BalanceValue.swift */; };
+		455F82BC2B30D64800CB161C /* RowExampleData.json in Resources */ = {isa = PBXBuildFile; fileRef = 455F82BB2B30D64800CB161C /* RowExampleData.json */; };
+		455F82BE2B30DAA100CB161C /* ReportExampleData.json in Resources */ = {isa = PBXBuildFile; fileRef = 455F82BD2B30DAA100CB161C /* ReportExampleData.json */; };
 		45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BD82B10EA72000FA293 /* PontentiqueApp.swift */; };
 		45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45669BDA2B10EA72000FA293 /* ContentView.swift */; };
 		45669BDD2B10EA74000FA293 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45669BDC2B10EA74000FA293 /* Assets.xcassets */; };
@@ -26,6 +33,13 @@
 		455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScreen.swift; sourceTree = "<group>"; };
 		455F82A72B2C8E7700CB161C /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		455F82A92B307D9E00CB161C /* UserMainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMainPanel.swift; sourceTree = "<group>"; };
+		455F82AE2B30AF6F00CB161C /* ClockTableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockTableRow.swift; sourceTree = "<group>"; };
+		455F82B02B30B0A700CB161C /* ClockEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockEvent.swift; sourceTree = "<group>"; };
+		455F82B22B30B20500CB161C /* ClockEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockEntry.swift; sourceTree = "<group>"; };
+		455F82B42B30B5EC00CB161C /* ClockReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockReport.swift; sourceTree = "<group>"; };
+		455F82B62B30D04D00CB161C /* BalanceValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceValue.swift; sourceTree = "<group>"; };
+		455F82BB2B30D64800CB161C /* RowExampleData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RowExampleData.json; sourceTree = "<group>"; };
+		455F82BD2B30DAA100CB161C /* ReportExampleData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReportExampleData.json; sourceTree = "<group>"; };
 		45669BD52B10EA72000FA293 /* Pontentique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pontentique.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45669BD82B10EA72000FA293 /* PontentiqueApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PontentiqueApp.swift; sourceTree = "<group>"; };
 		45669BDA2B10EA72000FA293 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -47,6 +61,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		455F82AD2B30AF3300CB161C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				455F82AE2B30AF6F00CB161C /* ClockTableRow.swift */,
+				455F82B62B30D04D00CB161C /* BalanceValue.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		45669BCC2B10EA72000FA293 = {
 			isa = PBXGroup;
 			children = (
@@ -72,7 +95,10 @@
 				45669BF22B111C95000FA293 /* Model */,
 				45669BF12B111C84000FA293 /* Controllers */,
 				45669BE82B10ECE0000FA293 /* Views */,
+				455F82AD2B30AF3300CB161C /* Helpers */,
 				45669BDC2B10EA74000FA293 /* Assets.xcassets */,
+				455F82BB2B30D64800CB161C /* RowExampleData.json */,
+				455F82BD2B30DAA100CB161C /* ReportExampleData.json */,
 				45669BDE2B10EA74000FA293 /* Pontentique.entitlements */,
 				45669BDF2B10EA74000FA293 /* Preview Content */,
 			);
@@ -111,6 +137,9 @@
 			isa = PBXGroup;
 			children = (
 				455F82A72B2C8E7700CB161C /* UserSession.swift */,
+				455F82B02B30B0A700CB161C /* ClockEvent.swift */,
+				455F82B22B30B20500CB161C /* ClockEntry.swift */,
+				455F82B42B30B5EC00CB161C /* ClockReport.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -174,7 +203,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				45669BE12B10EA74000FA293 /* Preview Assets.xcassets in Resources */,
+				455F82BE2B30DAA100CB161C /* ReportExampleData.json in Resources */,
 				45669BDD2B10EA74000FA293 /* Assets.xcassets in Resources */,
+				455F82BC2B30D64800CB161C /* RowExampleData.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,9 +218,14 @@
 			files = (
 				45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */,
 				45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */,
+				455F82B32B30B20500CB161C /* ClockEntry.swift in Sources */,
 				455F82AA2B307D9E00CB161C /* UserMainPanel.swift in Sources */,
+				455F82B52B30B5EC00CB161C /* ClockReport.swift in Sources */,
+				455F82AF2B30AF6F00CB161C /* ClockTableRow.swift in Sources */,
 				455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */,
+				455F82B12B30B0A700CB161C /* ClockEvent.swift in Sources */,
 				45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */,
+				455F82B72B30D04D00CB161C /* BalanceValue.swift in Sources */,
 				455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,
 				4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */,

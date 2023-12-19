@@ -1,0 +1,111 @@
+{
+    "user_id": 1,
+    "user_name": "admin",
+    "total_hours_worked": "24:00",
+    "total_normal_hours_worked": "23:00",
+    "total_hour_balance": "0:00",
+    "entries": [
+        {
+            "day": "2023-12-01",
+            "normal_hours_worked_on_day": "8:00",
+            "extra_hours_worked_on_day": "0:00",
+            "balance_hours_on_day": "0:00",
+            "total_time_worked_in_seconds": 28800,
+            "event_count": 4,
+            "events": [
+                {
+                    "id": 1,
+                    "timestamp": "2023-12-01 08:00:00",
+                    "justification": "test",
+                    "type": "clock_in"
+                },
+                {
+                    "id": 2,
+                    "timestamp": "2023-12-01 12:00:00",
+                    "justification": "test",
+                    "type": "clock_out"
+                },
+                {
+                    "id": 3,
+                    "timestamp": "2023-12-01 13:00:00",
+                    "justification": "test",
+                    "type": "clock_in"
+                },
+                {
+                    "id": 4,
+                    "timestamp": "2023-12-01 17:00:00",
+                    "justification": "test",
+                    "type": "clock_out"
+                }
+            ]
+        },
+        {
+            "day": "2023-12-02",
+            "normal_hours_worked_on_day": "8:00",
+            "extra_hours_worked_on_day": "1:00",
+            "balance_hours_on_day": "1:00",
+            "total_time_worked_in_seconds": 32400,
+            "event_count": 4,
+            "events": [
+                {
+                    "id": 5,
+                    "timestamp": "2023-12-02 07:00:00",
+                    "justification": "test",
+                    "type": "clock_in"
+                },
+                {
+                    "id": 6,
+                    "timestamp": "2023-12-02 12:00:00",
+                    "justification": "test",
+                    "type": "clock_out"
+                },
+                {
+                    "id": 7,
+                    "timestamp": "2023-12-02 13:00:00",
+                    "justification": "test",
+                    "type": "clock_in"
+                },
+                {
+                    "id": 8,
+                    "timestamp": "2023-12-02 17:00:00",
+                    "justification": "test",
+                    "type": "clock_out"
+                }
+            ]
+        },
+        {
+            "day": "2023-12-03",
+            "normal_hours_worked_on_day": "7:00",
+            "extra_hours_worked_on_day": "0:00",
+            "balance_hours_on_day": "-1:00",
+            "total_time_worked_in_seconds": 25200,
+            "event_count": 4,
+            "events": [
+                {
+                    "id": 9,
+                    "timestamp": "2023-12-03 08:00:00",
+                    "justification": "test",
+                    "type": "clock_in"
+                },
+                {
+                    "id": 10,
+                    "timestamp": "2023-12-03 12:00:00",
+                    "justification": "test",
+                    "type": "clock_out"
+                },
+                {
+                    "id": 12,
+                    "timestamp": "2023-12-03 13:00:00",
+                    "justification": "test",
+                    "type": "clock_in"
+                },
+                {
+                    "id": 13,
+                    "timestamp": "2023-12-03 16:00:00",
+                    "justification": "test",
+                    "type": "clock_out"
+                }
+            ]
+        }
+    ]
+}

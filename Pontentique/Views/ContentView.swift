@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             if sessionInfo.isLoggedIn {
-                UserMainPanel()
+                //UserMainPanel()
             } else {
                 LoginScreen()
             }
