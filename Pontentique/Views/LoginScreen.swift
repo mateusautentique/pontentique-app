@@ -15,6 +15,7 @@ struct LoginScreen: View {
     
     @State private var showRegisterScreen = false
     @State private var isLoggedIn = false
+    @EnvironmentObject var sessionManager: UserSessionManager
     
     var body: some View {
         NavigationStack {
@@ -78,7 +79,7 @@ struct LoginScreen: View {
                                             self.errorMessage = nil
                                             getLoggedUser(token){ (json, error) in
                                                 if let json = json {
-                                                    UserSession.current = .loggedIn(token: token, id: json["id"] as! Int, name: json["user_name"] as! String)
+                                                    self.sessionManager.session = .loggedIn(token: token, id: json["id"] as! Int, name: json["user_name"] as! String)
                                                     DispatchQueue.main.async {
                                                         isLoggedIn = true
                                                     }
@@ -156,5 +157,6 @@ struct LoginScreen: View {
 struct LoginScreen_Previews: PreviewProvider {
     static var previews: some View {
         LoginScreen()
+            .environmentObject(UserSessionManager())
     }
 }

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct UserMainPanel: View {
+    //USER INFO
+    @EnvironmentObject var sessionManager: UserSessionManager
+    
     //CLOCK INFO
     @StateObject var clockReportController = ClockReportController()
     
@@ -33,22 +36,6 @@ struct UserMainPanel: View {
     //VIEW
     var body: some View {
         NavigationStack{
-            NavigationLink(destination: UserMenu()){}
-                .navigationBarTitle("", displayMode: .inline)
-                .navigationBarItems(
-                    leading: HStack {
-                        Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "arrow.backward")
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(ColorScheme.primaryColor)
-                        }
-                        Text("\(weekAgoDate) - \(currentDate)")
-                            .font(.system(size: 25))
-                    }
-                )
-                .padding(.bottom, 15)
             VStack {
                 HStack{
                     Text("DATA")
@@ -89,7 +76,9 @@ struct UserMainPanel: View {
                 
                 Button(action: {
                     //Mostrar popup e confirmar batida
-                    print("BONG BONG BONG")
+                    if case let .loggedIn(token, id, name) = sessionManager.session {
+                        print("User name: \(name), ID: \(id), Token: \(token)")
+                    }
                 }) {
                     Text("Registrar ponto")
                         .bold()
@@ -103,8 +92,24 @@ struct UserMainPanel: View {
                 
             }
             .background(ColorScheme.appBackgroudColor)
+            .padding(.top, 15)
         }
-        
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading: HStack {
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "arrow.backward")
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(ColorScheme.primaryColor)
+                }
+                Text("\(weekAgoDate) - \(currentDate)")
+                    .font(.system(size: 25))
+            }
+        )
+        .padding(.bottom, 15)
     }
 }
 
@@ -114,5 +119,6 @@ struct UserMainPanel_Previews: PreviewProvider {
     static var previews: some View {
         UserMainPanel()
             .environmentObject(ClockReportController())
+            .environmentObject(UserSessionManager())
     }
 }

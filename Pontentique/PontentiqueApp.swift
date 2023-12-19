@@ -11,12 +11,12 @@ let API_HOST = "http://127.0.0.1/api"
 
 @main
 struct PontentiqueApp: App {
-    @StateObject var sessionInfo = SessionInfo()
+    @StateObject var sessionManager = UserSessionManager()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(sessionInfo)
+                .environmentObject(sessionManager)
         }
     }
 }

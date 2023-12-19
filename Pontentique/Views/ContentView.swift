@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var sessionInfo = SessionInfo()
+    @EnvironmentObject var sessionManager: UserSessionManager
     
     var body: some View {
         NavigationView {
-            if sessionInfo.isLoggedIn {
+            switch sessionManager.session {
+            case .loggedIn:
                 UserMainPanel()
                     .environmentObject(ClockReportController())
-            } else {
+            case .loggedOut:
                 LoginScreen()
             }
         }
@@ -24,5 +25,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(UserSessionManager())
 }
 

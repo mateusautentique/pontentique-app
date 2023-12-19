@@ -7,14 +7,6 @@
 
 import Foundation
 
-class SessionInfo: ObservableObject {
-    @Published var isLoggedIn = false
-    
-    func login() {
-        self.isLoggedIn = true
-    }
-}
-
 enum UserSession {
     case loggedIn(token: String, id: Int, name: String)
     case loggedOut
