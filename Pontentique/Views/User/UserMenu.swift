@@ -10,10 +10,13 @@ import SwiftUI
 struct UserMenu: View {
     @Environment(\.presentationMode) var presentationMode
     
+    @StateObject var clockReportController = ClockReportController()
+    
     var body: some View {
         NavigationStack {
             List {
-                NavigationLink(destination: UserMainPanel()) {}
+                NavigationLink(destination: UserMainPanel().environmentObject(ClockReportController())
+                ) {}
             }
         }
     }

@@ -11,9 +11,6 @@ struct UserMainPanel: View {
     //USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
-    //CLOCK INFO
-    @StateObject var clockReportController = ClockReportController()
-    
     //DATE VARIABLES
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -29,6 +26,9 @@ struct UserMainPanel: View {
         let sevenDaysAgo = Date().addingTimeInterval(-7 * 24 * 60 * 60)
         return formatter.string(from: sevenDaysAgo)
     }
+    
+    //CLOCK INFO
+    @StateObject var clockReportController = ClockReportController()
     
     //VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
@@ -75,9 +75,21 @@ struct UserMainPanel: View {
                 Spacer()
                 
                 Button(action: {
-                    //Mostrar popup e confirmar batida
-                    if case let .loggedIn(token, id, name) = sessionManager.session {
-                        print("User name: \(name), ID: \(id), Token: \(token)")
+                    //Mostrar popup
+                    
+                    
+                    
+                    //FUNCIONANDO
+                    if case let .loggedIn(token, id, _) = sessionManager.session {
+                        punchClock(id, token) { (message, error) in
+                            if let message = message {
+                                DispatchQueue.main.async {
+                                    print(message)
+                                }
+                            } else if let error = error {
+                                print(error)
+                            }
+                        }
                     }
                 }) {
                     Text("Registrar ponto")

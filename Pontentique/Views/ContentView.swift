@@ -14,8 +14,7 @@ struct ContentView: View {
         NavigationView {
             switch sessionManager.session {
             case .loggedIn:
-                UserMainPanel()
-                    .environmentObject(ClockReportController())
+                UserMenu()
             case .loggedOut:
                 LoginScreen()
             }
@@ -27,4 +26,3 @@ struct ContentView: View {
     ContentView()
         .environmentObject(UserSessionManager())
 }
-

@@ -103,7 +103,7 @@ struct LoginScreen: View {
                             .buttonStyle(PlainButtonStyle())
                             .padding(.trailing, 10)
                             .navigationDestination(isPresented: $isLoggedIn) {
-                                UserMainPanel()
+                                UserMenu()
                                     .environmentObject(ClockReportController())
                                     .navigationBarBackButtonHidden(true)
                             }
