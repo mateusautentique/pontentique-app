@@ -8,32 +8,37 @@
 import SwiftUI
 
 struct UserMainPanel: View {
-    //USER INFO
+    //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
-    //DATE VARIABLES
-    let formatter: DateFormatter = {
+    //MARK: - DATE VARIABLES
+    let textFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         return formatter
     }()
     
-    var currentDate: String {
-        formatter.string(from: Date())
+    let functionFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+    
+    var currentDate: Date {
+        return Date()
+    }
+
+    var weekAgoDate: Date {
+        return Date().addingTimeInterval(-7 * 24 * 60 * 60)
     }
     
-    var weekAgoDate: String {
-        let sevenDaysAgo = Date().addingTimeInterval(-7 * 24 * 60 * 60)
-        return formatter.string(from: sevenDaysAgo)
-    }
+    //MARK: - CLOCK INFO
+    @State private var clockReport: ClockReport?
     
-    //CLOCK INFO
-    @StateObject var clockReportController = ClockReportController()
-    
-    //VIEW VARIABLES
+    //MARK: - VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
     
-    //VIEW
+    //MARK: - VIEW
     var body: some View {
         NavigationStack{
             VStack {
@@ -51,7 +56,7 @@ struct UserMainPanel: View {
                 .fontWeight(.semibold)
                 .padding(.bottom, 15)
                 
-                ForEach(clockReportController.clockReport?.entries ?? []) { entry in
+                ForEach(clockReport?.entries ?? []) { entry in
                     ClockTableRow(clockEntry: entry)
                         .padding(.bottom, 15)
                 }
@@ -61,7 +66,7 @@ struct UserMainPanel: View {
                     Text("BANCO TOTAL")
                         .padding(.trailing, 20)
                         .foregroundColor(ColorScheme.tableTextColor)
-                    BalanceValue(balanceHours: clockReportController.clockReport?.totalHourBalance ?? "")
+                    BalanceValue(balanceHours: clockReport?.totalHourBalance ?? "")
                         .bold()
                         .frame(width: 60)
                         .padding(.trailing, 6)
@@ -76,10 +81,6 @@ struct UserMainPanel: View {
                 
                 Button(action: {
                     //Mostrar popup
-                    
-                    
-                    
-                    //FUNCIONANDO
                     if case let .loggedIn(token, id, _) = sessionManager.session {
                         punchClock(id, token) { (message, error) in
                             if let message = message {
@@ -117,20 +118,38 @@ struct UserMainPanel: View {
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(ColorScheme.primaryColor)
                 }
-                Text("\(weekAgoDate) - \(currentDate)")
+                Text("\(textFormatter.string(from: weekAgoDate)) - \(textFormatter.string(from: currentDate))")
                     .font(.system(size: 25))
             }
         )
         .padding(.bottom, 15)
+        .onAppear {
+            let endDate = functionFormatter.string(from: currentDate)
+            let startDate = functionFormatter.string(from: weekAgoDate)
+            fetchClockReport(startDate, endDate)
+        }
+    }
+    
+    func fetchClockReport(_ startDate: String, _ endDate: String) {
+        if case let .loggedIn(token, id, _) = sessionManager.session {
+            getClockEntriesByPeriod(id, token, startDate: startDate, endDate: endDate) { (clockReport, error) in
+                if let clockReport = clockReport {
+                    DispatchQueue.main.async {
+                        self.clockReport = clockReport
+                    }
+                } else if let error = error {
+                    print(error)
+                }
+            }
+        }
     }
 }
 
 
-//PREVIEW
+//MARK: - PREVIEW
 struct UserMainPanel_Previews: PreviewProvider {
     static var previews: some View {
         UserMainPanel()
-            .environmentObject(ClockReportController())
             .environmentObject(UserSessionManager())
     }
 }

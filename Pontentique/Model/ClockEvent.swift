@@ -7,9 +7,18 @@
 
 import Foundation
 
-struct ClockEvent: Codable, Identifiable{
+struct ClockEvent: Codable, Identifiable {
     let id: Int
     let timestamp: String
-    let justification: String
     let type: String
+    private let _justification: String?
+
+    var justification: String {
+        return _justification ?? ""
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, timestamp, type
+        case _justification = "justification"
+    }
 }

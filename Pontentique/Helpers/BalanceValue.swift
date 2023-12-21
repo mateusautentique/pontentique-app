@@ -8,23 +8,25 @@
 import SwiftUI
 
 struct BalanceValue: View {
-    @State var balanceHours: String
+    @State var balanceHours: String?
+
+    var formattedBalanceHours: String {
+        let hours = (balanceHours?.isEmpty == false) ? balanceHours! : "0:00"
+        return hours.first == "-" ? hours : "+" + hours
+    }
     
     var body: some View {
         HStack {
-            if checkBalanceValue(balanceHours) > 0 {
-                Text(balanceHours)
+            if checkBalanceValue((balanceHours?.isEmpty == false) ? balanceHours! : "0:00") > 0 {
+                Text(formattedBalanceHours)
                     .foregroundColor(Color.green)
-            } else if checkBalanceValue(balanceHours) == 0 {
-                Text(balanceHours)
+            } else if checkBalanceValue((balanceHours?.isEmpty == false) ? balanceHours! : "0:00") == 0 {
+                Text(formattedBalanceHours)
                     .foregroundColor(Color.white)
             } else {
-                Text(balanceHours)
+                Text(formattedBalanceHours)
                     .foregroundColor(Color.red)
             }
-        }
-        .onAppear{
-            balanceHours = balanceHours.first == "-" ? balanceHours : "+" + balanceHours
         }
     }
 }
