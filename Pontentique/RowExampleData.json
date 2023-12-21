@@ -29,6 +29,18 @@
             "timestamp": "2023-12-01 18:00:00",
             "justification": "test",
             "type": "clock_out"
+        },
+        {
+            "id": 5,
+            "timestamp": "2023-12-01 19:00:00",
+            "justification": "test",
+            "type": "clock_in"
+        },
+        {
+            "id": 6,
+            "timestamp": "2023-12-01 22:00:00",
+            "justification": "test",
+            "type": "clock_out"
         }
     ]
 }

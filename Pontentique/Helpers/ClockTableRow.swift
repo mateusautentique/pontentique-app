@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ClockTableRow: View {
+    //MARK: - VARIABLES
     let clockEntry: ClockEntry
-
+    
     init(clockEntry: ClockEntry) {
         self.clockEntry = clockEntry
     }
-
+    
     var body: some View {
         HStack (spacing: 0){
             Text(dateFormat(clockEntry.day))
@@ -21,16 +22,28 @@ struct ClockTableRow: View {
                 .padding(.leading, 6)
                 .padding(.trailing, 10)
                 .frame(width: 60)
-            ForEach(clockEntry.events) {event in
-                Text(timeFormat(event.timestamp))
-                    .padding(7)
-                    .background(ColorScheme.clockBtnBgColor)
-                    .foregroundColor(ColorScheme.textColor)
-                    .cornerRadius(10)
-                    .frame(width: 60)
-                    .frame(height: 24)
-                    .padding(.trailing, 4)
+            Group {
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
+                        HStack(alignment: .top, spacing: 0) {
+                            ForEach(chunk) { event in
+                                Text(timeFormat(event.timestamp))
+                                    .padding(7)
+                                    .frame(width: 60)
+                                    .fixedSize()
+                                    .background(ColorScheme.clockBtnBgColor)
+                                    .foregroundColor(ColorScheme.textColor)
+                                    .cornerRadius(10)
+                                    .padding(.trailing, 5)
+                            }
+                        }
+                        .padding(.bottom, 7)
+                    }
+                }
             }
+            .padding(0)
+            .frame(alignment: .leading)
+
             Spacer()
             BalanceValue(balanceHours: clockEntry.balanceHoursOnDay)
                 .bold()
@@ -43,11 +56,11 @@ struct ClockTableRow: View {
 }
 
 
-//UTILS
+//MARK: - UTILS
 func dateFormat(_ timestamp: String) -> String {
     let inputFormatter = DateFormatter()
     inputFormatter.dateFormat = "yyyy-MM-dd"
-
+    
     if let date = inputFormatter.date(from: timestamp) {
         let outputFormatter = DateFormatter()
         outputFormatter.dateFormat = "dd/MM"
@@ -60,13 +73,13 @@ func dateFormat(_ timestamp: String) -> String {
 func timeFormat(_ timestamp: String) -> (String) {
     let inputFormatter = DateFormatter()
     inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-
+    
     if let date = inputFormatter.date(from: timestamp) {
         let outputFormatter = DateFormatter()
         outputFormatter.dateFormat = "HH:mm"
         return outputFormatter.string(from: date)
     } else {
-        return "Invalid date"
+        return "Invalid time"
     }
 }
 
@@ -80,7 +93,24 @@ func checkBalanceValue(_ duration: String) -> Bool {
     }
 }
 
-//PREVIEW
+extension DateFormatter {
+    static let yyyyMMddHHmmss: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter
+    }()
+}
+
+extension Array {
+    func chunks(of size: Int) -> [[Element]] {
+        stride(from: 0, to: count, by: size).map {
+            Array(self[$0..<Swift.min($0 + size, count)])
+        }
+    }
+}
+
+
+//MARK: - PREVIEW
 struct ClockTableRow_Previews: PreviewProvider {
     static var previews: some View {
         let clockEntry: ClockEntry
@@ -95,15 +125,6 @@ struct ClockTableRow_Previews: PreviewProvider {
             print("Error decoding JSON: \(error)")
             clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         }
-
         return ClockTableRow(clockEntry: clockEntry)
     }
-}
-
-extension DateFormatter {
-    static let yyyyMMddHHmmss: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter
-    }()
 }

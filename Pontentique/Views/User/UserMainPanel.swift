@@ -23,7 +23,7 @@ struct UserMainPanel: View {
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }()
-    
+
     var currentDate: Date {
         return Date()
     }

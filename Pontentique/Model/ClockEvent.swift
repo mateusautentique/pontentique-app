@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ClockEvent: Codable, Identifiable {
+struct ClockEvent: Codable, Identifiable, Hashable {
     let id: Int
     let timestamp: String
     let type: String
