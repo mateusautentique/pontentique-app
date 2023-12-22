@@ -12,12 +12,16 @@ struct RegisterScreen: View {
     @State private var name: String = ""
     @State private var cpf: String = ""
     @State private var email: String = ""
-    @State private var passoword: String = ""
+    @State private var password: String = ""
     @State private var password_confirmation: String = ""
+    @State private var errorMessage: String?
+    @State private var isLoggedIn = false
+    @State private var registerUser = false
     let placeHolderEmail = "jair@tuamaeaquelaursa.com"
     
-    @State private var registerUser = false
+    
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var sessionManager: UserSessionManager
     
     var body: some View {
         NavigationStack {
@@ -94,7 +98,7 @@ struct RegisterScreen: View {
                             .font(.subheadline)
                             .padding(.bottom, 0)
                             .padding(.leading, 5)
-                        SecureField("umasenhabemsegura", text: $passoword)
+                        SecureField("umasenhabemsegura", text: $password)
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
@@ -122,8 +126,26 @@ struct RegisterScreen: View {
                     
                     Button(action: {
                         Task {
-                            //Validar o registro e criar usuário no banco
-                            registerUser = true
+                            
+                            userRegister(cpf: cpf, name: name, email: email, password: password, password_confirmation: password_confirmation) { (token, error) in
+                                if let token = token {
+                                    print("Registration succeeded!")
+                                    errorMessage = nil
+                                    getLoggedUser(token){ (json, error) in
+                                        if let json = json {
+                                            self.sessionManager.session = .loggedIn(token: token, id: json["id"] as! Int, name: json["user_name"] as! String)
+                                            DispatchQueue.main.async {
+                                                isLoggedIn = true
+                                            }
+                                        }else if let error = error {
+                                            self.errorMessage = error.localizedDescription
+                                        }
+                                    }
+                                } else if let error = error {
+                                    print("Registration failed: \(error)")
+                                    self.errorMessage = error.localizedDescription
+                                }
+                            }
                         }
                     }) {
                         Text("Registrar-se")
@@ -131,22 +153,20 @@ struct RegisterScreen: View {
                             .background(ColorScheme.primaryColor)
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                            /*
-                             Usar isso aqui na versão completa após o registro
-                             .navigationDestination(isPresented: $isLoggedIn) {
-                                 UserMainPanel()
-                                     .navigationBarBackButtonHidden(true)
-                             }
-                             */
-                            .fullScreenCover(isPresented: $registerUser) {
-                                //PLACEHOLDER OBV
-                                LoginScreen()
-                                    .foregroundColor(ColorScheme.textColor)
-                                    .multilineTextAlignment(.leading)
-                                //PLACEHOLDER OBV
-                            }
+                    }
+                    .navigationDestination(isPresented: $isLoggedIn) {
+                            UserMainPanel()
+                            .environmentObject(ClockReportController())
+                            .navigationBarBackButtonHidden(true)
+                            .foregroundColor(ColorScheme.textColor)
+                            .multilineTextAlignment(.leading)
                     }
                     Spacer()
+                    if let errorMessage = errorMessage {
+                        Text("ⓘ \(errorMessage)")
+                            .foregroundColor(.red)
+                            .padding(.top, 10)
+                    }
                 }
                 .padding()
                 .background(ColorScheme.appBackgroudColor)
