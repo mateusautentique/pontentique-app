@@ -21,4 +21,11 @@ struct ClockEvent: Codable, Identifiable, Hashable {
         case id, timestamp, type
         case _justification = "justification"
     }
+    
+    init(id: Int, timestamp: String, type: String, justification: String?) {
+        self.id = id
+        self.timestamp = timestamp
+        self.type = type
+        self._justification = justification
+    }
 }
