@@ -16,42 +16,46 @@ struct ClockTableRow: View {
     }
     
     var body: some View {
-        HStack (spacing: 0){
-            Text(dateFormat(clockEntry.day))
-                .foregroundColor(ColorScheme.tableTextColor)
-                .padding(.leading, 6)
-                .padding(.trailing, 10)
-                .frame(width: 60)
-            Group {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
-                        HStack(alignment: .top, spacing: 0) {
-                            ForEach(chunk) { event in
-                                Text(timeFormat(event.timestamp))
-                                    .padding(7)
-                                    .frame(width: 60)
-                                    .fixedSize()
-                                    .background(ColorScheme.clockBtnBgColor)
-                                    .foregroundColor(ColorScheme.textColor)
-                                    .cornerRadius(10)
-                                    .padding(.trailing, 5)
+        NavigationStack {
+            HStack (spacing: 0){
+                Text(dateFormat(clockEntry.day))
+                    .foregroundColor(ColorScheme.tableTextColor)
+                    .padding(.leading, 6)
+                    .padding(.trailing, 10)
+                    .frame(width: 60)
+                Group {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
+                            HStack(alignment: .top, spacing: 0) {
+                                ForEach(chunk) { event in
+                                    NavigationLink(destination: EditEventView(event: event)) {
+                                        Text(timeFormat(event.timestamp))
+                                            .padding(7)
+                                            .frame(width: 60)
+                                            .fixedSize()
+                                            .background(ColorScheme.clockBtnBgColor)
+                                            .foregroundColor(ColorScheme.textColor)
+                                            .cornerRadius(10)
+                                            .padding(.trailing, 5)
+                                    }
+                                }
                             }
+                            .padding(.bottom, 7)
                         }
-                        .padding(.bottom, 7)
                     }
                 }
-            }
-            .padding(0)
-            .frame(alignment: .leading)
+                .padding(0)
+                .frame(alignment: .leading)
 
-            Spacer()
-            BalanceValue(balanceHours: clockEntry.balanceHoursOnDay)
-                .bold()
-                .padding(.leading, 5)
-                .padding(.trailing, 6)
-                .frame(width: 60)
+                Spacer()
+                BalanceValue(balanceHours: clockEntry.balanceHoursOnDay)
+                    .bold()
+                    .padding(.leading, 5)
+                    .padding(.trailing, 6)
+                    .frame(width: 60)
+            }
+            .background(ColorScheme.appBackgroudColor)
         }
-        .background(ColorScheme.appBackgroudColor)
     }
 }
 

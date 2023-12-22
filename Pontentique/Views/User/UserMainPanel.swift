@@ -107,24 +107,10 @@ struct UserMainPanel: View {
             .background(ColorScheme.appBackgroudColor)
             .padding(.top, 15)
         }
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading: HStack {
-                Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "arrow.backward")
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(ColorScheme.primaryColor)
-                }
-                Text("\(textFormatter.string(from: weekAgoDate)) - \(textFormatter.string(from: currentDate))")
-                    .font(.system(size: 25))
-            }
-        )
         .padding(.bottom, 15)
         .onAppear {
-            let endDate = functionFormatter.string(from: currentDate)
+            let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)
+            let endDate = functionFormatter.string(from: tomorrowDate!)
             let startDate = functionFormatter.string(from: weekAgoDate)
             fetchClockReport(startDate, endDate)
         }

@@ -14,7 +14,7 @@ struct ContentView: View {
         NavigationView {
             switch sessionManager.session {
             case .loggedIn:
-                UserMenu()
+                UserMainPanel()
             case .loggedOut:
                 LoginScreen()
             }
