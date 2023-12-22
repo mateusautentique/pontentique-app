@@ -126,7 +126,6 @@ struct RegisterScreen: View {
                     
                     Button(action: {
                         Task {
-                            
                             userRegister(cpf: cpf, name: name, email: email, password: password, password_confirmation: password_confirmation) { (token, error) in
                                 if let token = token {
                                     print("Registration succeeded!")
@@ -155,8 +154,7 @@ struct RegisterScreen: View {
                             .cornerRadius(10)
                     }
                     .navigationDestination(isPresented: $isLoggedIn) {
-                            UserMainPanel()
-                            .environmentObject(ClockReportController())
+                        UserMainPanel()
                             .navigationBarBackButtonHidden(true)
                             .foregroundColor(ColorScheme.textColor)
                             .multilineTextAlignment(.leading)
