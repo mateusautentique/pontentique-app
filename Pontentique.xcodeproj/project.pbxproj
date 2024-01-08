@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		451887372B36141400C692F9 /* ClockEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451887362B36141400C692F9 /* ClockEventController.swift */; };
 		4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66B2B16458C00B2A799 /* AuthController.swift */; };
 		455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */; };
 		455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A72B2C8E7700CB161C /* UserSession.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		451887362B36141400C692F9 /* ClockEventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockEventController.swift; sourceTree = "<group>"; };
 		4525C66B2B16458C00B2A799 /* AuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthController.swift; sourceTree = "<group>"; };
 		4525C66D2B164C4700B2A799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4525C66E2B16560800B2A799 /* PontentiqueRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PontentiqueRelease.entitlements; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			children = (
 				45E931892B3346E2003BED3A /* APIClockReportController.swift */,
 				45E931852B331EEF003BED3A /* ClockPunchController.swift */,
+				451887362B36141400C692F9 /* ClockEventController.swift */,
 				4525C66B2B16458C00B2A799 /* AuthController.swift */,
 				45E931872B33204F003BED3A /* ErrorController.swift */,
 			);
@@ -248,6 +251,7 @@
 				45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */,
 				455F82B32B30B20500CB161C /* ClockEntry.swift in Sources */,
 				455F82AA2B307D9E00CB161C /* UserMainPanel.swift in Sources */,
+				451887372B36141400C692F9 /* ClockEventController.swift in Sources */,
 				455F82B52B30B5EC00CB161C /* ClockReport.swift in Sources */,
 				45E9318A2B3346E2003BED3A /* APIClockReportController.swift in Sources */,
 				45E931862B331EEF003BED3A /* ClockPunchController.swift in Sources */,
