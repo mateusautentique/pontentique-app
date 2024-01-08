@@ -11,7 +11,6 @@ struct UserMainPanel: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
-    
     //MARK: - DATE VARIABLES
     let textFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -25,14 +24,6 @@ struct UserMainPanel: View {
         return formatter
     }()
     
-    var currentDate: Date {
-        return Date()
-    }
-    
-    var weekAgoDate: Date {
-        return Date().addingTimeInterval(-7 * 24 * 60 * 60)
-    }
-    
     //MARK: - CLOCK INFO
     @State private var clockReport: ClockReport?
     
@@ -44,6 +35,7 @@ struct UserMainPanel: View {
         formatter.dateFormat = "dd/MM/yy"
         return formatter
     }
+    
     //MARK: - POPUP
     @State private var showingAlert = false
     var timeFormatter: DateFormatter {
@@ -51,11 +43,11 @@ struct UserMainPanel: View {
         formatter.dateFormat = "HH:mm"
         return formatter
     }
+    
     //MARK: - VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
     
     //MARK: - VIEW
-    
     var body: some View {
         let myHour = Text(Date(), formatter: timeFormatter)
             .font(.system(size: 330))
@@ -70,7 +62,6 @@ struct UserMainPanel: View {
                             }) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 24))
-                            
                             }
                             Spacer()
                             if !Calendar.current.isDate(endDate, equalTo: Date(), toGranularity: .day) {
@@ -80,21 +71,16 @@ struct UserMainPanel: View {
                                 }) {
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 24))
-                                    
                                 }
                             }
-                            
                         }
-                    .padding()
-                    
+                        .padding()
+                        
                         Text("\(startDate, formatter: dateFormatter) - \(endDate, formatter: dateFormatter)")
                             .font(.system(size: 28))
                             .frame(maxWidth: .infinity, alignment: .center)
-                            
                     }
                 }
-                
-               
                 
                 HStack{
                     Text("DATA")
@@ -111,10 +97,9 @@ struct UserMainPanel: View {
                 .padding(.bottom, 15)
                 
                 ForEach(clockReport?.entries ?? []) { entry in
-                    ClockTableRow(clockEntry: entry)
+                    ClockTableRow(clockEntry: entry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
                         .padding(.bottom, 15)
                 }
-                
                 
                 HStack {
                     Spacer()
@@ -133,12 +118,8 @@ struct UserMainPanel: View {
                 .padding(.top, 10)
                 
                 Spacer()
-                
-                
-                
+                              
                 VStack {
-                    // ... existing code ...
-                    
                     Button(action: {
                         showingAlert = true
                     }) {
@@ -150,8 +131,6 @@ struct UserMainPanel: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-                    
-                    // ... existing code ...
                 }
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text("Gerar registro de ponto"), message: Text("Tem certeza que você gostaria de registrar o ponto? Ele será registrado às\n \(myHour)"), primaryButton: .default(Text("Registrar"), action: {
@@ -168,7 +147,6 @@ struct UserMainPanel: View {
                         }
                     }), secondaryButton: .cancel())
                 }
-                
                 .padding()
             }
             .background(ColorScheme.appBackgroudColor)
@@ -176,9 +154,9 @@ struct UserMainPanel: View {
         }
         .padding(.bottom, 15)
         .onAppear {
-            let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)
+            let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
             let endDate = functionFormatter.string(from: tomorrowDate!)
-            let startDate = functionFormatter.string(from: weekAgoDate)
+            let startDate = functionFormatter.string(from: startDate)
             fetchClockReport(startDate, endDate)
         }
     }

@@ -9,10 +9,17 @@ import SwiftUI
 
 struct ClockTableRow: View {
     //MARK: - VARIABLES
+    @Binding var clockReport: ClockReport?
+    @Binding var startDate: Date
+    @Binding var endDate: Date
+    
     let clockEntry: ClockEntry
     
-    init(clockEntry: ClockEntry) {
+    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>) {
         self.clockEntry = clockEntry
+        self._clockReport = clockReport
+        self._startDate = startDate
+        self._endDate = endDate
     }
     
     var body: some View {
@@ -28,16 +35,7 @@ struct ClockTableRow: View {
                         ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
                             HStack(alignment: .top, spacing: 0) {
                                 ForEach(chunk) { event in
-                                    NavigationLink(destination: EditEventView(event: event)) {
-                                        Text(timeFormat(event.timestamp))
-                                            .padding(7)
-                                            .frame(width: 60)
-                                            .fixedSize()
-                                            .background(ColorScheme.clockBtnBgColor)
-                                            .foregroundColor(ColorScheme.textColor)
-                                            .cornerRadius(10)
-                                            .padding(.trailing, 5)
-                                    }
+                                    EventLinkView(event: event, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
                                 }
                             }
                             .padding(.bottom, 7)
@@ -118,6 +116,10 @@ extension Array {
 struct ClockTableRow_Previews: PreviewProvider {
     static var previews: some View {
         let clockEntry: ClockEntry
+        @State var clockReport: ClockReport?
+        @State var endDate = Date()
+        @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        
         do {
             let url = Bundle.main.url(forResource: "RowExampleData", withExtension: "json")!
             let data = try Data(contentsOf: url)
@@ -129,6 +131,7 @@ struct ClockTableRow_Previews: PreviewProvider {
             print("Error decoding JSON: \(error)")
             clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         }
-        return ClockTableRow(clockEntry: clockEntry)
+        
+        return ClockTableRow(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
     }
 }
