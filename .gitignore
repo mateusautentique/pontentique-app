@@ -5,4 +5,5 @@
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
-Pontentique.xcodeproj/project.xcworkspace/xcuserdata/mateuszanella.xcuserdatad/UserInterfaceState.xcuserstate
+Pontentique.xcodeproj/project.xcworkspace/xcuserdata/*
+
