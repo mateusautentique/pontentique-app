@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct EditEventView: View {
+    //MARK: - USER INFO
+    @EnvironmentObject var sessionManager: UserSessionManager
+    
+    //MARK: - DATE INFO
     let event: ClockEvent
     
+    @State var registeredTime: String
     @State var justification: String = ""
     @State var dayOff: Bool = false
     @State var doctor: Bool = false
+    
+    init(event: ClockEvent) {
+        self.event = event
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        var timeString = ""
+        if let date = dateFormatter.date(from: event.timestamp) {
+            dateFormatter.dateFormat = "H:mm"
+            timeString = dateFormatter.string(from: date)
+        }
+        _registeredTime = State(initialValue: timeString)
+    }
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -36,6 +53,7 @@ struct EditEventView: View {
         return ""
     }
     
+    //MARK: - VIEW
     var body: some View {
         VStack {
             HStack{
@@ -55,10 +73,24 @@ struct EditEventView: View {
                     Spacer()
                     Text("\(dayAndMonth)")
                         .foregroundColor(ColorScheme.tableTextColor)
-                    Text("\(time)")
+                    TextField("\(time)", text: $registeredTime)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.center)
+                        .onChange (of: registeredTime){
+                            let filtered = registeredTime.filter { "0123456789".contains($0) }
+                            if filtered.count > 4 {
+                                registeredTime = String(filtered.prefix(4))
+                            } else if filtered.count == 4 && !filtered.contains(":") {
+                                let timeWithSeparator = filtered.inserting(separator: ":", every: 2)
+                                registeredTime = validateAndCorrectTime(time: timeWithSeparator)
+                            } else {
+                                registeredTime = filtered
+                            }
+                        }
                         .padding(5)
                         .background(ColorScheme.fieldBgColor)
                         .cornerRadius(7)
+                        .frame(minWidth: 58, maxWidth: 60)
                 }
                 .background(ColorScheme.appBackgroudColor)
                 .padding(.bottom, 15)
@@ -114,7 +146,7 @@ struct EditEventView: View {
                 Spacer()
                 
                 Button(action: {
-                    //salvar mudança
+                    editSelectedEvent(event, justification, registeredTime, event.timestamp)
                 }){
                     Text("Salvar")
                         .padding(15)
@@ -144,8 +176,49 @@ struct EditEventView: View {
                     }
                 }
             }
-        }    }
+        }
+    }
+    
+    //MARK: - AUX FUNCTIONS
+    
+    func editSelectedEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String, _ originalTimestamp: String) {
+        let id = event.id
+        let justification = justification
+        let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
+
+        if case let .loggedIn(token, _, _) = sessionManager.session {
+            editClockEvent(id, timestamp, justification, token){ (message, error) in
+                if let message = message {
+                    DispatchQueue.main.async {
+                        //mostrar alerta
+                        print(message)
+                    }
+                } else if let error = error {
+                    //mostrar erro
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func validateAndCorrectTime(time: String) -> String {
+        let timeComponents = time.split(separator: ":")
+        if let hour = Int(timeComponents[0]), let minute = Int(timeComponents[1]) {
+            if hour > 23 || minute > 59 {
+                return "23:59"
+            }
+        }
+        return time
+    }
+    
+    func replaceTimeInTimestamp(originalTimestamp: String, newTime: String) -> String {
+        let timeIndex = originalTimestamp.index(originalTimestamp.startIndex, offsetBy: 11)
+        let datePart = originalTimestamp[..<timeIndex]
+        return "\(datePart)\(newTime):00"
+    }
 }
+
+//MARK: - PREVIEW
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -164,5 +237,21 @@ struct ContentView_Previews: PreviewProvider {
         return NavigationView {
             EditEventView(event: exampleEvent)
         }
+    }
+}
+
+//MARK: - AUX
+extension String {
+    func inserting(separator: String, every n: Int) -> String {
+        var result: String = ""
+        var counter = 0
+        for character in self {
+            if counter != 0 && counter % n == 0 {
+                result.append(separator)
+            }
+            result.append(character)
+            counter += 1
+        }
+        return result
     }
 }
