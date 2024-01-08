@@ -5,4 +5,9 @@
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
+<<<<<<< HEAD
 Pontentique.xcodeproj/project.xcworkspace/xcuserdata/*
+=======
+Pontentique.xcodeproj/project.xcworkspace/xcuserdata/*
+
+>>>>>>> d3dff48a8af0f6cdffd3e0ee3b4513987c84f73e
