@@ -11,7 +11,7 @@ struct UserMainPanel: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
-
+    
     //MARK: - DATE VARIABLES
     let textFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -36,6 +36,14 @@ struct UserMainPanel: View {
     //MARK: - CLOCK INFO
     @State private var clockReport: ClockReport?
     
+    //MARK: - DATE INFO
+    @State private var endDate = Date()
+    @State private var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter
+    }
     //MARK: - POPUP
     @State private var showingAlert = false
     var timeFormatter: DateFormatter {
@@ -47,12 +55,47 @@ struct UserMainPanel: View {
     @Environment(\.presentationMode) var presentationMode
     
     //MARK: - VIEW
-
+    
     var body: some View {
         let myHour = Text(Date(), formatter: timeFormatter)
             .font(.system(size: 330))
         NavigationStack{
             VStack {
+                HStack {
+                    ZStack{
+                        HStack{
+                            Button(action: {
+                                startDate = Calendar.current.date(byAdding: .day, value: -7, to: startDate)!
+                                endDate = Calendar.current.date(byAdding: .day, value: -7, to: endDate)!
+                            }) {
+                                Image(systemName: "chevron.left")
+                                    .font(.system(size: 24))
+                            
+                            }
+                            Spacer()
+                            if !Calendar.current.isDate(endDate, equalTo: Date(), toGranularity: .day) {
+                                Button(action: {
+                                    startDate = Calendar.current.date(byAdding: .day, value: +7, to: startDate)!
+                                    endDate = Calendar.current.date(byAdding: .day, value: +7, to: endDate)!
+                                }) {
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 24))
+                                    
+                                }
+                            }
+                            
+                        }
+                    .padding()
+                    
+                        Text("\(startDate, formatter: dateFormatter) - \(endDate, formatter: dateFormatter)")
+                            .font(.system(size: 28))
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            
+                    }
+                }
+                
+               
+                
                 HStack{
                     Text("DATA")
                         .padding(.trailing, 6)
@@ -92,10 +135,10 @@ struct UserMainPanel: View {
                 Spacer()
                 
                 
-
+                
                 VStack {
                     // ... existing code ...
-
+                    
                     Button(action: {
                         showingAlert = true
                     }) {
@@ -107,11 +150,11 @@ struct UserMainPanel: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-
+                    
                     // ... existing code ...
                 }
                 .alert(isPresented: $showingAlert) {
-                    Alert(title: Text("Gerar registro de ponto"), message: Text("Tem certeza que você gostaria de registrar o ponto? Ele será registrado às:\n \(myHour)"), primaryButton: .default(Text("Registrar"), action: {
+                    Alert(title: Text("Gerar registro de ponto"), message: Text("Tem certeza que você gostaria de registrar o ponto? Ele será registrado às\n \(myHour)"), primaryButton: .default(Text("Registrar"), action: {
                         if case let .loggedIn(token, id, _) = sessionManager.session {
                             punchClock(id, token) { (message, error) in
                                 if let message = message {
@@ -125,7 +168,7 @@ struct UserMainPanel: View {
                         }
                     }), secondaryButton: .cancel())
                 }
-    
+                
                 .padding()
             }
             .background(ColorScheme.appBackgroudColor)
