@@ -66,6 +66,11 @@ struct UserMainPanel: View {
                             Button(action: {
                                 startDate = Calendar.current.date(byAdding: .day, value: -7, to: startDate)!
                                 endDate = Calendar.current.date(byAdding: .day, value: -7, to: endDate)!
+                                
+                                let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
+                                let endDate = functionFormatter.string(from: tomorrowDate!)
+                                let startDate = functionFormatter.string(from: startDate)
+                                fetchClockReport(startDate, endDate)
                             }) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 24))
@@ -75,6 +80,11 @@ struct UserMainPanel: View {
                                 Button(action: {
                                     startDate = Calendar.current.date(byAdding: .day, value: +7, to: startDate)!
                                     endDate = Calendar.current.date(byAdding: .day, value: +7, to: endDate)!
+                                    
+                                    let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
+                                    let endDate = functionFormatter.string(from: tomorrowDate!)
+                                    let startDate = functionFormatter.string(from: startDate)
+                                    fetchClockReport(startDate, endDate)
                                 }) {
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 24))
