@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		451887372B36141400C692F9 /* ClockEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451887362B36141400C692F9 /* ClockEventController.swift */; };
+		451887392B4C5EE600C692F9 /* EditLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451887382B4C5EE600C692F9 /* EditLinkView.swift */; };
 		4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525C66B2B16458C00B2A799 /* AuthController.swift */; };
 		455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */; };
 		455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455F82A72B2C8E7700CB161C /* UserSession.swift */; };
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		451887362B36141400C692F9 /* ClockEventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockEventController.swift; sourceTree = "<group>"; };
+		451887382B4C5EE600C692F9 /* EditLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLinkView.swift; sourceTree = "<group>"; };
 		4525C66B2B16458C00B2A799 /* AuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthController.swift; sourceTree = "<group>"; };
 		4525C66D2B164C4700B2A799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4525C66E2B16560800B2A799 /* PontentiqueRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PontentiqueRelease.entitlements; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 			children = (
 				45669BE92B10FD8D000FA293 /* ColorScheme.swift */,
 				455F82AE2B30AF6F00CB161C /* ClockTableRow.swift */,
+				451887382B4C5EE600C692F9 /* EditLinkView.swift */,
 				455F82B62B30D04D00CB161C /* BalanceValue.swift */,
 			);
 			path = Helpers;
@@ -262,6 +265,7 @@
 				455F82B72B30D04D00CB161C /* BalanceValue.swift in Sources */,
 				45E931882B33204F003BED3A /* ErrorController.swift in Sources */,
 				455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */,
+				451887392B4C5EE600C692F9 /* EditLinkView.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,
 				4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */,
 				45E9318E2B34BFDB003BED3A /* EditEventView.swift in Sources */,

@@ -11,16 +11,31 @@ struct EditEventView: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
-    //MARK: - DATE INFO
+    //MARK: - ERROR
+    @State private var errorMessage: String?
+    
+    //MARK: - ALERT
+    @State private var showingAlert: Bool = false
+    @State private var alertMessage: String = ""
+    
+    //MARK: - CLOCK INFO
+    @Binding var clockReport: ClockReport?
+    @Binding var startDate: Date
+    @Binding var endDate: Date
     let event: ClockEvent
     
+    //MARK: - UPDATE INFO
     @State var registeredTime: String
     @State var justification: String = ""
     @State var dayOff: Bool = false
     @State var doctor: Bool = false
     
-    init(event: ClockEvent) {
+    init(event: ClockEvent, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>) {
         self.event = event
+        self._clockReport = clockReport
+        self._startDate = startDate
+        self._endDate = endDate
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         var timeString = ""
@@ -30,9 +45,16 @@ struct EditEventView: View {
         }
         _registeredTime = State(initialValue: timeString)
     }
-    
+
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
+    //MARK: - DATE FORMATTING
+    let functionFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+
     var dayAndMonth: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -145,8 +167,22 @@ struct EditEventView: View {
                 
                 Spacer()
                 
+                if let errorMessage = errorMessage {
+                    Text("\(errorMessage)")
+                        .foregroundColor(.red)
+                        .padding(.top, 10)
+                        .padding(.bottom, 15)
+                }
+                
                 Button(action: {
-                    editSelectedEvent(event, justification, registeredTime, event.timestamp)
+                    if justification.isEmpty {
+                        errorMessage = "ⓘ A justificativa é obrigatória"
+                    } else if registeredTime.count != 5 {
+                        errorMessage = "ⓘ Insira um horário válido"
+                    } else {
+                        errorMessage = ""
+                        editSelectedEvent(event, justification, registeredTime)
+                    }
                 }){
                     Text("Salvar")
                         .padding(15)
@@ -161,6 +197,12 @@ struct EditEventView: View {
                         .font(.system(size: 20))
                 }
             }
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text("Ponto editado com sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }))
+            }
+            .padding()
             .padding(.leading, 5)
             .padding(.trailing, 5)
         }
@@ -181,7 +223,7 @@ struct EditEventView: View {
     
     //MARK: - AUX FUNCTIONS
     
-    func editSelectedEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String, _ originalTimestamp: String) {
+    func editSelectedEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
         let id = event.id
         let justification = justification
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
@@ -190,12 +232,16 @@ struct EditEventView: View {
             editClockEvent(id, timestamp, justification, token){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
-                        //mostrar alerta
-                        print(message)
+                        alertMessage = message
+                        showingAlert = true
+                        
+                        let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
+                        let endDate = functionFormatter.string(from: tomorrowDate!)
+                        let startDate = functionFormatter.string(from: startDate)
+                        fetchUpdatedClockReport(startDate, endDate)
                     }
                 } else if let error = error {
-                    //mostrar erro
-                    print(error)
+                    errorMessage = "ⓘ \(error.localizedDescription)"
                 }
             }
         }
@@ -216,6 +262,20 @@ struct EditEventView: View {
         let datePart = originalTimestamp[..<timeIndex]
         return "\(datePart)\(newTime):00"
     }
+    
+    func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
+        if case let .loggedIn(token, id, _) = sessionManager.session {
+            getClockEntriesByPeriod(id, token, startDate: startDate, endDate: endDate) { (clockReport, error) in
+                if let clockReport = clockReport {
+                    DispatchQueue.main.async {
+                        self.clockReport = clockReport
+                    }
+                } else if let error = error {
+                    print(error)
+                }
+            }
+        }
+    }
 }
 
 //MARK: - PREVIEW
@@ -223,6 +283,10 @@ struct EditEventView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let exampleEvent: ClockEvent
+        @State var clockReport: ClockReport?
+        @State var endDate = Date()
+        @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        
         do {
             let url = Bundle.main.url(forResource: "EventExampleData", withExtension: "json")!
             let data = try Data(contentsOf: url)
@@ -235,7 +299,7 @@ struct ContentView_Previews: PreviewProvider {
             exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", justification: nil)
         }
         return NavigationView {
-            EditEventView(event: exampleEvent)
+            EditEventView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
         }
     }
 }
