@@ -14,4 +14,6 @@ struct ColorScheme {
     public static let tableTextColor = Color("TableTextColor")
     public static let fieldBgColor = Color("FieldBackgroundColor")
     public static let clockBtnBgColor = Color("ClockBtnBackgroundColor")
+    public static let todaysColor = Color("todayColor")
+    public static let BacktodaysColor = Color("todayBackGround")
 }

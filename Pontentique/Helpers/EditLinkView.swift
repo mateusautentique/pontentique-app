@@ -12,20 +12,15 @@ struct EventLinkView: View {
     @Binding var clockReport: ClockReport?
     @Binding var startDate: Date
     @Binding var endDate: Date
-
+    
     var body: some View {
         NavigationLink(destination: EditEventView(event: event, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)) {
             Text(timeFormat(event.timestamp))
-                .padding(7)
-                .frame(width: 60)
-                .fixedSize()
-                .background(ColorScheme.clockBtnBgColor)
-                .foregroundColor(ColorScheme.textColor)
-                .cornerRadius(10)
-                .padding(.trailing, 5)
+                
         }
     }
 }
+
 
 struct EventLinkView_Previews: PreviewProvider {
     static var previews: some View {

@@ -128,7 +128,7 @@ struct RegisterScreen: View {
                         Task {
                             userRegister(cpf: cpf, name: name, email: email, password: password, password_confirmation: password_confirmation) { (token, error) in
                                 if let token = token {
-                                    print("Registration succeeded!")
+//                                    print("Registration succeeded!")
                                     errorMessage = nil
                                     getLoggedUser(token){ (json, error) in
                                         if let json = json {
