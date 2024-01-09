@@ -26,7 +26,7 @@ struct ClockTableRow: View {
         NavigationStack {
             HStack (spacing: 0){
                 Text(dateFormat(clockEntry.day))
-                    .foregroundColor(ColorScheme.tableTextColor)
+                    .foregroundColor(isEventToday(clockEntry.day) ? ColorScheme.todaysColor : ColorScheme.tableTextColor)
                     .padding(.leading, 6)
                     .padding(.trailing, 10)
                     .frame(width: 60)
@@ -36,6 +36,13 @@ struct ClockTableRow: View {
                             HStack(alignment: .top, spacing: 0) {
                                 ForEach(chunk) { event in
                                     EventLinkView(event: event, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
+                                        .padding(7)
+                                        .frame(width: 60)
+                                        .fixedSize()
+                                        .background(isToday(event.timestamp) ? ColorScheme.BacktodaysColor : ColorScheme.clockBtnBgColor)
+                                        .foregroundColor(isToday(event.timestamp) ? ColorScheme.todaysColor : ColorScheme.textColor)
+                                        .cornerRadius(10)
+                                        .padding(.trailing, 5)
                                 }
                             }
                             .padding(.bottom, 7)
@@ -59,6 +66,28 @@ struct ClockTableRow: View {
 
 
 //MARK: - UTILS
+func isEventToday(_ dateString: String) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd" 
+        guard let date = dateFormatter.date(from: dateString) else {
+            return false
+        }
+        let comparisonResult = Calendar.current.isDate(date, equalTo: Date(), toGranularity: .day)
+        return comparisonResult
+    }
+func isToday(_ timestamp: String) -> Bool {
+        guard let eventDate = convertToDate(timestamp) else {
+            return false
+        }
+        let comparisonResult = Calendar.current.isDate(eventDate, equalTo: Date(), toGranularity: .day)
+        return comparisonResult
+    }
+
+func convertToDate(_ timestamp: String) -> Date? {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    return dateFormatter.date(from: timestamp)
+}
 func dateFormat(_ timestamp: String) -> String {
     let inputFormatter = DateFormatter()
     inputFormatter.dateFormat = "yyyy-MM-dd"
