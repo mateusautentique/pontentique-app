@@ -17,9 +17,6 @@ func getClockEntriesByPeriod(_ userId: Int, _ token: String, startDate: String?,
     let startDate = startDate ?? ""
     let endDate = endDate ?? ""
     
-    print(startDate)
-    print(endDate)
-    
     let parameters: [String: Any] = [
         "user_id": "\(userId)",
         "start_date": startDate,
@@ -43,7 +40,6 @@ func getClockEntriesByPeriod(_ userId: Int, _ token: String, startDate: String?,
             } else {
                 let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                 let error = createError(from: json ?? [:], with: response.statusCode)
-                print(error)
                 completion(nil, error)
             }
         } catch {

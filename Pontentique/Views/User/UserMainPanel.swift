@@ -67,10 +67,7 @@ struct UserMainPanel: View {
                                 startDate = Calendar.current.date(byAdding: .day, value: -7, to: startDate)!
                                 endDate = Calendar.current.date(byAdding: .day, value: -7, to: endDate)!
                                 
-                                let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
-                                let endDate = functionFormatter.string(from: tomorrowDate!)
-                                let startDate = functionFormatter.string(from: startDate)
-                                fetchClockReport(startDate, endDate)
+                                refreshReport()
                             }) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 24))
@@ -81,10 +78,7 @@ struct UserMainPanel: View {
                                     startDate = Calendar.current.date(byAdding: .day, value: +7, to: startDate)!
                                     endDate = Calendar.current.date(byAdding: .day, value: +7, to: endDate)!
                                     
-                                    let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
-                                    let endDate = functionFormatter.string(from: tomorrowDate!)
-                                    let startDate = functionFormatter.string(from: startDate)
-                                    fetchClockReport(startDate, endDate)
+                                    refreshReport()
                                 }) {
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 24))
@@ -164,10 +158,7 @@ struct UserMainPanel: View {
                                 punchClock(id, token) { (message, error) in
                                     if let message = message {
                                         DispatchQueue.main.async {
-                                            let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
-                                            let endDate = functionFormatter.string(from: tomorrowDate!)
-                                            let startDate = functionFormatter.string(from: startDate)
-                                            fetchClockReport(startDate, endDate)
+                                            refreshReport()
                                             
                                             sucessPunchMessage = message
                                             self.activeAlert = .second
@@ -190,10 +181,7 @@ struct UserMainPanel: View {
         }
         .padding(.bottom, 15)
         .onAppear {
-            let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
-            let endDate = functionFormatter.string(from: tomorrowDate!)
-            let startDate = functionFormatter.string(from: startDate)
-            fetchClockReport(startDate, endDate)
+            refreshReport()
         }
     }
     
@@ -209,6 +197,12 @@ struct UserMainPanel: View {
                 }
             }
         }
+    }
+    
+    func refreshReport() {
+        let endDate = functionFormatter.string(from: endDate)
+        let startDate = functionFormatter.string(from: startDate)
+        fetchClockReport(startDate, endDate)
     }
 }
 
