@@ -31,17 +31,32 @@ struct ClockTableRow: View {
                     .frame(width: 60)
                 Group {
                     VStack(alignment: .leading, spacing: 0) {
-                        ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
+                        if clockEntry.events.isEmpty && isWeekday(clockEntry.day) {
                             HStack(alignment: .top, spacing: 0) {
-                                ForEach(chunk) { event in
-                                    EventLinkView(event: event, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
+                                ForEach(0..<4) { _ in
+                                    Text("Falta")
                                         .padding(7)
                                         .frame(width: 60)
                                         .fixedSize()
-                                        .background(isToday(event.timestamp) ? ColorScheme.BacktodaysColor : ColorScheme.clockBtnBgColor)
-                                        .foregroundColor(isToday(event.timestamp) ? ColorScheme.todaysColor : ColorScheme.textColor)
+                                        .background(ColorScheme.BackAbsDay)
+                                        .foregroundColor(ColorScheme.AbsDay)
                                         .cornerRadius(10)
                                         .padding(.trailing, 5)
+                                }
+                            }
+                        } else {
+                            ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
+                                HStack(alignment: .top, spacing: 0) {
+                                    ForEach(chunk) { event in
+                                        EventLinkView(event: event, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
+                                            .padding(7)
+                                            .frame(width: 60)
+                                            .fixedSize()
+                                            .background(isToday(event.timestamp) ? ColorScheme.BacktodaysColor : ColorScheme.clockBtnBgColor)
+                                            .foregroundColor(isToday(event.timestamp) ? ColorScheme.todaysColor : ColorScheme.textColor)
+                                            .cornerRadius(10)
+                                            .padding(.trailing, 5)
+                                    }
                                 }
                             }
                             .padding(.bottom, 7)
@@ -50,7 +65,7 @@ struct ClockTableRow: View {
                 }
                 .padding(0)
                 .frame(alignment: .leading)
-
+                
                 Spacer()
                 BalanceValue(balanceHours: $clockEntry.balanceHoursOnDay)
                     .bold()
@@ -65,22 +80,32 @@ struct ClockTableRow: View {
 
 
 //MARK: - UTILS
+func isWeekday(_ dateString: String) -> Bool {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    guard let date = dateFormatter.date(from: dateString) else {
+        return false
+    }
+    let calendar = Calendar.current
+    let weekday = calendar.component(.weekday, from: date)
+    return !(weekday == 1 || weekday == 7) 
+}
 func isEventToday(_ dateString: String) -> Bool {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd" 
-        guard let date = dateFormatter.date(from: dateString) else {
-            return false
-        }
-        let comparisonResult = Calendar.current.isDate(date, equalTo: Date(), toGranularity: .day)
-        return comparisonResult
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    guard let date = dateFormatter.date(from: dateString) else {
+        return false
     }
+    let comparisonResult = Calendar.current.isDate(date, equalTo: Date(), toGranularity: .day)
+    return comparisonResult
+}
 func isToday(_ timestamp: String) -> Bool {
-        guard let eventDate = convertToDate(timestamp) else {
-            return false
-        }
-        let comparisonResult = Calendar.current.isDate(eventDate, equalTo: Date(), toGranularity: .day)
-        return comparisonResult
+    guard let eventDate = convertToDate(timestamp) else {
+        return false
     }
+    let comparisonResult = Calendar.current.isDate(eventDate, equalTo: Date(), toGranularity: .day)
+    return comparisonResult
+}
 
 func convertToDate(_ timestamp: String) -> Date? {
     let dateFormatter = DateFormatter()

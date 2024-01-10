@@ -16,7 +16,7 @@ struct EventLinkView: View {
     var body: some View {
         NavigationLink(destination: EditEventView(event: event, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)) {
             Text(timeFormat(event.timestamp))
-                
+            
         }
     }
 }

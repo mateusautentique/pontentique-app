@@ -16,4 +16,6 @@ struct ColorScheme {
     public static let clockBtnBgColor = Color("ClockBtnBackgroundColor")
     public static let todaysColor = Color("todayColor")
     public static let BacktodaysColor = Color("todayBackGround")
+    public static let AbsDay = Color("abscentDay")
+    public static let BackAbsDay = Color("BackAbscentDay")
 }
