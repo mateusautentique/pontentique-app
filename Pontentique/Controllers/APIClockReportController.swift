@@ -17,8 +17,6 @@ func getClockEntriesByPeriod(_ userId: Int, _ token: String, startDate: String?,
     let startDate = startDate ?? ""
     let endDate = endDate ?? ""
     
-    print(startDate)
-    print(endDate)
     
     let parameters: [String: Any] = [
         "user_id": "\(userId)",
