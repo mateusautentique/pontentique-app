@@ -12,8 +12,7 @@ struct ClockTableRow: View {
     @Binding var clockReport: ClockReport?
     @Binding var startDate: Date
     @Binding var endDate: Date
-    
-    let clockEntry: ClockEntry
+    @ObservedObject var clockEntry: ClockEntry
     
     init(clockEntry: ClockEntry, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>) {
         self.clockEntry = clockEntry
@@ -53,7 +52,7 @@ struct ClockTableRow: View {
                 .frame(alignment: .leading)
 
                 Spacer()
-                BalanceValue(balanceHours: clockEntry.balanceHoursOnDay)
+                BalanceValue(balanceHours: $clockEntry.balanceHoursOnDay)
                     .bold()
                     .padding(.leading, 5)
                     .padding(.trailing, 6)

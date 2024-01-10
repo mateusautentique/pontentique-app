@@ -26,3 +26,4 @@ struct ContentView: View {
     ContentView()
         .environmentObject(UserSessionManager())
 }
+

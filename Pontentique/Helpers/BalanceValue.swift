@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct BalanceValue: View {
-    @State var balanceHours: String?
+    @Binding var balanceHours: String
 
     var formattedBalanceHours: String {
-        let hours = (balanceHours?.isEmpty == false) ? balanceHours! : "0:00"
+        let hours = (balanceHours.isEmpty == false) ? balanceHours : "0:00"
         return hours.first == "-" ? hours : "+" + hours
     }
     
     var body: some View {
         HStack {
-            if checkBalanceValue((balanceHours?.isEmpty == false) ? balanceHours! : "0:00") > 0 {
+            if checkBalanceValue((balanceHours.isEmpty == false) ? balanceHours : "0:00") > 0 {
                 Text(formattedBalanceHours)
                     .foregroundColor(Color.green)
-            } else if checkBalanceValue((balanceHours?.isEmpty == false) ? balanceHours! : "0:00") == 0 {
+            } else if checkBalanceValue((balanceHours.isEmpty == false) ? balanceHours : "0:00") == 0 {
                 Text(formattedBalanceHours)
                     .foregroundColor(Color.white)
             } else {
@@ -40,6 +40,10 @@ func checkBalanceValue(_ duration: String) -> Int {
     }
 }
 
-#Preview {
-    BalanceValue(balanceHours: "0:00")
+struct BalanceValue_Previews: PreviewProvider {
+    @State static var balanceHours = "0:00"
+
+    static var previews: some View {
+        BalanceValue(balanceHours: $balanceHours)
+    }
 }

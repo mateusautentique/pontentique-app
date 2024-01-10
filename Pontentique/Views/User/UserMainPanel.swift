@@ -26,6 +26,7 @@ struct UserMainPanel: View {
     
     //MARK: - CLOCK INFO
     @State private var clockReport: ClockReport?
+    @State var totalHourBalance: String = "+0:00"
     
     //MARK: - ERROR INFO
     @State private var errorMessage: String?
@@ -117,7 +118,7 @@ struct UserMainPanel: View {
                     Text("BANCO TOTAL")
                         .padding(.trailing, 20)
                         .foregroundColor(ColorScheme.tableTextColor)
-                    BalanceValue(balanceHours: clockReport?.totalHourBalance ?? "")
+                    BalanceValue(balanceHours: $totalHourBalance)
                         .bold()
                         .frame(width: 60)
                         .padding(.trailing, 6)
@@ -191,6 +192,7 @@ struct UserMainPanel: View {
                 if let clockReport = clockReport {
                     DispatchQueue.main.async {
                         self.clockReport = clockReport
+                        self.totalHourBalance = clockReport.totalHourBalance
                     }
                 } else if let error = error {
                     print(error)
@@ -203,6 +205,7 @@ struct UserMainPanel: View {
         let endDate = functionFormatter.string(from: endDate)
         let startDate = functionFormatter.string(from: startDate)
         fetchClockReport(startDate, endDate)
+        self.totalHourBalance = clockReport?.totalHourBalance ?? "+0:00"
     }
 }
 
