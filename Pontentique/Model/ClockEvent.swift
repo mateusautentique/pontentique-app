@@ -12,6 +12,7 @@ struct ClockEvent: Codable, Identifiable, Hashable {
     let timestamp: String
     let type: String
     private let _justification: String?
+    var isEdited: Bool = false
 
     var justification: String {
         return _justification ?? ""

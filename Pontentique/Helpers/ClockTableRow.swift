@@ -29,7 +29,6 @@ struct ClockTableRow: View {
             HStack (spacing: 0){
                 DateText(date: clockEntry.day)
                 EventGroup(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                Spacer()
                 BalanceValue(balanceHours: $clockEntry.balanceHoursOnDay)
                     .bold()
                     .padding(.leading, 5)
@@ -51,7 +50,7 @@ func isWeekday(_ dateString: String) -> Bool {
     }
     let calendar = Calendar.current
     let weekday = calendar.component(.weekday, from: date)
-    return !(weekday == 1 || weekday == 7) 
+    return !(weekday == 1 || weekday == 7)
 }
 
 func isEventToday(_ dateString: String) -> Bool {
