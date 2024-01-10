@@ -195,6 +195,7 @@ struct EditEventView: View {
                         .padding(.trailing, 10)
                         .padding(.bottom, 25)
                         .font(.system(size: 20))
+                    
                 }
             }
             .alert(isPresented: $showingAlert) {
@@ -227,14 +228,13 @@ struct EditEventView: View {
         let id = event.id
         let justification = justification
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
-
+        
         if case let .loggedIn(token, _, _) = sessionManager.session {
             editClockEvent(id, timestamp, justification, token){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
                         alertMessage = message
                         showingAlert = true
-                        
                         let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
                         let endDate = functionFormatter.string(from: tomorrowDate!)
                         let startDate = functionFormatter.string(from: startDate)
