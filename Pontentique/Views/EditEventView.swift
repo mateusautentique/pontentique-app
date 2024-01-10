@@ -30,11 +30,15 @@ struct EditEventView: View {
     @State var dayOff: Bool = false
     @State var doctor: Bool = false
     
-    init(event: ClockEvent, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>) {
+    let onEventEdited: () -> Void
+    
+    //MARK: - INIT
+    init(event: ClockEvent, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
         self.event = event
         self._clockReport = clockReport
         self._startDate = startDate
         self._endDate = endDate
+        self.onEventEdited = onEventEdited
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -200,6 +204,7 @@ struct EditEventView: View {
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text("Ponto editado com sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
                     self.presentationMode.wrappedValue.dismiss()
+                    self.onEventEdited()
                 }))
             }
             .padding()
@@ -234,11 +239,6 @@ struct EditEventView: View {
                     DispatchQueue.main.async {
                         alertMessage = message
                         showingAlert = true
-                        
-                        let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)
-                        let endDate = functionFormatter.string(from: tomorrowDate!)
-                        let startDate = functionFormatter.string(from: startDate)
-                        fetchUpdatedClockReport(startDate, endDate)
                     }
                 } else if let error = error {
                     errorMessage = "ⓘ \(error.localizedDescription)"
@@ -298,8 +298,11 @@ struct ContentView_Previews: PreviewProvider {
             print("Error decoding JSON: \(error)")
             exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", justification: nil)
         }
+        
         return NavigationView {
-            EditEventView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
+            EditEventView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
+                // DEGUG
+            })
         }
     }
 }

@@ -9,63 +9,26 @@ import SwiftUI
 
 struct ClockTableRow: View {
     //MARK: - VARIABLES
-    @Binding var clockReport: ClockReport?
+    @ObservedObject var clockReport: ClockReport
     @Binding var startDate: Date
     @Binding var endDate: Date
     @ObservedObject var clockEntry: ClockEntry
     
-    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>) {
+    let onEventEdited: () -> Void
+    
+    init(clockEntry: ClockEntry, clockReport: ClockReport, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
         self.clockEntry = clockEntry
-        self._clockReport = clockReport
+        self._clockReport = ObservedObject(initialValue: clockReport)
         self._startDate = startDate
         self._endDate = endDate
+        self.onEventEdited = onEventEdited
     }
     
     var body: some View {
         NavigationStack {
             HStack (spacing: 0){
-                Text(dateFormat(clockEntry.day))
-                    .foregroundColor(isEventToday(clockEntry.day) ? ColorScheme.todaysColor : ColorScheme.tableTextColor)
-                    .padding(.leading, 6)
-                    .padding(.trailing, 10)
-                    .frame(width: 60)
-                Group {
-                    VStack(alignment: .leading, spacing: 0) {
-                        if clockEntry.events.isEmpty && isWeekday(clockEntry.day) {
-                            HStack(alignment: .top, spacing: 0) {
-                                ForEach(0..<4) { _ in
-                                    Text("Falta")
-                                        .padding(7)
-                                        .frame(width: 60)
-                                        .fixedSize()
-                                        .background(ColorScheme.BackAbsDay)
-                                        .foregroundColor(ColorScheme.AbsDay)
-                                        .cornerRadius(10)
-                                        .padding(.trailing, 5)
-                                }
-                            }
-                        } else {
-                            ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
-                                HStack(alignment: .top, spacing: 0) {
-                                    ForEach(chunk) { event in
-                                        EventLinkView(event: event, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
-                                            .padding(7)
-                                            .frame(width: 60)
-                                            .fixedSize()
-                                            .background(isToday(event.timestamp) ? ColorScheme.BacktodaysColor : ColorScheme.clockBtnBgColor)
-                                            .foregroundColor(isToday(event.timestamp) ? ColorScheme.todaysColor : ColorScheme.textColor)
-                                            .cornerRadius(10)
-                                            .padding(.trailing, 5)
-                                    }
-                                }
-                            }
-                            .padding(.bottom, 7)
-                        }
-                    }
-                }
-                .padding(0)
-                .frame(alignment: .leading)
-                
+                DateText(date: clockEntry.day)
+                EventGroup(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
                 Spacer()
                 BalanceValue(balanceHours: $clockEntry.balanceHoursOnDay)
                     .bold()
@@ -90,6 +53,7 @@ func isWeekday(_ dateString: String) -> Bool {
     let weekday = calendar.component(.weekday, from: date)
     return !(weekday == 1 || weekday == 7) 
 }
+
 func isEventToday(_ dateString: String) -> Bool {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -99,6 +63,7 @@ func isEventToday(_ dateString: String) -> Bool {
     let comparisonResult = Calendar.current.isDate(date, equalTo: Date(), toGranularity: .day)
     return comparisonResult
 }
+
 func isToday(_ timestamp: String) -> Bool {
     guard let eventDate = convertToDate(timestamp) else {
         return false
@@ -112,6 +77,7 @@ func convertToDate(_ timestamp: String) -> Date? {
     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
     return dateFormatter.date(from: timestamp)
 }
+
 func dateFormat(_ timestamp: String) -> String {
     let inputFormatter = DateFormatter()
     inputFormatter.dateFormat = "yyyy-MM-dd"
@@ -169,7 +135,7 @@ extension Array {
 struct ClockTableRow_Previews: PreviewProvider {
     static var previews: some View {
         let clockEntry: ClockEntry
-        @State var clockReport: ClockReport?
+        @State var clockReport: ClockReport? = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         
@@ -185,6 +151,8 @@ struct ClockTableRow_Previews: PreviewProvider {
             clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         }
         
-        return ClockTableRow(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
+        return ClockTableRow(clockEntry: clockEntry, clockReport: clockReport!, startDate: $startDate, endDate: $endDate, onEventEdited: {
+            //DEBUG
+        })
     }
 }

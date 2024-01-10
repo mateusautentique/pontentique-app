@@ -25,9 +25,9 @@ struct UserMainPanel: View {
     }()
     
     //MARK: - CLOCK INFO
-    @State private var clockReport: ClockReport?
-    @State var totalHourBalance: String = "+0:00"
-    
+    @State private var clockReport = ClockReport()
+    @ObservedObject var dataFetcher = DataFetcher()
+
     //MARK: - ERROR INFO
     @State private var errorMessage: String?
     
@@ -108,9 +108,8 @@ struct UserMainPanel: View {
                 .fontWeight(.semibold)
                 .padding(.bottom, 15)
                 
-                ForEach(clockReport?.entries ?? []) { entry in
-                    ClockTableRow(clockEntry: entry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate)
-                        .padding(.bottom, 15)
+                ForEach(clockReport.entries) { entry in
+                    ClockTableRow(clockEntry: entry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: refreshReport)
                 }
                 
                 HStack {
@@ -118,11 +117,10 @@ struct UserMainPanel: View {
                     Text("BANCO TOTAL")
                         .padding(.trailing, 20)
                         .foregroundColor(ColorScheme.tableTextColor)
-                    BalanceValue(balanceHours: $totalHourBalance)
+                    BalanceValue(balanceHours: $clockReport.totalHourBalance)
                         .bold()
                         .frame(width: 60)
                         .padding(.trailing, 6)
-                    
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
@@ -186,26 +184,16 @@ struct UserMainPanel: View {
         }
     }
     
-    func fetchClockReport(_ startDate: String, _ endDate: String) {
-        if case let .loggedIn(token, id, _) = sessionManager.session {
-            getClockEntriesByPeriod(id, token, startDate: startDate, endDate: endDate) { (clockReport, error) in
-                if let clockReport = clockReport {
-                    DispatchQueue.main.async {
-                        self.clockReport = clockReport
-                        self.totalHourBalance = clockReport.totalHourBalance
-                    }
-                } else if let error = error {
-                    print(error)
-                }
-            }
-        }
-    }
-    
     func refreshReport() {
         let endDate = functionFormatter.string(from: endDate)
         let startDate = functionFormatter.string(from: startDate)
-        fetchClockReport(startDate, endDate)
-        self.totalHourBalance = clockReport?.totalHourBalance ?? "+0:00"
+        dataFetcher.fetchClockReport(startDate, endDate, sessionManager: sessionManager) { fetchedClockReport in
+            if let fetchedClockReport = fetchedClockReport {
+                DispatchQueue.main.async {
+                    self.clockReport = fetchedClockReport
+                }
+            }
+        }
     }
 }
 
