@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4506CE252B4F220B00DCAD9A /* WeekendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4506CE242B4F220B00DCAD9A /* WeekendView.swift */; };
 		451887372B36141400C692F9 /* ClockEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451887362B36141400C692F9 /* ClockEventController.swift */; };
 		451887392B4C5EE600C692F9 /* EditLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451887382B4C5EE600C692F9 /* EditLinkView.swift */; };
 		4518873D2B4EFF0B00C692F9 /* DateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4518873C2B4EFF0B00C692F9 /* DateText.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4506CE242B4F220B00DCAD9A /* WeekendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekendView.swift; sourceTree = "<group>"; };
 		451887362B36141400C692F9 /* ClockEventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockEventController.swift; sourceTree = "<group>"; };
 		451887382B4C5EE600C692F9 /* EditLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLinkView.swift; sourceTree = "<group>"; };
 		4518873C2B4EFF0B00C692F9 /* DateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateText.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				45669BE92B10FD8D000FA293 /* ColorScheme.swift */,
+				4506CE242B4F220B00DCAD9A /* WeekendView.swift */,
 				455F82AE2B30AF6F00CB161C /* ClockTableRow.swift */,
 				4518873E2B4EFF9C00C692F9 /* EventGroup.swift */,
 				4518873C2B4EFF0B00C692F9 /* DateText.swift */,
@@ -280,6 +283,7 @@
 				455F82B12B30B0A700CB161C /* ClockEvent.swift in Sources */,
 				451887432B4F015600C692F9 /* EventChunkView.swift in Sources */,
 				45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */,
+				4506CE252B4F220B00DCAD9A /* WeekendView.swift in Sources */,
 				4518873D2B4EFF0B00C692F9 /* DateText.swift in Sources */,
 				451887452B4F02F100C692F9 /* AbsenceView.swift in Sources */,
 				455F82B72B30D04D00CB161C /* BalanceValue.swift in Sources */,

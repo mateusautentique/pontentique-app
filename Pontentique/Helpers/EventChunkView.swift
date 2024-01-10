@@ -31,8 +31,16 @@ struct EventChunkView: View {
                         .padding(7)
                         .frame(width: 60)
                         .fixedSize()
-                        .background(isToday(event.timestamp) ? ColorScheme.BacktodaysColor : ColorScheme.clockBtnBgColor)
-                        .foregroundColor(isToday(event.timestamp) ? ColorScheme.todaysColor : ColorScheme.textColor)
+                        .background(
+                            event.justification != "" ? Color.yellow.opacity(0.17) :
+                                isToday(event.timestamp) ? ColorScheme.BacktodaysColor :
+                                ColorScheme.clockBtnBgColor
+                        )
+                        .foregroundColor(
+                            event.justification != "" ? Color.yellow :
+                                isToday(event.timestamp) ? ColorScheme.todaysColor :
+                                ColorScheme.textColor
+                        )
                         .cornerRadius(10)
                         .padding(.trailing, 5)
                 }

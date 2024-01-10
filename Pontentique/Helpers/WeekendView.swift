@@ -9,10 +9,23 @@ import SwiftUI
 
 struct WeekendView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack(alignment: .top, spacing: 0){
+            ForEach(0..<4){_ in
+                Text("Folga")
+                    .padding(7)
+                    .frame(width: 60)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(Color.white.opacity(0.17))
+                    .foregroundColor(Color.white.opacity(0.50))
+                    .cornerRadius(10)
+                    .padding(.trailing, 5)
+            }
+        }
     }
 }
 
-#Preview {
-    WeekendView()
+struct WeekendView_Previews: PreviewProvider {
+    static var previews: some View {
+        WeekendView()
+    }
 }

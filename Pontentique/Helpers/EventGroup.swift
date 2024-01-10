@@ -26,7 +26,10 @@ struct EventGroup: View {
     var body: some View {
         Group {
             VStack(alignment: .leading, spacing: 0) {
-                if clockEntry.events.isEmpty && isWeekday(clockEntry.day) {
+                if !isWeekday(clockEntry.day) {
+                    WeekendView()
+                }
+                else if clockEntry.events.isEmpty && isWeekday(clockEntry.day) {
                     AbsenceView()
                 } else {
                     EventChunkView(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
