@@ -91,8 +91,8 @@ struct EditEventView: View {
                             let filtered = registeredTime.filter { "0123456789".contains($0) }
                             if filtered.count > 4 {
                                 registeredTime = String(filtered.prefix(4))
-                            } else if filtered.count == 4 && !filtered.contains(":") {
-                                let timeWithSeparator = filtered.inserting(separator: ":", every: 2)
+                            } else if filtered.count >= 3 {
+                                let timeWithSeparator = insertColonInTime(time: filtered)
                                 registeredTime = validateAndCorrectTime(time: timeWithSeparator)
                             } else {
                                 registeredTime = filtered
@@ -243,6 +243,10 @@ struct EditEventView: View {
         return time
     }
     
+    func insertColonInTime(time: String) -> String {
+        return time.inserting(separator: ":", at: time.count == 3 ? 1 : 2)
+    }
+    
     func replaceTimeInTimestamp(originalTimestamp: String, newTime: String) -> String {
         let timeIndex = originalTimestamp.index(originalTimestamp.startIndex, offsetBy: 11)
         let datePart = originalTimestamp[..<timeIndex]
@@ -306,5 +310,14 @@ extension String {
             counter += 1
         }
         return result
+    }
+}
+
+extension String {
+    func inserting(separator: String, at i: Int) -> String {
+        var str = self
+        let index = str.index(str.startIndex, offsetBy: i)
+        str.insert(contentsOf: separator, at: index)
+        return str
     }
 }
