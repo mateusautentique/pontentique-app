@@ -75,6 +75,7 @@ struct UserMainPanel: View {
                         .padding(.trailing, 6)
                         .padding(.leading, 8)
                     Text("REGISTROS")
+                        .padding(.leading, 2)
                     Spacer()
                     Text("BANCO")
                         .padding(.trailing, 6)

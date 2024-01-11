@@ -24,7 +24,9 @@ struct EventChunkView: View {
     }
 
     var body: some View {
-        ForEach(clockEntry.events.chunks(of: 4), id: \.self) { chunk in
+        let chunks = clockEntry.events.chunks(of: 4)
+        ForEach(chunks.indices, id: \.self) { index in
+            let chunk = chunks[index]
             HStack(alignment: .top, spacing: 0) {
                 ForEach(chunk) { event in
                     EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
@@ -45,10 +47,9 @@ struct EventChunkView: View {
                         .padding(.trailing, 5)
                 }
             }
+            .padding(.bottom, index < chunks.count - 1 ? 7 : 0)
         }
-        .padding(.bottom, 7)
-    }
-}
+    }}
 
 struct EventChunkView_Previews: PreviewProvider {
     static var previews: some View {

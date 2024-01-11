@@ -14,13 +14,13 @@ struct DateText: View {
             .foregroundColor(isEventToday(date) ? ColorScheme.todaysColor : ColorScheme.tableTextColor)
             .padding(.leading, 6)
             .padding(.trailing, 10)
-            .frame(width: 60)
+            .frame(width: 65)
     }
 }
 
 struct DateText_Previews: PreviewProvider {
     static var previews: some View {
-        DateText(date: "1/12")
+        DateText(date: "2023-1-1")
     }
 }
 
