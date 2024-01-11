@@ -85,8 +85,10 @@ struct UserMainPanel: View {
                 .fontWeight(.semibold)
                 .padding(.bottom, 15)
                 
-                ForEach(clockReport.entries) { entry in
-                    ClockTableRow(clockEntry: entry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: refreshReport)
+                ScrollView {
+                    ForEach(clockReport.entries) { entry in
+                        ClockTableRow(clockEntry: entry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: refreshReport)
+                    }
                 }
                 
                 HStack {
