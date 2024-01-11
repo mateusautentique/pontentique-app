@@ -11,19 +11,6 @@ struct UserMainPanel: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
-    //MARK: - DATE VARIABLES
-    let textFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
-        return formatter
-    }()
-    
-    let functionFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
-    
     //MARK: - CLOCK INFO
     @State private var clockReport = ClockReport()
     @ObservedObject var dataFetcher = DataFetcher()
@@ -34,11 +21,6 @@ struct UserMainPanel: View {
     //MARK: - DATE INFO
     @State private var endDate = Date()
     @State private var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-    var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yy"
-        return formatter
-    }
     
     //MARK: - ALERT
     enum ActiveAlert { case first, second }
@@ -46,18 +28,12 @@ struct UserMainPanel: View {
     @State private var showAlert: Bool = false
     @State private var sucessPunchMessage: String = ""
     
-    var timeFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter
-    }
-    
     //MARK: - VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
     
     //MARK: - VIEW
     var body: some View {
-        let myHour = Text(Date(), formatter: timeFormatter)
+        let myHour = Text(Date(), formatter: createFormatter("HH:mm"))
             .font(.system(size: 330))
         NavigationStack{
             VStack {
@@ -88,7 +64,7 @@ struct UserMainPanel: View {
                         }
                         .padding()
                         
-                        Text("\(startDate, formatter: dateFormatter) - \(endDate, formatter: dateFormatter)")
+                        Text("\(startDate, formatter: createFormatter("dd/MM/yy")) - \(endDate, formatter: createFormatter("dd/MM/yy"))")
                             .font(.system(size: 28))
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
@@ -184,9 +160,10 @@ struct UserMainPanel: View {
         }
     }
     
+//MARK: - UPDATE VIEW
     func refreshReport() {
-        let endDate = functionFormatter.string(from: endDate)
-        let startDate = functionFormatter.string(from: startDate)
+        let endDate = createFormatter("yyyy-MM-dd").string(from: endDate)
+        let startDate = createFormatter("yyyy-MM-dd").string(from: startDate)
         dataFetcher.fetchClockReport(startDate, endDate, sessionManager: sessionManager) { fetchedClockReport in
             if let fetchedClockReport = fetchedClockReport {
                 DispatchQueue.main.async {

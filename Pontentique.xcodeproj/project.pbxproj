@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4506CE252B4F220B00DCAD9A /* WeekendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4506CE242B4F220B00DCAD9A /* WeekendView.swift */; };
+		4506CE272B501A1100DCAD9A /* DateFormatterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4506CE262B501A1100DCAD9A /* DateFormatterController.swift */; };
 		451887372B36141400C692F9 /* ClockEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451887362B36141400C692F9 /* ClockEventController.swift */; };
 		451887392B4C5EE600C692F9 /* EditLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451887382B4C5EE600C692F9 /* EditLinkView.swift */; };
 		4518873D2B4EFF0B00C692F9 /* DateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4518873C2B4EFF0B00C692F9 /* DateText.swift */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		4506CE242B4F220B00DCAD9A /* WeekendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekendView.swift; sourceTree = "<group>"; };
+		4506CE262B501A1100DCAD9A /* DateFormatterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterController.swift; sourceTree = "<group>"; };
 		451887362B36141400C692F9 /* ClockEventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockEventController.swift; sourceTree = "<group>"; };
 		451887382B4C5EE600C692F9 /* EditLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLinkView.swift; sourceTree = "<group>"; };
 		4518873C2B4EFF0B00C692F9 /* DateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateText.swift; sourceTree = "<group>"; };
@@ -93,14 +95,14 @@
 			isa = PBXGroup;
 			children = (
 				45669BE92B10FD8D000FA293 /* ColorScheme.swift */,
-				4506CE242B4F220B00DCAD9A /* WeekendView.swift */,
 				455F82AE2B30AF6F00CB161C /* ClockTableRow.swift */,
-				4518873E2B4EFF9C00C692F9 /* EventGroup.swift */,
 				4518873C2B4EFF0B00C692F9 /* DateText.swift */,
+				4518873E2B4EFF9C00C692F9 /* EventGroup.swift */,
+				455F82B62B30D04D00CB161C /* BalanceValue.swift */,
 				451887442B4F02F100C692F9 /* AbsenceView.swift */,
+				4506CE242B4F220B00DCAD9A /* WeekendView.swift */,
 				451887422B4F015600C692F9 /* EventChunkView.swift */,
 				451887382B4C5EE600C692F9 /* EditLinkView.swift */,
-				455F82B62B30D04D00CB161C /* BalanceValue.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -178,6 +180,7 @@
 				4525C66B2B16458C00B2A799 /* AuthController.swift */,
 				45E931872B33204F003BED3A /* ErrorController.swift */,
 				451887482B4F0AC000C692F9 /* DataFetcherController.swift */,
+				4506CE262B501A1100DCAD9A /* DateFormatterController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */,
 				451887392B4C5EE600C692F9 /* EditLinkView.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,
+				4506CE272B501A1100DCAD9A /* DateFormatterController.swift in Sources */,
 				4525C66C2B16458C00B2A799 /* AuthController.swift in Sources */,
 				45E9318E2B34BFDB003BED3A /* EditEventView.swift in Sources */,
 			);

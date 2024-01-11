@@ -53,7 +53,7 @@ struct EventGroup_Previews: PreviewProvider {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMddHHmmss)
+            decoder.dateDecodingStrategy = .formatted(createFormatter("yyyy-MM-dd HH:mm:ss"))
             clockEntry = try decoder.decode(ClockEntry.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")

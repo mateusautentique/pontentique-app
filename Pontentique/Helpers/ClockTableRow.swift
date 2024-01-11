@@ -10,9 +10,9 @@ import SwiftUI
 struct ClockTableRow: View {
     //MARK: - VARIABLES
     @ObservedObject var clockReport: ClockReport
+    @ObservedObject var clockEntry: ClockEntry
     @Binding var startDate: Date
     @Binding var endDate: Date
-    @ObservedObject var clockEntry: ClockEntry
     
     let onEventEdited: () -> Void
     
@@ -44,64 +44,43 @@ struct ClockTableRow: View {
 
 //MARK: - UTILS
 func isWeekday(_ dateString: String) -> Bool {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd"
-    guard let date = dateFormatter.date(from: dateString) else {
+    guard let date = createFormatter("yyyy-MM-dd").date(from: dateString) else {
         return false
     }
-    let calendar = Calendar.current
-    let weekday = calendar.component(.weekday, from: date)
+    let weekday = Calendar.current.component(.weekday, from: date)
     return !(weekday == 1 || weekday == 7)
 }
 
 func isEventToday(_ dateString: String) -> Bool {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd"
-    guard let date = dateFormatter.date(from: dateString) else {
+    guard let date = createFormatter("yyyy-MM-dd").date(from: dateString) else {
         return false
     }
-    let comparisonResult = Calendar.current.isDate(date, equalTo: Date(), toGranularity: .day)
-    return comparisonResult
+    return Calendar.current.isDate(date, equalTo: Date(), toGranularity: .day)
 }
 
 func isToday(_ timestamp: String) -> Bool {
     guard let eventDate = convertToDate(timestamp) else {
         return false
     }
-    let comparisonResult = Calendar.current.isDate(eventDate, equalTo: Date(), toGranularity: .day)
-    return comparisonResult
+    return Calendar.current.isDate(eventDate, equalTo: Date(), toGranularity: .day)
 }
 
 func convertToDate(_ timestamp: String) -> Date? {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    return dateFormatter.date(from: timestamp)
+    return createFormatter("yyyy-MM-dd HH:mm:ss").date(from: timestamp)
 }
 
 func dateFormat(_ timestamp: String) -> String {
-    let inputFormatter = DateFormatter()
-    inputFormatter.dateFormat = "yyyy-MM-dd"
-    
-    if let date = inputFormatter.date(from: timestamp) {
-        let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "dd/MM"
-        return outputFormatter.string(from: date)
-    } else {
+    guard let date = createFormatter("yyyy-MM-dd").date(from: timestamp) else {
         return "Invalid date"
     }
+    return createFormatter("dd/MM").string(from: date)
 }
 
-func timeFormat(_ timestamp: String) -> (String) {
-    let inputFormatter = DateFormatter()
-    inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    
-    if let date = inputFormatter.date(from: timestamp) {
-        let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "HH:mm"
-        return outputFormatter.string(from: date)
-    } else {
+func timeFormat(_ timestamp: String) -> String {
+    guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: timestamp) else {
         return "Invalid time"
     }
+    return createFormatter("HH:mm").string(from: date)
 }
 
 func checkBalanceValue(_ duration: String) -> Bool {
@@ -112,14 +91,6 @@ func checkBalanceValue(_ duration: String) -> Bool {
     } else {
         return false
     }
-}
-
-extension DateFormatter {
-    static let yyyyMMddHHmmss: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter
-    }()
 }
 
 extension Array {
@@ -144,7 +115,7 @@ struct ClockTableRow_Previews: PreviewProvider {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMddHHmmss)
+            decoder.dateDecodingStrategy = .formatted(createFormatter("yyyy-MM-dd HH:mm:ss"))
             clockEntry = try decoder.decode(ClockEntry.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")

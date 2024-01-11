@@ -40,12 +40,9 @@ struct EditEventView: View {
         self._endDate = endDate
         self.onEventEdited = onEventEdited
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         var timeString = ""
-        if let date = dateFormatter.date(from: event.timestamp) {
-            dateFormatter.dateFormat = "H:mm"
-            timeString = dateFormatter.string(from: date)
+        if let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) {
+            timeString = createFormatter("H:mm").string(from: date)
         }
         _registeredTime = State(initialValue: timeString)
     }
@@ -53,30 +50,18 @@ struct EditEventView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     //MARK: - DATE FORMATTING
-    let functionFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
-
     var dayAndMonth: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        if let date = dateFormatter.date(from: event.timestamp) {
-            dateFormatter.dateFormat = "d/MM"
-            return dateFormatter.string(from: date)
+        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
+            return ""
         }
-        return ""
+        return createFormatter("d/MM").string(from: date)
     }
-    
+
     var time: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        if let date = dateFormatter.date(from: event.timestamp) {
-            dateFormatter.dateFormat = "H:mm"
-            return dateFormatter.string(from: date)
+        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
+            return ""
         }
-        return ""
+        return createFormatter("H:mm").string(from: date)
     }
     
     //MARK: - VIEW
@@ -293,7 +278,7 @@ struct ContentView_Previews: PreviewProvider {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            decoder.dateDecodingStrategy = .formatted(DateFormatter.yyyyMMddHHmmss)
+            decoder.dateDecodingStrategy = .formatted(createFormatter("yyyy-MM-dd HH:mm:ss"))
             exampleEvent = try decoder.decode(ClockEvent.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")
