@@ -87,21 +87,30 @@ struct EditEventView: View {
                     TextField("\(time)", text: $registeredTime)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.center)
-                        .onChange (of: registeredTime){
-                            let filtered = registeredTime.filter { "0123456789".contains($0) }
-                            if filtered.count > 4 {
-                                registeredTime = String(filtered.prefix(4))
-                            } else if filtered.count >= 3 {
-                                let timeWithSeparator = insertColonInTime(time: filtered)
-                                registeredTime = validateAndCorrectTime(time: timeWithSeparator)
-                            } else {
-                                registeredTime = filtered
-                            }
-                        }
                         .padding(5)
                         .background(ColorScheme.fieldBgColor)
                         .cornerRadius(7)
                         .frame(minWidth: 58, maxWidth: 60)
+                        .onChange (of: registeredTime){
+                            let filtered = registeredTime.filter { "0123456789".contains($0) }
+                            if filtered.count > 4 {
+                                registeredTime = String(filtered.prefix(4))
+                            } else if filtered.count == 3 {
+                                let timeWithSeparator = insertColonInTime(time: filtered, afterSecondDigit: filtered[filtered.index(filtered.startIndex, offsetBy: 1)] >= "6")
+                                if isValidTime(timeWithSeparator) {
+                                    registeredTime = timeWithSeparator
+                                }
+                            } else if filtered.count == 4 {
+                                let timeWithSeparator = insertColonInTime(time: filtered, afterSecondDigit: true)
+                                if isValidTime(timeWithSeparator) {
+                                    registeredTime = timeWithSeparator
+                                } else {
+                                    registeredTime = "23:59"
+                                }
+                            } else {
+                                registeredTime = filtered
+                            }
+                        }
                 }
                 .background(ColorScheme.appBackgroudColor)
                 .padding(.bottom, 15)
@@ -166,7 +175,7 @@ struct EditEventView: View {
                 Button(action: {
                     if justification.isEmpty {
                         errorMessage = "ⓘ A justificativa é obrigatória"
-                    } else if registeredTime.count != 5 {
+                    } else if !isValidTime(registeredTime) {
                         errorMessage = "ⓘ Insira um horário válido"
                     } else {
                         errorMessage = ""
@@ -243,14 +252,27 @@ struct EditEventView: View {
         return time
     }
     
-    func insertColonInTime(time: String) -> String {
-        return time.inserting(separator: ":", at: time.count == 3 ? 1 : 2)
+    func isValidTime(_ time: String) -> Bool {
+        let formatter = DateFormatter()
+        formatter.dateFormat = time.count == 4 ? "H:mm" : "HH:mm"
+        if formatter.date(from: time) == nil {
+            return false
+        }
+        
+        let components = time.split(separator: ":")
+        return components[1].count == 2
+    }
+    
+    func insertColonInTime(time: String, afterSecondDigit: Bool) -> String {
+        let index = afterSecondDigit ? 2 : 1
+        return time.inserting(separator: ":", at: index)
     }
     
     func replaceTimeInTimestamp(originalTimestamp: String, newTime: String) -> String {
         let timeIndex = originalTimestamp.index(originalTimestamp.startIndex, offsetBy: 11)
         let datePart = originalTimestamp[..<timeIndex]
-        return "\(datePart)\(newTime):00"
+        let formattedTime = newTime.count == 4 ? "0\(newTime)" : newTime
+        return "\(datePart)\(formattedTime):00"
     }
     
     func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
