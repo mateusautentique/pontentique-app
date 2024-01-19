@@ -22,13 +22,12 @@ struct AddEventView: View {
     @Binding var clockReport: ClockReport?
     @Binding var startDate: Date
     @Binding var endDate: Date
-    let event: ClockEvent
     
     //MARK: - UPDATE INFO
-    @Binding var registeredTime: String
-    var justification: String = ""
-    var dayOff: Bool = false
-    var doctor: Bool = false
+    @State private var registeredTime: String = ""
+    @State private var justification: String = ""
+    @State private var dayOff: Bool = false
+    @State private var doctor: Bool = false
     
     let onEventEdited: () -> Void
     
@@ -43,19 +42,19 @@ struct AddEventView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     //MARK: - DATE FORMATTING
-    var dayAndMonth: String {
-        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
-            return ""
-        }
-        return createFormatter("d/MM").string(from: date)
-    }
-
-    var time: String {
-        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
-            return ""
-        }
-        return createFormatter("H:mm").string(from: date)
-    }
+//    var dayAndMonth: String {
+//        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
+//            return ""
+//        }
+//        return createFormatter("d/MM").string(from: date)
+//    }
+//
+//    var time: String {
+//        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
+//            return ""
+//        }
+//        return createFormatter("H:mm").string(from: date)
+//    }
     
     //MARK: - VIEW
     var body: some View {
@@ -75,9 +74,9 @@ struct AddEventView: View {
                     Text("Horário registrado")
                         .foregroundColor(ColorScheme.textColor)
                     Spacer()
-                    Text("\(dayAndMonth)")
+                    Text("12/01")
                         .foregroundColor(ColorScheme.tableTextColor)
-                    TextField("\(time)", text: $registeredTime)
+                    TextField("12:00", text: $registeredTime)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.center)
                         .padding(5)
@@ -115,7 +114,7 @@ struct AddEventView: View {
                     Spacer()
                 }
                 
-                TextField("Motivo", text: justification, axis: .vertical)
+                TextField("Motivo", text: $justification, axis: .vertical)
                     .textFieldStyle(PlainTextFieldStyle())
                     .padding(10)
                     .background(ColorScheme.fieldBgColor)
@@ -133,7 +132,7 @@ struct AddEventView: View {
                             .foregroundColor(ColorScheme.tableTextColor)
                     }
                     Spacer()
-                    Toggle("", isOn: dayOff)
+                    Toggle("", isOn: $dayOff)
                                 .onChange(of: dayOff) { oldValue, newValue in
                                     if newValue {
                                         doctor = false
@@ -152,7 +151,7 @@ struct AddEventView: View {
                             .foregroundColor(ColorScheme.tableTextColor)
                     }
                     Spacer()
-                    Toggle("", isOn: doctor)
+                    Toggle("", isOn: $doctor)
                         .onChange(of: doctor) { oldValue, newValue in
                             if newValue {
                                 dayOff = false
@@ -179,7 +178,7 @@ struct AddEventView: View {
                         errorMessage = "ⓘ Insira um horário válido"
                     } else {
                         errorMessage = ""
-                        editSelectedEvent(event, justification, registeredTime)
+                        //ADD EVENT
                     }
                 }){
                     Text("Salvar")
