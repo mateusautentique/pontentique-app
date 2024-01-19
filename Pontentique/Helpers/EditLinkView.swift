@@ -18,7 +18,6 @@ struct EventLinkView: View {
     var body: some View {
         NavigationLink(destination: EditEventView(event: event, clockReport: Binding.constant(clockReport), startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)) {
             Text(timeFormat(event.timestamp))
-                
         }
     }
 }

@@ -11,6 +11,10 @@ struct AdminMainPanel: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     @State private var isLoggedIn = false
+    
+    @State private var users = [User]()
+    @State private var currentUserIndex = 0
+    
     //MARK: - CLOCK INFO
     @State private var clockReport = ClockReport()
     @ObservedObject var dataFetcher = DataFetcher()
@@ -27,42 +31,56 @@ struct AdminMainPanel: View {
     @State private var activeAlert: ActiveAlert = .first
     @State private var showAlert: Bool = false
     @State private var sucessPunchMessage: String = ""
+    
     //MARK: - VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
+    @State private var appIsFullyLoaded = false
     
     //MARK: - VIEW
     var body: some View {
-    //MARK: MYHOUR FORMATTER
         let myHour = Text(Date(), formatter: createFormatter("HH:mm"))
             .font(.system(size: 330))
-    //MARK: USERNAME AND BUTTONS
+        
+        //MARK: USER
         NavigationStack{
             VStack {
                 HStack {
-                    ZStack{
-                        HStack{
+                    ZStack {
+                        HStack {
                             Button(action: {
-                                //Coloque aqui a acão do botão da esquerda
+                                if currentUserIndex > 0 {
+                                    currentUserIndex -= 1
+                                } else {
+                                    currentUserIndex = users.count - 1
+                                }
+                                refreshAdminReport()
                             }) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 24))
                             }
+                            
                             Spacer()
                             
                             Button(action: {
-                                //Coloque aqui a acão do botão da direita
+                                if currentUserIndex < users.count - 1 {
+                                    currentUserIndex += 1
+                                } else {
+                                    currentUserIndex = 0
+                                }
+                                refreshAdminReport()
                             }) {
                                 Image(systemName: "chevron.right")
                                     .font(.system(size: 24))
                             }
                         }
                         .padding()
-                        Text("USERNAME(0¯0)")
+                        
+                        Text(users.isEmpty ? "Carregando..." : users[currentUserIndex].name)
                             .font(.system(size: 28))
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
-        //MARK: DATE
+                //MARK: DATE
                 HStack {
                     ZStack{
                         HStack{
@@ -70,35 +88,37 @@ struct AdminMainPanel: View {
                                 startDate = Calendar.current.date(byAdding: .day, value: -7, to: startDate)!
                                 endDate = Calendar.current.date(byAdding: .day, value: -7, to: endDate)!
                                 
-                                refreshReport()
+                                refreshAdminReport()
                             }) {
                                 Image(systemName: "chevron.left")
                                     .font(.system(size: 24))
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Spacer()
+                            
                             if !Calendar.current.isDate(endDate, equalTo: Date(), toGranularity: .day) {
                                 Button(action: {
                                     startDate = Calendar.current.date(byAdding: .day, value: +7, to: startDate)!
                                     endDate = Calendar.current.date(byAdding: .day, value: +7, to: endDate)!
                                     
-                                    refreshReport()
+                                    refreshAdminReport()
                                 }) {
                                     Image(systemName: "chevron.right")
                                         .font(.system(size: 24))
                                 }
                             }
                         }
-                        .padding(.leading)
+                        .padding()
                         
                         Text("\(startDate, formatter: createFormatter("dd/MM/yy")) - \(endDate, formatter: createFormatter("dd/MM/yy"))")
                             .font(.system(size: 28))
                             .frame(maxWidth: .infinity, alignment: .center)
-                        
                     }
                 }
                 Spacer()
                 Spacer()
-        //MARK: "DATA", "REGISTROS", "BANCO"
+                
+                //MARK: "DATA", "REGISTROS", "BANCO"
                 HStack{
                     Text("DATA")
                         .padding(.trailing, 6)
@@ -116,11 +136,18 @@ struct AdminMainPanel: View {
                 .padding(.bottom, 15)
                 
                 ScrollView {
-                    ForEach(clockReport.entries) { entry in
-                        ClockTableRow(clockEntry: entry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: refreshReport)
+                    if appIsFullyLoaded {
+                        ForEach(clockReport.entries) { entry in
+                            ClockTableRow(clockEntry: entry, clockReport: clockReport,
+                                          startDate: $startDate, endDate: $endDate,
+                                          onEventEdited: refreshAdminReport)
+                        }
+                    } else {
+                        LoadingIconView()
                     }
                 }
-        //MARK: "BANCO TOTAL"
+                
+                //MARK: "BANCO TOTAL"
                 HStack {
                     Spacer()
                     Text("BANCO TOTAL")
@@ -143,19 +170,21 @@ struct AdminMainPanel: View {
                         .foregroundColor(.red)
                         .padding(.top, 10)
                 }
-        //MARK: REGISTER THE CLOCKEVENT AND ALERT
+                //MARK: REGISTER THE CLOCKEVENT AND ALERT
                 VStack {
-                    Button(action: {
-                        self.activeAlert = .first
-                        showAlert = true
-                    }) {
-                        Text("Registrar ponto")
-                            .bold()
-                            .padding(15)
-                            .frame(maxWidth: .infinity)
-                            .background(ColorScheme.primaryColor)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                    if appIsFullyLoaded, let currentUser = sessionManager.user, users[currentUserIndex].id == currentUser.id {
+                        Button(action: {
+                            self.activeAlert = .first
+                            showAlert = true
+                        }) {
+                            Text("Registrar ponto")
+                                .bold()
+                                .padding(15)
+                                .frame(maxWidth: .infinity)
+                                .background(ColorScheme.primaryColor)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
                     }
                 }
                 .alert(isPresented: $showAlert) {
@@ -166,8 +195,8 @@ struct AdminMainPanel: View {
                                 punchClock(user.id, user.token ?? "") { (message, error) in
                                     if let message = message {
                                         DispatchQueue.main.async {
-                                            refreshReport()
-
+                                            refreshAdminReport()
+                                            
                                             sucessPunchMessage = message
                                             self.activeAlert = .second
                                             showAlert = true
@@ -185,7 +214,7 @@ struct AdminMainPanel: View {
                 .padding()
             }
             
-            //MARK: 3 BUTTONS
+            //MARK: CHANGE VIEW
             HStack {
                 Spacer()
                 Button(action: {
@@ -214,27 +243,53 @@ struct AdminMainPanel: View {
                         .font(.system(size: 26))
                         .padding(.top, 20)
                 }
-
+                
                 Spacer()
             }
             
             .frame(maxWidth: .infinity, minHeight: 50)
             .background(ColorScheme.clockBtnBgColor)
         }
-        
         .onAppear {
-            refreshReport()
+            getAllUsers {
+                refreshAdminReport()
+            }
         }
     }
     
     //MARK: - UPDATE VIEW
-    func refreshReport() {
+    func getAllUsers(completion: @escaping () -> Void) {
+        dataFetcher.fetchAllUsers(sessionManager: sessionManager) { fetchedUsers, error in
+            if let fetchedUsers = fetchedUsers {
+                DispatchQueue.main.async {
+                    self.users = fetchedUsers
+                    if let currentUser = sessionManager.user {
+                        self.currentUserIndex = self.users.firstIndex(where: { $0.id == currentUser.id }) ?? 0
+                    }
+                    completion()
+                }
+            } else if let error = error {
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
+
+    func refreshAdminReport() {
+        guard !users.isEmpty else { return }
+        let selectedUser = users[currentUserIndex]
         let endDate = createFormatter("yyyy-MM-dd").string(from: endDate)
         let startDate = createFormatter("yyyy-MM-dd").string(from: startDate)
-        dataFetcher.fetchClockReport(startDate, endDate, sessionManager: sessionManager) { fetchedClockReport in
+        dataFetcher.fetchClockReport(startDate, endDate, sessionManager: sessionManager, selectedUser: selectedUser) { fetchedClockReport, error in
             if let fetchedClockReport = fetchedClockReport {
                 DispatchQueue.main.async {
                     self.clockReport = fetchedClockReport
+                    self.appIsFullyLoaded = true
+                }
+            } else if let error = error {
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
                 }
             }
         }

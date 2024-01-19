@@ -137,7 +137,7 @@ struct UserMainPanel: View {
                                     if let message = message {
                                         DispatchQueue.main.async {
                                             refreshReport()
-
+                                            
                                             sucessPunchMessage = message
                                             self.activeAlert = .second
                                             showAlert = true
@@ -146,7 +146,8 @@ struct UserMainPanel: View {
                                         errorMessage = "ⓘ \(error.localizedDescription)"
                                     }
                                 }
-                            }                        }), secondaryButton: .cancel())
+                            }
+                         }), secondaryButton: .cancel())
                     case .second:
                         return Alert(title: Text("Successo!"), message: Text(sucessPunchMessage), dismissButton: .default(Text("OK")))
                     }
@@ -164,17 +165,21 @@ struct UserMainPanel: View {
     
 //MARK: - UPDATE VIEW
     func refreshReport() {
+        let defaultUser = User()
         let endDate = createFormatter("yyyy-MM-dd").string(from: endDate)
         let startDate = createFormatter("yyyy-MM-dd").string(from: startDate)
-        dataFetcher.fetchClockReport(startDate, endDate, sessionManager: sessionManager) { fetchedClockReport in
+        dataFetcher.fetchClockReport(startDate, endDate, sessionManager: sessionManager, selectedUser: sessionManager.user ?? defaultUser) { fetchedClockReport, error in
             if let fetchedClockReport = fetchedClockReport {
                 DispatchQueue.main.async {
                     self.clockReport = fetchedClockReport
                 }
+            } else if let error = error {
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                }
             }
         }
-    }
-}
+    }}
 
 //MARK: - PREVIEW
 struct UserMainPanel_Previews: PreviewProvider {

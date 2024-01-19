@@ -14,7 +14,10 @@ struct ContentView: View {
         NavigationView {
             switch sessionManager.session {
             case .loggedIn:
-                UserMainPanel()
+                Group {
+                    if sessionManager.user?.role == "admin" { AdminMainPanel() }
+                    else { UserMainPanel() }
+                }
             case .loggedOut:
                 LoginScreen()
             }
