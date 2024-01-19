@@ -30,12 +30,12 @@ struct AdminRequestMainPanel: View {
     
     
     var body: some View {
-    
+        
         VStack {
             Text("Solicitações")
                 .font(.system(size: 28))
                 .frame(maxWidth: .infinity, alignment: .center)
-//MARK: REQUEST RECIVER 
+            //MARK: REQUEST RECIVER
             List{
                 ForEach(requests) { request in
                     VStack(alignment: .leading) {
@@ -56,7 +56,7 @@ struct AdminRequestMainPanel: View {
                         Button(role: .destructive) {
                             withAnimation {
                                 denyRequest(request)
-                            //Botão negar
+                                //Botão negar
                             }
                         } label: {
                             Text("Negar")
@@ -66,42 +66,6 @@ struct AdminRequestMainPanel: View {
                 }
             }
         }
-//MARK: 3 BUTTONS
-        VStack {
-            Spacer()
-            HStack {
-                Spacer()
-                Button(action: {
-                    // Ação do botão 1
-                }) {
-                    Image(systemName: "clock")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-                Button(action: {
-                    // Ação do botão 2
-                }) {
-                    Image(systemName: "list.bullet.clipboard.fill")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-                Button(action: {
-                    // Ação do botão 3
-                }) {
-                    Image(systemName: "person.2")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: 50)
-        .background(ColorScheme.clockBtnBgColor)
     }
     
 //MARK: FUNC TO DELETE THE REQUEST (DUMMY DATA)

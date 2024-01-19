@@ -43,42 +43,6 @@ struct AdminUsersMainPainel: View {
             }
             .listStyle(PlainListStyle())
         }
-
-        VStack{
-            Spacer()
-            HStack {
-                Spacer()
-                Button(action: {
-                    // Ação do botão 1
-                }) {
-                    Image(systemName: "clock")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-                Button(action: {
-                    // Ação do botão 2
-                }) {
-                    Image(systemName: "list.bullet.clipboard")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-                Button(action: {
-                    // Ação do botão 3
-                }) {
-                    Image(systemName: "person.2.fill")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: 50)
-        .background(ColorScheme.clockBtnBgColor)
     }
 }
 #Preview {
