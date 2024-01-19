@@ -7,27 +7,18 @@
 
 import SwiftUI
 
-struct User: Identifiable {
+struct TestUser: Identifiable {
     let id = UUID()
     let name: String
 }
 
 struct AdminUsersMainPainel: View {
     
-    let users: [User] = [
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)"),
-        User(name: "Username(0-0)")
-     
-        
+    let users: [TestUser] = [
+        TestUser(name: "Username(0-0)"),
+        TestUser(name: "Username(0-0)"),
+        TestUser(name: "Username(0-0)"),
+        TestUser(name: "Username(0-0)")
     ]
     var body: some View {
         VStack {

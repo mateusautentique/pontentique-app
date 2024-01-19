@@ -137,7 +137,7 @@ struct UserMainPanel: View {
                                     if let message = message {
                                         DispatchQueue.main.async {
                                             refreshReport()
-                                            
+
                                             sucessPunchMessage = message
                                             self.activeAlert = .second
                                             showAlert = true
@@ -146,8 +146,7 @@ struct UserMainPanel: View {
                                         errorMessage = "ⓘ \(error.localizedDescription)"
                                     }
                                 }
-                            }
-                        }), secondaryButton: .cancel())
+                            }                        }), secondaryButton: .cancel())
                     case .second:
                         return Alert(title: Text("Successo!"), message: Text(sucessPunchMessage), dismissButton: .default(Text("OK")))
                     }

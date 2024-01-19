@@ -80,7 +80,6 @@ func userRegister(cpf: String, name: String, email: String, password: String, pa
         }
     }
     task.resume()
-    
 }
 
 func getLoggedUser(_ token: String, host: String = "\(API_HOST)/user/", completion: @escaping (User?, Error?) -> Void) {
