@@ -127,7 +127,6 @@
 				4506CE242B4F220B00DCAD9A /* WeekendView.swift */,
 				451887422B4F015600C692F9 /* EventChunkView.swift */,
 				451887382B4C5EE600C692F9 /* EditLinkView.swift */,
-				8BE7B2FE2B599209004B6B6D /* AddEvent.swift */,
 				457DA01E2B5AF2EE000167A2 /* LoadingIconView.swift */,
 				8BE7B2FE2B599209004B6B6D /* AddEventLinkView.swift */,
 				8BE7B3022B5AFAFF004B6B6D /* ForEachChunk.swift */,
@@ -139,8 +138,6 @@
 		455F82C12B31F9D700CB161C /* User */ = {
 			isa = PBXGroup;
 			children = (
-				8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */,
-				8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */,
 				455F82A92B307D9E00CB161C /* UserMainPanel.swift */,
 			);
 			path = User;
@@ -197,10 +194,8 @@
 				45669BEB2B10FDC8000FA293 /* LoginScreen.swift */,
 				455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */,
 				45E9318D2B34BFDB003BED3A /* EditEventView.swift */,
-				457DA0202B5B0356000167A2 /* AdminMainPanel.swift */,
-				8B09429C2B56F51D00F206C0 /* AdminReportPainel.swift */,
 				8BE7B2F82B599034004B6B6D /* AddEventView.swift */,
-				8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */,
+				457DA0222B5B10BC000167A2 /* Admin */,
 				455F82C12B31F9D700CB161C /* User */,
 			);
 			path = Views;
@@ -232,6 +227,18 @@
 				455F82B42B30B5EC00CB161C /* ClockReport.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		457DA0222B5B10BC000167A2 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				457DA0202B5B0356000167A2 /* AdminMainPanel.swift */,
+				8B09429C2B56F51D00F206C0 /* AdminReportPainel.swift */,
+				8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */,
+				8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */,
+				8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */,
+			);
+			path = Admin;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

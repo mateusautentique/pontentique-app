@@ -48,10 +48,10 @@ struct EventChunkView: View {
 struct EventChunkView_Previews: PreviewProvider {
     static var previews: some View {
         let clockEntry: ClockEntry
-        @State var clockReport: ClockReport? = ClockReport()
+        let clockReport = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-        
+
         do {
             let url = Bundle.main.url(forResource: "RowExampleData", withExtension: "json")!
             let data = try Data(contentsOf: url)
@@ -63,8 +63,8 @@ struct EventChunkView_Previews: PreviewProvider {
             print("Error decoding JSON: \(error)")
             clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         }
-        
-        return EventChunkView(clockEntry: clockEntry, clockReport: clockReport!, startDate: $startDate, endDate: $endDate, onEventEdited: {
+
+        return EventChunkView(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
             //DEBUG
         })
     }
