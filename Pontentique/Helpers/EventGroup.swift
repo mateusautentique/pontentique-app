@@ -25,20 +25,19 @@ struct EventGroup: View {
     
     var body: some View {
         Group {
-            
-                VStack(alignment: .leading, spacing: 0) {
-                    if !clockEntry.events.isEmpty {
-                        EventChunkView(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                    } else if isWeekday(clockEntry.day) {
-                        AbsenceView()
-                    } else {
-                        WeekendView()
-                    }
+            VStack(alignment: .leading, spacing: 0) {
+                if !clockEntry.events.isEmpty {
+                    EventChunkView(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                } else if isWeekday(clockEntry.day) {
+                    AbsenceView()
+                } else {
+                    WeekendView()
                 }
-    }
+            }
+        }
         .padding(0)
         .frame(alignment: .leading)
-}
+    }
 }
 
 struct EventGroup_Previews: PreviewProvider {
