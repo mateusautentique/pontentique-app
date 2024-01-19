@@ -144,9 +144,12 @@ struct EditEventView: View {
                             .foregroundColor(ColorScheme.tableTextColor)
                     }
                     Spacer()
-                    Toggle(isOn: $dayOff) {
-                        Text("")
-                    }
+                    Toggle("", isOn: $dayOff)
+                                .onChange(of: dayOff) { oldValue, newValue in
+                                    if newValue {
+                                        doctor = false
+                                    }
+                                }
                     .padding()
                 }
                 Divider()
@@ -160,9 +163,13 @@ struct EditEventView: View {
                             .foregroundColor(ColorScheme.tableTextColor)
                     }
                     Spacer()
-                    Toggle(isOn: $doctor) {
-                        Text("")
-                    }
+                    Toggle("", isOn: $doctor)
+                        .onChange(of: doctor) { oldValue, newValue in
+                            if newValue {
+                                dayOff = false
+                            }
+                        }
+                    
                     .padding()
                 }
                 Divider()
