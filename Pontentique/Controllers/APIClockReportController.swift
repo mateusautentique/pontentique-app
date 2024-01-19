@@ -30,7 +30,6 @@ func getClockEntriesByPeriod(_ userId: Int, _ token: String, startDate: String?,
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
         guard let response = response as? HTTPURLResponse, let data = data else { return }
-        
         do {
             if response.statusCode == 200 {
                 let decoder = JSONDecoder()

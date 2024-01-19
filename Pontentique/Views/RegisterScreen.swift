@@ -128,20 +128,18 @@ struct RegisterScreen: View {
                         Task {
                             userRegister(cpf: cpf, name: name, email: email, password: password, password_confirmation: password_confirmation) { (token, error) in
                                 if let token = token {
-//                                    print("Registration succeeded!")
                                     errorMessage = nil
-                                    getLoggedUser(token){ (json, error) in
-                                        if let json = json {
-                                            self.sessionManager.session = .loggedIn(token: token, id: json["id"] as! Int, name: json["user_name"] as! String)
+                                    getLoggedUser(token){ (user, error) in
+                                        if let user = user {
+                                            self.sessionManager.session = .loggedIn(user)
                                             DispatchQueue.main.async {
                                                 isLoggedIn = true
                                             }
-                                        }else if let error = error {
+                                        } else if let error = error {
                                             self.errorMessage = error.localizedDescription
                                         }
                                     }
                                 } else if let error = error {
-                                    print("Registration failed: \(error)")
                                     self.errorMessage = error.localizedDescription
                                 }
                             }

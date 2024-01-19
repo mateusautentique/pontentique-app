@@ -40,6 +40,10 @@ struct EditEventView: View {
         self._endDate = endDate
         self.onEventEdited = onEventEdited
 
+        _doctor = State(initialValue: event.doctor)
+        _dayOff = State(initialValue: event.dayOff)
+        _justification = State(initialValue: event.justification )
+
         var timeString = ""
         if let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) {
             timeString = createFormatter("H:mm").string(from: date)
@@ -228,8 +232,8 @@ struct EditEventView: View {
         let justification = justification
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
         
-        if case let .loggedIn(token, _, _) = sessionManager.session {
-            editClockEvent(id, timestamp, justification, token){ (message, error) in
+        if let user = sessionManager.user {
+            editClockEvent(id, timestamp, justification, user.token ?? "", dayOff, doctor){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
                         alertMessage = message
@@ -276,8 +280,8 @@ struct EditEventView: View {
     }
     
     func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
-        if case let .loggedIn(token, id, _) = sessionManager.session {
-            getClockEntriesByPeriod(id, token, startDate: startDate, endDate: endDate) { (clockReport, error) in
+        if let user = sessionManager.user {
+            getClockEntriesByPeriod(user.id, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
                 if let clockReport = clockReport {
                     DispatchQueue.main.async {
                         self.clockReport = clockReport
@@ -308,7 +312,7 @@ struct ContentView_Previews: PreviewProvider {
             exampleEvent = try decoder.decode(ClockEvent.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")
-            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", justification: nil)
+            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", _justification: nil, doctor: false, dayOff: false)
         }
         
         return NavigationView {

@@ -39,7 +39,7 @@ struct EventLinkView_Previews: PreviewProvider {
             exampleEvent = try decoder.decode(ClockEvent.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")
-            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", justification: nil)
+            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", _justification: nil, doctor: false, dayOff: false)
         }
         
         return NavigationView {
