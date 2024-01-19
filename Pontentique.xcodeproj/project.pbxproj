@@ -39,6 +39,12 @@
 		45E9318A2B3346E2003BED3A /* APIClockReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E931892B3346E2003BED3A /* APIClockReportController.swift */; };
 		45E9318E2B34BFDB003BED3A /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E9318D2B34BFDB003BED3A /* EditEventView.swift */; };
 		45E931902B34CD6E003BED3A /* EventExampleData.json in Resources */ = {isa = PBXBuildFile; fileRef = 45E9318F2B34CD6E003BED3A /* EventExampleData.json */; };
+		8B09429D2B56F51D00F206C0 /* AdminMainPainel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B09429C2B56F51D00F206C0 /* AdminMainPainel.swift */; };
+		8B59EC822B58431600B10E40 /* AdminRequestMainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */; };
+		8B59EC842B5962FF00B10E40 /* AdminUsersMainPainel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */; };
+		8BE7B2F92B599034004B6B6D /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B2F82B599034004B6B6D /* AddEventView.swift */; };
+		8BE7B2FF2B599209004B6B6D /* AddEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B2FE2B599209004B6B6D /* AddEvent.swift */; };
+		8BE7B3012B59A090004B6B6D /* AdminEditUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +84,12 @@
 		45E931892B3346E2003BED3A /* APIClockReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClockReportController.swift; sourceTree = "<group>"; };
 		45E9318D2B34BFDB003BED3A /* EditEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
 		45E9318F2B34CD6E003BED3A /* EventExampleData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = EventExampleData.json; sourceTree = "<group>"; };
+		8B09429C2B56F51D00F206C0 /* AdminMainPainel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminMainPainel.swift; sourceTree = "<group>"; };
+		8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminRequestMainPanel.swift; sourceTree = "<group>"; };
+		8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUsersMainPainel.swift; sourceTree = "<group>"; };
+		8BE7B2F82B599034004B6B6D /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
+		8BE7B2FE2B599209004B6B6D /* AddEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEvent.swift; sourceTree = "<group>"; };
+		8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminEditUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +115,7 @@
 				4506CE242B4F220B00DCAD9A /* WeekendView.swift */,
 				451887422B4F015600C692F9 /* EventChunkView.swift */,
 				451887382B4C5EE600C692F9 /* EditLinkView.swift */,
+				8BE7B2FE2B599209004B6B6D /* AddEvent.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -110,6 +123,8 @@
 		455F82C12B31F9D700CB161C /* User */ = {
 			isa = PBXGroup;
 			children = (
+				8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */,
+				8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */,
 				455F82A92B307D9E00CB161C /* UserMainPanel.swift */,
 			);
 			path = User;
@@ -166,6 +181,9 @@
 				45669BEB2B10FDC8000FA293 /* LoginScreen.swift */,
 				455F82A32B2B6E9B00CB161C /* RegisterScreen.swift */,
 				45E9318D2B34BFDB003BED3A /* EditEventView.swift */,
+				8B09429C2B56F51D00F206C0 /* AdminMainPainel.swift */,
+				8BE7B2F82B599034004B6B6D /* AddEventView.swift */,
+				8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */,
 				455F82C12B31F9D700CB161C /* User */,
 			);
 			path = Views;
@@ -273,6 +291,7 @@
 				45669BDB2B10EA72000FA293 /* ContentView.swift in Sources */,
 				451887492B4F0AC000C692F9 /* DataFetcherController.swift in Sources */,
 				45E931842B321EBD003BED3A /* UserSessionManager.swift in Sources */,
+				8B59EC822B58431600B10E40 /* AdminRequestMainPanel.swift in Sources */,
 				45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */,
 				455F82B32B30B20500CB161C /* ClockEntry.swift in Sources */,
 				455F82AA2B307D9E00CB161C /* UserMainPanel.swift in Sources */,
@@ -283,14 +302,19 @@
 				45E931862B331EEF003BED3A /* ClockPunchController.swift in Sources */,
 				455F82AF2B30AF6F00CB161C /* ClockTableRow.swift in Sources */,
 				455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */,
+				8B59EC842B5962FF00B10E40 /* AdminUsersMainPainel.swift in Sources */,
 				455F82B12B30B0A700CB161C /* ClockEvent.swift in Sources */,
 				451887432B4F015600C692F9 /* EventChunkView.swift in Sources */,
+				8BE7B3012B59A090004B6B6D /* AdminEditUser.swift in Sources */,
+				8B09429D2B56F51D00F206C0 /* AdminMainPainel.swift in Sources */,
 				45669BEA2B10FD8D000FA293 /* ColorScheme.swift in Sources */,
 				4506CE252B4F220B00DCAD9A /* WeekendView.swift in Sources */,
+				8BE7B2FF2B599209004B6B6D /* AddEvent.swift in Sources */,
 				4518873D2B4EFF0B00C692F9 /* DateText.swift in Sources */,
 				451887452B4F02F100C692F9 /* AbsenceView.swift in Sources */,
 				455F82B72B30D04D00CB161C /* BalanceValue.swift in Sources */,
 				45E931882B33204F003BED3A /* ErrorController.swift in Sources */,
+				8BE7B2F92B599034004B6B6D /* AddEventView.swift in Sources */,
 				455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */,
 				451887392B4C5EE600C692F9 /* EditLinkView.swift in Sources */,
 				45669BD92B10EA72000FA293 /* PontentiqueApp.swift in Sources */,

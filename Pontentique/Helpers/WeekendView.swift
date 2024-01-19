@@ -10,7 +10,6 @@ import SwiftUI
 struct WeekendView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 0){
-            ForEach(0..<4){_ in
                 Text("Folga")
                     .padding(7)
                     .frame(width: 60)
@@ -19,7 +18,6 @@ struct WeekendView: View {
                     .foregroundColor(Color.white.opacity(0.50))
                     .cornerRadius(10)
                     .padding(.trailing, 5)
-            }
         }
     }
 }

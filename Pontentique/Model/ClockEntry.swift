@@ -6,8 +6,8 @@
 //
 
 import Foundation
-
 class ClockEntry: Codable, Identifiable, ObservableObject{
+
     let day: String
     let normalHoursWorkedOnDay: String
     let extraHoursWorkedOnDay: String
@@ -17,6 +17,7 @@ class ClockEntry: Codable, Identifiable, ObservableObject{
     let events: [ClockEvent]
     
     var id: String { day }
+    
     
     init(day: String, normalHoursWorkedOnDay: String, extraHoursWorkedOnDay: String, balanceHoursOnDay: String, totalTimeWorkedInSeconds: Int, eventCount: Int, events: [ClockEvent]) {
         self.day = day
@@ -28,5 +29,6 @@ class ClockEntry: Codable, Identifiable, ObservableObject{
         self.events = events
     }
 }
+
 
 

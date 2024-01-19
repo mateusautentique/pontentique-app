@@ -22,34 +22,43 @@ struct EventChunkView: View {
         self._endDate = endDate
         self.onEventEdited = onEventEdited
     }
-
+    
+    
     var body: some View {
         let chunks = clockEntry.events.chunks(of: 4)
-        ForEach(chunks.indices, id: \.self) { index in
-            let chunk = chunks[index]
-            HStack(alignment: .top, spacing: 0) {
-                ForEach(chunk) { event in
-                    EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                        .padding(7)
-                        .frame(width: 60)
-                        .fixedSize()
-                        .background(
-                            event.justification != "" ? Color.yellow.opacity(0.17) :
-                                isToday(event.timestamp) ? ColorScheme.BacktodaysColor :
-                                ColorScheme.clockBtnBgColor
-                        )
-                        .foregroundColor(
-                            event.justification != "" ? Color.yellow :
-                                isToday(event.timestamp) ? ColorScheme.todaysColor :
-                                ColorScheme.textColor
-                        )
-                        .cornerRadius(10)
-                        .padding(.trailing, 5)
+            VStack(alignment: .leading) {
+                ForEach(Array(chunks.enumerated()), id: \.offset) { index, chunk in
+                    HStack(alignment: .top, spacing: 0) {
+                        ForEach(chunk) { event in
+                            EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: onEventEdited)
+                                .padding(7)
+                                .frame(width: 60)
+                                .fixedSize()
+                                .background(isToday(event.timestamp) ? ColorScheme.BacktodaysColor : ColorScheme.clockBtnBgColor)
+                                .foregroundColor(isToday(event.timestamp) ? ColorScheme.todaysColor : ColorScheme.textColor)
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(event.justification != "" ? Color.gray : .clear, lineWidth: 1)
+                                )
+                                .padding(.trailing, 5)
+                        }
+                        if index == chunks.indices.last && chunk.count < 4 {
+                            AddEvent()
+                                
+                        }
+                    }
+                    .padding(.bottom, index < chunks.count - 1 ? 7 : 0)
+                }
+                // Check if you need to add the AddEvent button on a new line.
+                if let lastChunk = chunks.last, lastChunk.count == 4 {
+                    AddEvent()
+                        
                 }
             }
-            .padding(.bottom, index < chunks.count - 1 ? 7 : 0)
         }
-    }}
+    }
+
 
 struct EventChunkView_Previews: PreviewProvider {
     static var previews: some View {
