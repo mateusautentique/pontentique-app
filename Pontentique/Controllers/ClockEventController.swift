@@ -7,7 +7,8 @@
 
 import Foundation
 
-func editClockEvent(_ id: Int,_ timestamp: String,_ justification: String, _ token: String,
+func editClockEvent(_ id: Int,_ timestamp: String,_ justification: String,
+                    _ token: String, _ dayOff: Bool, _ doctor: Bool,
                     host: String = "\(API_HOST)/admin/userEntries",
                     completion: @escaping (String?, Error?)
                     -> (Void))
@@ -18,7 +19,9 @@ func editClockEvent(_ id: Int,_ timestamp: String,_ justification: String, _ tok
     let parameters: [String: Any] = [
         "id": "\(id)",
         "timestamp": "\(timestamp)",
-        "justification": "\(justification)"
+        "justification": "\(justification)",
+        "doctor": doctor ? 1 : 0,
+        "day_off": dayOff ? 1 : 0
     ]
     
     request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .fragmentsAllowed)

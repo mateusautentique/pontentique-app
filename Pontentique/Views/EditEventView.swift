@@ -40,6 +40,10 @@ struct EditEventView: View {
         self._endDate = endDate
         self.onEventEdited = onEventEdited
 
+        _doctor = State(initialValue: event.doctor)
+        _dayOff = State(initialValue: event.dayOff)
+        _justification = State(initialValue: event.justification )
+
         var timeString = ""
         if let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) {
             timeString = createFormatter("H:mm").string(from: date)
@@ -229,7 +233,7 @@ struct EditEventView: View {
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
         
         if let user = sessionManager.user {
-            editClockEvent(id, timestamp, justification, user.token ?? ""){ (message, error) in
+            editClockEvent(id, timestamp, justification, user.token ?? "", dayOff, doctor){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
                         alertMessage = message
@@ -308,7 +312,7 @@ struct ContentView_Previews: PreviewProvider {
             exampleEvent = try decoder.decode(ClockEvent.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")
-            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", justification: nil)
+            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", _justification: nil, doctor: false, dayOff: false)
         }
         
         return NavigationView {
