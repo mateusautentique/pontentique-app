@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AdminMainPanel: View {
+struct AdminReportPanel: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     @State private var isLoggedIn = false
@@ -170,6 +170,7 @@ struct AdminMainPanel: View {
                         .foregroundColor(.red)
                         .padding(.top, 10)
                 }
+                
                 //MARK: REGISTER THE CLOCKEVENT AND ALERT
                 VStack {
                     if appIsFullyLoaded, let currentUser = sessionManager.user, users[currentUserIndex].id == currentUser.id {
@@ -213,42 +214,6 @@ struct AdminMainPanel: View {
                 }
                 .padding()
             }
-            
-            //MARK: CHANGE VIEW
-            HStack {
-                Spacer()
-                Button(action: {
-                    // Ação do botão 1
-                }) {
-                    Image(systemName: "clock.fill")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-                Button(action: {
-                    //Ação do botão 2
-                }) {
-                    Image(systemName: "list.bullet.clipboard")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                Spacer()
-                Button(action: {
-                    // Ação do botão 3
-                }) {
-                    Image(systemName: "person.2")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 26))
-                        .padding(.top, 20)
-                }
-                
-                Spacer()
-            }
-            
-            .frame(maxWidth: .infinity, minHeight: 50)
-            .background(ColorScheme.clockBtnBgColor)
         }
         .onAppear {
             getAllUsers {
@@ -297,7 +262,7 @@ struct AdminMainPanel: View {
 }
 
 //MARK: - PREVIEW
-struct AdminMainPanel_Previews: PreviewProvider {
+struct AdminReportPanel_Previews: PreviewProvider {
     static var previews: some View {
         AdminMainPanel()
             .environmentObject(UserSessionManager())
