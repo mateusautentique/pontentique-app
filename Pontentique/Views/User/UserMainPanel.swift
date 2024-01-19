@@ -132,8 +132,8 @@ struct UserMainPanel: View {
                     switch activeAlert {
                     case .first:
                         return Alert(title: Text("Gerar registro de ponto"), message: Text("Tem certeza que você gostaria de registrar o ponto? Ele será registrado às\n \(myHour)"), primaryButton: .default(Text("Registrar"), action: {
-                            if case let .loggedIn(token, id, _) = sessionManager.session {
-                                punchClock(id, token) { (message, error) in
+                            if let user = sessionManager.user {
+                                punchClock(user.id, user.token ?? "") { (message, error) in
                                     if let message = message {
                                         DispatchQueue.main.async {
                                             refreshReport()

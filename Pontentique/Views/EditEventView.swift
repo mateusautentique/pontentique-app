@@ -228,8 +228,8 @@ struct EditEventView: View {
         let justification = justification
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
         
-        if case let .loggedIn(token, _, _) = sessionManager.session {
-            editClockEvent(id, timestamp, justification, token){ (message, error) in
+        if let user = sessionManager.user {
+            editClockEvent(id, timestamp, justification, user.token ?? ""){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
                         alertMessage = message
@@ -276,8 +276,8 @@ struct EditEventView: View {
     }
     
     func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
-        if case let .loggedIn(token, id, _) = sessionManager.session {
-            getClockEntriesByPeriod(id, token, startDate: startDate, endDate: endDate) { (clockReport, error) in
+        if let user = sessionManager.user {
+            getClockEntriesByPeriod(user.id, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
                 if let clockReport = clockReport {
                     DispatchQueue.main.async {
                         self.clockReport = clockReport

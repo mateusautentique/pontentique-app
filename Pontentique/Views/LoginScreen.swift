@@ -77,9 +77,9 @@ struct LoginScreen: View {
                                     userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                         if let token = token {
                                             self.errorMessage = nil
-                                            getLoggedUser(token){ (json, error) in
-                                                if let json = json {
-                                                    self.sessionManager.session = .loggedIn(token: token, id: json["id"] as! Int, name: json["user_name"] as! String)
+                                            getLoggedUser(token){ (user, error) in
+                                                if let user = user {
+                                                    self.sessionManager.session = .loggedIn(user)
                                                     DispatchQueue.main.async {
                                                         isLoggedIn = true
                                                     }

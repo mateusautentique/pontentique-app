@@ -11,8 +11,8 @@ class DataFetcher: ObservableObject {
     @Published var clockReport: ClockReport?
 
     func fetchClockReport(_ startDate: String, _ endDate: String, sessionManager: UserSessionManager, completion: @escaping (ClockReport?) -> Void) {
-        if case let .loggedIn(token, id, _) = sessionManager.session {
-            getClockEntriesByPeriod(id, token, startDate: startDate, endDate: endDate) { (clockReport, error) in
+        if let user = sessionManager.user {
+            getClockEntriesByPeriod(user.id, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
                 if let clockReport = clockReport {
                     DispatchQueue.main.async {
                         self.clockReport = clockReport
