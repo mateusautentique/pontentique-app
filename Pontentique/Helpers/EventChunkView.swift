@@ -26,23 +26,29 @@ struct EventChunkView: View {
     
     var body: some View {
         let chunks = clockEntry.events.chunks(of: 4)
-            VStack(alignment: .leading) {
-                ForEach(Array(chunks.enumerated()), id: \.offset) { index, chunk in
-                    HStack(alignment: .top, spacing: 0) {
-                        let event = chunk[index]
-                            ForEachChunk(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                        if index == chunks.indices.last && chunk.count < 4 {
-                            AddEventLinkView(clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)    
-                        }
-                    }
-                    .padding(.bottom, index < chunks.count - 1 ? 7 : 0)
+        ForEach(chunks.indices, id: \.self) { index in
+            let chunk = chunks[index]
+            HStack(alignment: .top, spacing: 0) {
+                ForEach(chunk) { event in
+                    ForEachChunk(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
                 }
-                if let lastChunk = chunks.last, lastChunk.count == 4 {
+                if chunk.count < 4 {
+                    AddEventLinkView(clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                    
+                    
+                    
+                }
+            }
+            .padding(.bottom, index < chunks.count - 1 ? 7 : 0)
+            if chunk.count == 4 && index == chunks.count - 1 {
+                VStack {
+                    Spacer()
                     AddEventLinkView(clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
                 }
             }
         }
     }
+}
 
 
 struct EventChunkView_Previews: PreviewProvider {
@@ -51,7 +57,7 @@ struct EventChunkView_Previews: PreviewProvider {
         let clockReport = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-
+        
         do {
             let url = Bundle.main.url(forResource: "RowExampleData", withExtension: "json")!
             let data = try Data(contentsOf: url)
@@ -63,7 +69,7 @@ struct EventChunkView_Previews: PreviewProvider {
             print("Error decoding JSON: \(error)")
             clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         }
-
+        
         return EventChunkView(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
             //DEBUG
         })

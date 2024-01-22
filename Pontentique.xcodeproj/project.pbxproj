@@ -127,8 +127,8 @@
 				4506CE242B4F220B00DCAD9A /* WeekendView.swift */,
 				451887422B4F015600C692F9 /* EventChunkView.swift */,
 				451887382B4C5EE600C692F9 /* EditLinkView.swift */,
-				457DA01E2B5AF2EE000167A2 /* LoadingIconView.swift */,
 				8BE7B2FE2B599209004B6B6D /* AddEventLinkView.swift */,
+				457DA01E2B5AF2EE000167A2 /* LoadingIconView.swift */,
 				8BE7B3022B5AFAFF004B6B6D /* ForEachChunk.swift */,
 				8BE7B3042B5B0622004B6B6D /* EventBackgroundColor.swift */,
 			);

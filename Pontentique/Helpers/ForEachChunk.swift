@@ -16,21 +16,23 @@ struct ForEachChunk: View {
     let onEventEdited: () -> Void
 
     var body: some View {
-        EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-            .padding(7)
-            .frame(width: 60)
-            .fixedSize()
-            .modifier(EventBackgroundColor(event: event))
-            .modifier(EventForegroundColor(event: event))
-            .cornerRadius(10)
-            .overlay(
-                Group {
-                    if event.justification != "" {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 1)
+        
+            EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                .padding(7)
+                .frame(width: 60)
+                .fixedSize()
+                .modifier(EventBackgroundColor(event: event))
+                .modifier(EventForegroundColor(event: event))
+                .cornerRadius(10)
+                .overlay(
+                    Group {
+                        if event.justification != "" {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                        }
                     }
-                }
-            )
+                )
             .padding(.trailing, 5)
     }
 }
+
