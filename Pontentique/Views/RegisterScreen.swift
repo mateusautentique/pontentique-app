@@ -141,6 +141,8 @@ struct RegisterScreen: View {
                                     }
                                 } else if let error = error {
                                     self.errorMessage = error.localizedDescription
+                                } else {
+                                    self.errorMessage = "Não foi possível conectar-se ao servidor"
                                 }
                             }
                         }

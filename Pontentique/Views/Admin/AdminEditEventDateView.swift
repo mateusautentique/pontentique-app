@@ -139,12 +139,12 @@ struct AdminEditEventDateView: View {
                     }
                     Spacer()
                     Toggle("", isOn: $dayOff)
-                                .onChange(of: dayOff) { oldValue, newValue in
-                                    if newValue {
-                                        doctor = false
-                                    }
-                                }
-                    .padding()
+                        .onChange(of: dayOff){ oldValue, newValue in
+                            if newValue {
+                                doctor = false
+                            }
+                        }
+                        .padding()
                 }
                 Divider()
                 
@@ -164,7 +164,7 @@ struct AdminEditEventDateView: View {
                             }
                         }
                     
-                    .padding()
+                        .padding()
                 }
                 Divider()
                 
