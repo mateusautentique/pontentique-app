@@ -14,25 +14,41 @@ struct ForEachChunk: View {
     @Binding var endDate: Date
     
     let onEventEdited: () -> Void
-
+    
     var body: some View {
-        
-            EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                .padding(7)
-                .frame(width: 60)
-                .fixedSize()
-                .modifier(EventBackgroundColor(event: event))
-                .modifier(EventForegroundColor(event: event))
-                .cornerRadius(10)
-                .overlay(
-                    Group {
-                        if event.justification != "" {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray, lineWidth: 1)
+        Group {
+            if event.dayOff || event.doctor {
+                EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                    .overlay(
+                        Group {
+                            if event.justification != "" {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            }
                         }
-                    }
-                )
-            .padding(.trailing, 5)
+                    )
+                    .padding(.trailing, 5)
+                
+            } else {
+                EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                    .padding(7)
+                    .frame(width: 60)
+                    .fixedSize()
+                    .modifier(EventBackgroundColor(event: event))
+                    .modifier(EventForegroundColor(event: event))
+                    .cornerRadius(10)
+                
+                    .overlay(
+                        Group {
+                            if event.justification != "" {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            }
+                        }
+                    )
+                
+                    .padding(.trailing, 5)
+            }
+        }
     }
 }
-
