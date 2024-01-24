@@ -1,13 +1,14 @@
 //
-//  EditEventView.swift
+//  AdminEditEventDateView.swift
 //  Pontentique
 //
-//  Created by Mateus Zanella on 21/12/23.
+//  Created by Mateus Zanella on 22/01/24.
 //
+
 
 import SwiftUI
 
-struct EditEventView: View {
+struct AdminEditEventDateView: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
@@ -25,7 +26,10 @@ struct EditEventView: View {
     let event: ClockEvent
     
     //MARK: - UPDATE INFO
-    @State var registeredTime: String
+    @State var startRegisteredTime: String
+    @State var endRegisteredTime: String
+    @State var startRegisteredDate: String
+    @State var endRegisteredDate: String
     @State var justification: String = ""
     @State var dayOff: Bool = false
     @State var doctor: Bool = false
@@ -45,10 +49,15 @@ struct EditEventView: View {
         _justification = State(initialValue: event.justification )
 
         var timeString = ""
+        var dateString = ""
         if let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) {
             timeString = createFormatter("H:mm").string(from: date)
+            dateString = createFormatter("dd/MM").string(from: date)
         }
-        _registeredTime = State(initialValue: timeString)
+        _startRegisteredTime = State(initialValue: timeString)
+        _endRegisteredTime = State(initialValue: timeString)
+        _startRegisteredDate = State(initialValue: dateString)
+        _endRegisteredDate = State(initialValue: dateString)
     }
 
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -82,39 +91,24 @@ struct EditEventView: View {
             .padding(.bottom, 10)
             
             VStack {
-                HStack{
-                    Text("Horário registrado")
-                        .foregroundColor(ColorScheme.textColor)
-                    Spacer()
-                    Text("\(dayAndMonth)")
-                        .foregroundColor(ColorScheme.tableTextColor)
-                    TextField("\(time)", text: $registeredTime)
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.center)
-                        .padding(5)
-                        .background(ColorScheme.fieldBgColor)
-                        .cornerRadius(7)
-                        .frame(minWidth: 58, maxWidth: 60)
-                        .onChange (of: registeredTime){
-                            let filtered = registeredTime.filter { "0123456789".contains($0) }
-                            if filtered.count > 4 {
-                                registeredTime = String(filtered.prefix(4))
-                            } else if filtered.count == 3 {
-                                let timeWithSeparator = insertColonInTime(time: filtered, afterSecondDigit: filtered[filtered.index(filtered.startIndex, offsetBy: 1)] >= "6")
-                                if isValidTime(timeWithSeparator) {
-                                    registeredTime = timeWithSeparator
-                                }
-                            } else if filtered.count == 4 {
-                                let timeWithSeparator = insertColonInTime(time: filtered, afterSecondDigit: true)
-                                if isValidTime(timeWithSeparator) {
-                                    registeredTime = timeWithSeparator
-                                } else {
-                                    registeredTime = "23:59"
-                                }
-                            } else {
-                                registeredTime = filtered
-                            }
-                        }
+                VStack {
+                    HStack{
+                        Text("Data de início")
+                            .foregroundColor(ColorScheme.textColor)
+                            .font(.system(size: 20))
+                        Spacer()
+                        DateTextField(registeredDate: $startRegisteredDate, dayAndMonth: dayAndMonth)
+                        TimeTextField(registeredTime: $startRegisteredTime, time: time)
+                    }
+                    
+                    HStack{
+                        Text("Data de término")
+                            .foregroundColor(ColorScheme.textColor)
+                            .font(.system(size: 20))
+                        Spacer()
+                        DateTextField(registeredDate: $endRegisteredDate, dayAndMonth: dayAndMonth)
+                        TimeTextField(registeredTime: $endRegisteredTime, time: time)
+                    }
                 }
                 .background(ColorScheme.appBackgroudColor)
                 .padding(.bottom, 15)
@@ -145,12 +139,12 @@ struct EditEventView: View {
                     }
                     Spacer()
                     Toggle("", isOn: $dayOff)
-                                .onChange(of: dayOff) { oldValue, newValue in
-                                    if newValue {
-                                        doctor = false
-                                    }
-                                }
-                    .padding()
+                        .onChange(of: dayOff){ oldValue, newValue in
+                            if newValue {
+                                doctor = false
+                            }
+                        }
+                        .padding()
                 }
                 Divider()
                 
@@ -170,7 +164,7 @@ struct EditEventView: View {
                             }
                         }
                     
-                    .padding()
+                        .padding()
                 }
                 Divider()
                 
@@ -184,14 +178,14 @@ struct EditEventView: View {
                 }
                 
                 Button(action: {
-                    if justification.isEmpty {
-                        errorMessage = "ⓘ A justificativa é obrigatória"
-                    } else if !isValidTime(registeredTime) {
-                        errorMessage = "ⓘ Insira um horário válido"
-                    } else {
-                        errorMessage = ""
-                        editSelectedEvent(event, justification, registeredTime)
-                    }
+//                    if justification.isEmpty {
+//                        errorMessage = "ⓘ A justificativa é obrigatória"
+//                    } else if !isValidTime(registeredTime) {
+//                        errorMessage = "ⓘ Insira um horário válido"
+//                    } else {
+//                        errorMessage = ""
+//                        editSelectedEvent(event, justification, registeredTime)
+//                    }
                 }){
                     Text("Salvar")
                         .padding(15)
@@ -253,32 +247,6 @@ struct EditEventView: View {
         }
     }
     
-    func validateAndCorrectTime(time: String) -> String {
-        let timeComponents = time.split(separator: ":")
-        if let hour = Int(timeComponents[0]), let minute = Int(timeComponents[1]) {
-            if hour > 23 || minute > 59 {
-                return "23:59"
-            }
-        }
-        return time
-    }
-    
-    func isValidTime(_ time: String) -> Bool {
-        let formatter = DateFormatter()
-        formatter.dateFormat = time.count == 4 ? "H:mm" : "HH:mm"
-        if formatter.date(from: time) == nil {
-            return false
-        }
-        
-        let components = time.split(separator: ":")
-        return components[1].count == 2
-    }
-    
-    func insertColonInTime(time: String, afterSecondDigit: Bool) -> String {
-        let index = afterSecondDigit ? 2 : 1
-        return time.inserting(separator: ":", at: index)
-    }
-    
     func replaceTimeInTimestamp(originalTimestamp: String, newTime: String) -> String {
         let timeIndex = originalTimestamp.index(originalTimestamp.startIndex, offsetBy: 11)
         let datePart = originalTimestamp[..<timeIndex]
@@ -303,7 +271,7 @@ struct EditEventView: View {
 
 //MARK: - PREVIEW
 
-struct EditEventView_Previews: PreviewProvider {
+struct AdminEditEventDateView_Previews: PreviewProvider {
     static var previews: some View {
         let exampleEvent: ClockEvent
         @State var clockReport: ClockReport?
@@ -323,34 +291,11 @@ struct EditEventView_Previews: PreviewProvider {
         }
         
         return NavigationView {
-            EditEventView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
+            AdminEditEventDateView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
                 // DEGUG
             })
         }
     }
 }
 
-//MARK: - AUX
-extension String {
-    func inserting(separator: String, every n: Int) -> String {
-        var result: String = ""
-        var counter = 0
-        for character in self {
-            if counter != 0 && counter % n == 0 {
-                result.append(separator)
-            }
-            result.append(character)
-            counter += 1
-        }
-        return result
-    }
-}
 
-extension String {
-    func inserting(separator: String, at i: Int) -> String {
-        var str = self
-        let index = str.index(str.startIndex, offsetBy: i)
-        str.insert(contentsOf: separator, at: index)
-        return str
-    }
-}
