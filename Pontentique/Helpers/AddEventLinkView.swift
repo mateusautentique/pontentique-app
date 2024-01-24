@@ -18,7 +18,7 @@ struct AddEventLinkView: View {
     
     var body: some View {
         
-        NavigationLink(destination: AddEventView(clockReport: Binding.constant(clockReport), startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)){
+        NavigationLink(destination: AddEventView( clockReport: Binding.constant(clockReport), startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)){
             Image(systemName: "plus")
                 .font(.system(size: 14))
                 .foregroundColor(.white)

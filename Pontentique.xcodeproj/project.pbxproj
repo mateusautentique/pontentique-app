@@ -52,6 +52,7 @@
 		8BE7B3032B5AFAFF004B6B6D /* ForEachChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B3022B5AFAFF004B6B6D /* ForEachChunk.swift */; };
 		8BE7B3052B5B0622004B6B6D /* EventBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B3042B5B0622004B6B6D /* EventBackgroundColor.swift */; };
 		8BE7B3072B6006F6004B6B6D /* DoctorVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B3062B6006F6004B6B6D /* DoctorVIew.swift */; };
+		8BE7B30D2B614AC7004B6B6D /* StatusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B30C2B614AC7004B6B6D /* StatusController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		8BE7B3022B5AFAFF004B6B6D /* ForEachChunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForEachChunk.swift; sourceTree = "<group>"; };
 		8BE7B3042B5B0622004B6B6D /* EventBackgroundColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBackgroundColor.swift; sourceTree = "<group>"; };
 		8BE7B3062B6006F6004B6B6D /* DoctorVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorVIew.swift; sourceTree = "<group>"; };
+		8BE7B30C2B614AC7004B6B6D /* StatusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +217,7 @@
 				45E931872B33204F003BED3A /* ErrorController.swift */,
 				451887482B4F0AC000C692F9 /* DataFetcherController.swift */,
 				4506CE262B501A1100DCAD9A /* DateFormatterController.swift */,
+				8BE7B30C2B614AC7004B6B6D /* StatusController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				456A83722B59ACBC0086A4E3 /* User.swift in Sources */,
 				457DA0212B5B0356000167A2 /* AdminMainPanel.swift in Sources */,
 				457DA01F2B5AF2EE000167A2 /* LoadingIconView.swift in Sources */,
+				8BE7B30D2B614AC7004B6B6D /* StatusController.swift in Sources */,
 				45E931882B33204F003BED3A /* ErrorController.swift in Sources */,
 				8BE7B2F92B599034004B6B6D /* AddEventView.swift in Sources */,
 				455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */,

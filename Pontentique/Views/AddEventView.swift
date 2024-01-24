@@ -299,7 +299,7 @@ struct AddEvent_Previews: PreviewProvider {
         
         do {
             let url = Bundle.main.url(forResource: "EventExampleData", withExtension: "json")!
-            let _ = try Data(contentsOf: url)
+            _ = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             decoder.dateDecodingStrategy = .formatted(createFormatter("yyyy-MM-dd HH:mm:ss"))

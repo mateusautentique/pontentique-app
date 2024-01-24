@@ -35,6 +35,7 @@ struct AdminReportPanel: View {
     //MARK: - VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
     @State private var appIsFullyLoaded = false
+    @State private var userColor: String?
     
     //MARK: - VIEW
     var body: some View {
@@ -68,6 +69,7 @@ struct AdminReportPanel: View {
                                     currentUserIndex = 0
                                 }
                                 refreshAdminReport()
+                                
                             }) {
                                 Image(systemName: "chevron.right")
                                     .font(.system(size: 24))
@@ -80,6 +82,7 @@ struct AdminReportPanel: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
+            
                 //MARK: DATE
                 HStack {
                     ZStack{
@@ -219,7 +222,9 @@ struct AdminReportPanel: View {
             getAllUsers {
                 refreshAdminReport()
             }
+            
         }
+      
     }
     
     //MARK: - UPDATE VIEW
@@ -240,7 +245,7 @@ struct AdminReportPanel: View {
             }
         }
     }
-
+    
     func refreshAdminReport() {
         guard !users.isEmpty else { return }
         let selectedUser = users[currentUserIndex]
