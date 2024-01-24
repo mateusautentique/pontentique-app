@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddEventLinkView: View {
     @ObservedObject var clockReport: ClockReport
+    @ObservedObject var clockEntry: ClockEntry
     @Binding var startDate: Date
     @Binding var endDate: Date
     
@@ -17,8 +18,7 @@ struct AddEventLinkView: View {
     @State private var isShowingAddEventView = false
     
     var body: some View {
-        
-        NavigationLink(destination: AddEventView(clockReport: Binding.constant(clockReport), startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)){
+        NavigationLink(destination: AddEventView(clockEntry: clockEntry, clockReport: Binding.constant(clockReport), startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)){
             Image(systemName: "plus")
                 .font(.system(size: 14))
                 .foregroundColor(.white)
@@ -35,6 +35,7 @@ struct AddEventLinkView_Previews: PreviewProvider {
         @State var clockReport: ClockReport? = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         
         do {
             let url = Bundle.main.url(forResource: "EventExampleData", withExtension: "json")!
@@ -47,7 +48,7 @@ struct AddEventLinkView_Previews: PreviewProvider {
         }
         
         return NavigationView {
-            AddEventLinkView(clockReport: clockReport!, startDate: $startDate, endDate: $endDate, onEventEdited: {
+            AddEventLinkView(clockReport: clockReport!, clockEntry: clockEntry, startDate: $startDate, endDate: $endDate, onEventEdited: {
                 //DEBUG
             })
         }

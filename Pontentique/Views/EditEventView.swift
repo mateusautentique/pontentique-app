@@ -39,18 +39,18 @@ struct EditEventView: View {
         self._startDate = startDate
         self._endDate = endDate
         self.onEventEdited = onEventEdited
-
+        
         _doctor = State(initialValue: event.doctor)
         _dayOff = State(initialValue: event.dayOff)
         _justification = State(initialValue: event.justification )
-
+        
         var timeString = ""
         if let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) {
             timeString = createFormatter("H:mm").string(from: date)
         }
         _registeredTime = State(initialValue: timeString)
     }
-
+    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     //MARK: - DATE FORMATTING
@@ -60,7 +60,7 @@ struct EditEventView: View {
         }
         return createFormatter("d/MM").string(from: date)
     }
-
+    
     var time: String {
         guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
             return ""
@@ -88,33 +88,7 @@ struct EditEventView: View {
                     Spacer()
                     Text("\(dayAndMonth)")
                         .foregroundColor(ColorScheme.tableTextColor)
-                    TextField("\(time)", text: $registeredTime)
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.center)
-                        .padding(5)
-                        .background(ColorScheme.fieldBgColor)
-                        .cornerRadius(7)
-                        .frame(minWidth: 58, maxWidth: 60)
-                        .onChange (of: registeredTime){
-                            let filtered = registeredTime.filter { "0123456789".contains($0) }
-                            if filtered.count > 4 {
-                                registeredTime = String(filtered.prefix(4))
-                            } else if filtered.count == 3 {
-                                let timeWithSeparator = insertColonInTime(time: filtered, afterSecondDigit: filtered[filtered.index(filtered.startIndex, offsetBy: 1)] >= "6")
-                                if isValidTime(timeWithSeparator) {
-                                    registeredTime = timeWithSeparator
-                                }
-                            } else if filtered.count == 4 {
-                                let timeWithSeparator = insertColonInTime(time: filtered, afterSecondDigit: true)
-                                if isValidTime(timeWithSeparator) {
-                                    registeredTime = timeWithSeparator
-                                } else {
-                                    registeredTime = "23:59"
-                                }
-                            } else {
-                                registeredTime = filtered
-                            }
-                        }
+                    TimeTextField(registeredTime: $registeredTime, time: time)
                 }
                 .background(ColorScheme.appBackgroudColor)
                 .padding(.bottom, 15)
@@ -145,12 +119,12 @@ struct EditEventView: View {
                     }
                     Spacer()
                     Toggle("", isOn: $dayOff)
-                                .onChange(of: dayOff) { oldValue, newValue in
-                                    if newValue {
-                                        doctor = false
-                                    }
-                                }
-                    .padding()
+                        .onChange(of: dayOff) { oldValue, newValue in
+                            if newValue {
+                                doctor = false
+                            }
+                        }
+                        .padding()
                 }
                 Divider()
                 
@@ -169,8 +143,7 @@ struct EditEventView: View {
                                 dayOff = false
                             }
                         }
-                    
-                    .padding()
+                        .padding()
                 }
                 Divider()
                 
@@ -190,7 +163,7 @@ struct EditEventView: View {
                         errorMessage = "ⓘ Insira um horário válido"
                     } else {
                         errorMessage = ""
-                        editSelectedEvent(event, justification, registeredTime)
+                        createEditTicket(event, justification, registeredTime)
                     }
                 }){
                     Text("Salvar")
@@ -208,7 +181,7 @@ struct EditEventView: View {
                 }
             }
             .alert(isPresented: $showingAlert) {
-                Alert(title: Text("Ponto editado com sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
+                Alert(title: Text("Sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
                     self.presentationMode.wrappedValue.dismiss()
                     self.onEventEdited()
                 }))
@@ -234,13 +207,18 @@ struct EditEventView: View {
     
     //MARK: - AUX FUNCTIONS
     
-    func editSelectedEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
-        let id = event.id
+    func createEditTicket(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
+        let eventId = event.id
         let justification = justification
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
         
         if let user = sessionManager.user {
-            editClockEvent(id, timestamp, justification, user.token ?? "", dayOff, doctor){ (message, error) in
+            let requestedData = RequestedData(userId: user.id, timestamp: timestamp, justification: justification,
+                                              dayOff: dayOff ? 1 : 0,doctor: doctor ? 1 : 0)
+            let ticketRequest = TicketRequest(userId: user.id, type: "update", clockEventId: eventId,
+                                              justification: justification, requestedData: requestedData)
+            
+            createTicket(ticketRequest, user.token ?? ""){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
                         alertMessage = message
@@ -253,16 +231,6 @@ struct EditEventView: View {
         }
     }
     
-    func validateAndCorrectTime(time: String) -> String {
-        let timeComponents = time.split(separator: ":")
-        if let hour = Int(timeComponents[0]), let minute = Int(timeComponents[1]) {
-            if hour > 23 || minute > 59 {
-                return "23:59"
-            }
-        }
-        return time
-    }
-    
     func isValidTime(_ time: String) -> Bool {
         let formatter = DateFormatter()
         formatter.dateFormat = time.count == 4 ? "H:mm" : "HH:mm"
@@ -272,11 +240,6 @@ struct EditEventView: View {
         
         let components = time.split(separator: ":")
         return components[1].count == 2
-    }
-    
-    func insertColonInTime(time: String, afterSecondDigit: Bool) -> String {
-        let index = afterSecondDigit ? 2 : 1
-        return time.inserting(separator: ":", at: index)
     }
     
     func replaceTimeInTimestamp(originalTimestamp: String, newTime: String) -> String {

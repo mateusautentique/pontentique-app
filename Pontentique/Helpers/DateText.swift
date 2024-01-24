@@ -20,7 +20,7 @@ struct DateText: View {
 
 struct DateText_Previews: PreviewProvider {
     static var previews: some View {
-        DateText(date: "2023-1-1")
+        DateText(date: "2023-01-01")
     }
 }
 

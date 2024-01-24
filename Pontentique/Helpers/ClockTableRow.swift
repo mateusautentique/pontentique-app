@@ -107,7 +107,7 @@ extension Array {
 struct ClockTableRow_Previews: PreviewProvider {
     static var previews: some View {
         let clockEntry: ClockEntry
-        @State var clockReport: ClockReport? = ClockReport()
+        let clockReport = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         
@@ -123,7 +123,7 @@ struct ClockTableRow_Previews: PreviewProvider {
             clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         }
         
-        return ClockTableRow(clockEntry: clockEntry, clockReport: clockReport!, startDate: $startDate, endDate: $endDate, onEventEdited: {
+        return ClockTableRow(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
             //DEBUG
         })
     }

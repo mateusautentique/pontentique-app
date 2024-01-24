@@ -1,7 +1,7 @@
 {
     "day": "2023-12-01",
     "normal_hours_worked_on_day": "8:00",
-    "extra_hours_worked_on_day": "0:00",
+    "extra_hours_worked_on_day": "1:00",
     "balance_hours_on_day": "1:00",
     "total_time_worked_in_seconds": 28800,
     "event_count": 4,
@@ -27,18 +27,6 @@
         {
             "id": 4,
             "timestamp": "2023-12-01 18:00:00",
-            "justification": "test",
-            "type": "clock_out"
-        },
-        {
-            "id": 5,
-            "timestamp": "2023-12-01 19:00:00",
-            "justification": "test",
-            "type": "clock_in"
-        },
-        {
-            "id": 6,
-            "timestamp": "2023-12-01 22:00:00",
             "justification": "test",
             "type": "clock_out"
         }

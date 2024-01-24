@@ -17,12 +17,16 @@ struct EventChunkView: View {
     
     init(clockEntry: ClockEntry, clockReport: ClockReport, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
         self.clockEntry = clockEntry
-        self._clockReport = ObservedObject(initialValue: clockReport)
+        self.clockReport = clockReport
         self._startDate = startDate
         self._endDate = endDate
         self.onEventEdited = onEventEdited
     }
     
+    struct IdentifiableChunk: Identifiable {
+        let id = UUID()
+        let chunk: [ClockEvent]
+    }
     
     var body: some View {
         let chunks = clockEntry.events.chunks(of: 4)
@@ -33,23 +37,24 @@ struct EventChunkView: View {
                     ForEachChunk(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
                 }
                 if chunk.count < 4 {
-                    AddEventLinkView(clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                    
-                    
-                    
+                    AddEventLinkView(clockReport: clockReport, clockEntry: clockEntry,
+                                     startDate: $startDate, endDate: $endDate,
+                                     onEventEdited: self.onEventEdited)
                 }
             }
+            
             .padding(.bottom, index < chunks.count - 1 ? 7 : 0)
             if chunk.count == 4 && index == chunks.count - 1 {
                 VStack {
                     Spacer()
-                    AddEventLinkView(clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                    AddEventLinkView(clockReport: clockReport, clockEntry: clockEntry,
+                                     startDate: $startDate, endDate: $endDate,
+                                     onEventEdited: self.onEventEdited)
                 }
             }
         }
     }
 }
-
 
 struct EventChunkView_Previews: PreviewProvider {
     static var previews: some View {
