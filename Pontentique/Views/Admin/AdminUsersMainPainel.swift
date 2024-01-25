@@ -14,7 +14,7 @@ func colorFromString(_ colorName: String) -> Color {
         return Color.green
     case "gray":
         return Color.gray
-        // Add more cases as needed...
+       
     default:
         return Color.blue
     }
@@ -24,6 +24,7 @@ struct AdminUsersMainPainel: View {
     @State private var users: [User] = []
     @State private var userStatus: [String: String] = [:]
     @EnvironmentObject var sessionManager: UserSessionManager
+    @State private var selectedUser: User? = nil
     
     var body: some View {
         VStack {
@@ -35,42 +36,45 @@ struct AdminUsersMainPainel: View {
             List(users) { user in
                 
                 Button(action: {
-                    //Ação do botão do user
-                }) {
-                    HStack {
-                        
-                        Text(user.name)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Circle()
-                            .fill(colorFromString(userStatus[String(user.id)] ?? "gray"))
-                            .frame(width: 10, height: 10)
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.gray)
-                    }
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .listStyle(PlainListStyle())
+                       self.selectedUser = user
+                   }) {
+                       HStack {
+                           Text(user.name)
+                               .foregroundColor(.white)
+                           Spacer()
+                           Circle()
+                               .fill(colorFromString(userStatus[String(user.id)] ?? "gray"))
+                               .frame(width: 10, height: 10)
+                           Image(systemName: "chevron.right")
+                               .foregroundColor(.gray)
+                       }
+                   }
+                   .buttonStyle(PlainButtonStyle())
+                   .sheet(item: $selectedUser, onDismiss: fetchUsers) { user in
+                           AdminEditUser(user: user, token: self.sessionManager.user?.token ?? "")
+                       }
+               }
+               .listStyle(PlainListStyle())
         }
         .onAppear {
-                if let token = sessionManager.user?.token {
-                    getAllUsers(token) { (users, error) in
-                        if let error = error {
-                            print("Failed to fetch users: \(error)")
-                        } else if let users = users {
-                            self.users = users
-                            for user in users {
-                                fetchUserStatus(userId: String(user.id), token: token) { status, error in
-                                    if let status = status {
-                                        self.userStatus[String(user.id)] = status.lowercased()
-                                    }
-                                }
-                            }
+                fetchUsers()
+            }
+    }
+    func fetchUsers() {
+        if let token = sessionManager.user?.token {
+            getAllUsers(token) { (users, error) in
+                if let error = error {
+                    print("Failed to fetch users: \(error)")
+                } else if let users = users {
+                    self.users = users
+                    for user in users {
+                        fetchUserStatus(userId: String(user.id), token: token) { status, error in
+                            // handle status and error...
                         }
                     }
                 }
             }
+        }
     }
 }
 

@@ -9,9 +9,9 @@ import Foundation
 
 struct User: Codable, Identifiable{
     let id: Int
-    let name: String
-    let cpf: String
-    let email: String
+    var name: String
+    var cpf: String
+    var email: String
     let role: String
     let workJourneyHours: Int
     let createdAt: Date

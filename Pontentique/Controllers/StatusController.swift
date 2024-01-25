@@ -23,22 +23,17 @@ func fetchUserStatus(userId: String, token: String, completion: @escaping (Strin
     let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: [])
     request.httpBody = jsonData
 
-    print("Request: \(request)")
-    print("Request Body: \(String(data: request.httpBody!, encoding: .utf8) ?? "no body")")
 
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            print("Error: \(error)")
             completion(nil, error)
         } else if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
                     let status = json["message"] as? String
-                    print("Response JSON: \(json)")
                     completion(status, nil)
                 }
             } catch {
-                print("JSON Parsing Error: \(error)")
                 completion(nil, error)
             }
         }
