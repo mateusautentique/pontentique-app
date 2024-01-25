@@ -213,8 +213,8 @@ struct EditEventView: View {
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
         
         if let user = sessionManager.user {
-            let requestedData = RequestedData(userId: user.id, timestamp: timestamp, justification: justification,
-                                              dayOff: dayOff ? 1 : 0,doctor: doctor ? 1 : 0)
+            let requestedData = RequestedData(userId: user.id, timestamp: timestamp,
+                                              justification: justification, dayOff: dayOff, doctor: doctor)
             let ticketRequest = TicketRequest(userId: user.id, type: "update", clockEventId: eventId,
                                               justification: justification, requestedData: requestedData)
             

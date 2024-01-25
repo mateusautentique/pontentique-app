@@ -17,17 +17,14 @@ struct AdminRequest: Identifiable {
 }
 
 struct AdminRequestMainPanel: View {
-//MARK: REQUEST DUMMY DATA
-    @State private var requests = [
-
-        AdminRequest(name: "Renan Poersch", details: "18/12 12:31 → 18/12 13:00", time: "Bati ponto errado ao voltar do almoço", reason: ""),
-        AdminRequest(name: "Daniel Didone", details: "18/12 13:00 → Médico", time: "Tenho consulta à tarde", reason: ""),
-        AdminRequest(name: "Daniel Didone", details: "18/12 13:00 → Médico", time: "Tenho consulta à tarde", reason: ""),
-        AdminRequest(name: "Daniel Didone", details: "18/12 13:00 → Médico", time: "Tenho consulta à tarde", reason: ""),
-        AdminRequest(name: "Daniel Didone", details: "18/12 13:00 → Médico", time: "Tenho consulta à tarde", reason: "")
-        
-    ]
+//MARK: USER INFO
+    @EnvironmentObject var sessionManager: UserSessionManager
     
+//MARK: TICKETS
+    @State private var tickets: [Ticket] = []
+    
+//MARK: ERROR
+    @State private var errorMessage: String?
     
     var body: some View {
         
@@ -35,52 +32,123 @@ struct AdminRequestMainPanel: View {
             Text("Solicitações")
                 .font(.system(size: 28))
                 .frame(maxWidth: .infinity, alignment: .center)
-            //MARK: REQUEST RECIVER
-            List{
-                ForEach(requests) { request in
-                    VStack(alignment: .leading) {
-                        Text(request.name).font(.headline)
-                        Text(request.details).font(.subheadline)
-                        Text(request.time).font(.caption)
-                        
+            
+            List(tickets) { ticket in
+                VStack(alignment: .leading) {
+                    Text(ticket.userName).font(.headline)
+                    Text(createDetailsString(ticket)).font(.subheadline)
+                    Text(ticket.justification).font(.caption)
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button {
+                        handleSelectedTicket(ticket, action: "approve")
+                    } label: {
+                        Text("Aceitar")
                     }
-                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        Button {
-                            //Botão aceita
-                        } label: {
-                            Text("Aceitar")
+                    .tint(.green)
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        withAnimation {
+                            handleSelectedTicket(ticket, action: "deny")
                         }
-                        .tint(.green)
+                    } label: {
+                        Text("Negar")
                     }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            withAnimation {
-                                denyRequest(request)
-                                //Botão negar
-                            }
-                        } label: {
-                            Text("Negar")
-                        }
-                        .tint(.red)
+                    .tint(.red)
+                }
+            }
+            .onAppear(perform: getActiveTickets)
+            .alert(isPresented: Binding<Bool>(
+                get: { self.errorMessage != nil },
+                set: { _ in self.errorMessage = nil }
+            )) {
+                Alert(title: Text("Error"), message: Text(errorMessage ?? "Unknown error"), dismissButton: .default(Text("OK")))
+            }
+        }
+    }
+    
+//MARK: TICKET FUNCTIONS
+    private func handleSelectedTicket(_ ticket: Ticket, action: String) {
+        if let index = tickets.firstIndex(where: { $0.id == ticket.id }) {
+            if let user = sessionManager.user {
+                handleTicket(ticket.id, action, user.token ?? "") { (message, error) in
+                    if let message = message {
+                        print(message)
+                    }
+                    if let error = error {
+                        print(error.localizedDescription)
+                        errorMessage = error.localizedDescription
+                    }
+                }
+            }
+            tickets.remove(at: index)
+        }
+    }
+    
+    private func getActiveTickets() {
+        if let user = sessionManager.user {
+            getAllActiveTickets(user.token ?? ""){ (result) in
+                switch result {
+                case .success(let fetchedTickets):
+                    DispatchQueue.main.async {
+                        self.tickets = fetchedTickets
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.errorMessage = "ⓘ \(error.localizedDescription)"
                     }
                 }
             }
         }
     }
     
-//MARK: FUNC TO DELETE THE REQUEST (DUMMY DATA)
-    private func denyRequest(_ request: AdminRequest) {
-        if let index = requests.firstIndex(where: { $0.id == request.id }) {
-            requests.remove(at: index)
+//MARK: UTILS
+    func createDetailsString(_ ticket: Ticket) -> String {
+        var details = ""
+        
+        switch ticket.type {
+        case "delete":
+            return ""
+        case "create":
+            if let timestamp = ticket.requestedData?.timestamp {
+                details += convertDateFormat(timestamp)
+            }
+        case "update":
+            if let timestamp = ticket.requestedData?.timestamp {
+                details += convertDateFormat(ticket.clockEventTimestamp ?? "")
+                details += " → "
+                details += convertDateFormat(timestamp)
+            }
+        default:
+            return ""
+        }
+        
+        if let doctor = ticket.requestedData?.doctor, doctor {
+            details += " → Médico"
+        } else if let dayOff = ticket.requestedData?.dayOff, dayOff {
+            details += " → Folga"
+        }
+        
+        return details
+    }
+    
+    func convertDateFormat(_ dateString: String) -> String {
+        let inputFormatter = createFormatter("yyyy-MM-dd HH:mm:ss")
+        
+        if let date = inputFormatter.date(from: dateString) {
+            let outputFormatter = createFormatter("dd/MM HH:mm")
+            return outputFormatter.string(from: date)
+        } else {
+            return "Invalid date"
         }
     }
 }
 
-
-
-
-
 //MARK: PREVIEW
-#Preview {
-    AdminRequestMainPanel()
+struct AdminRequestMainPanel_Previews: PreviewProvider {
+    static var previews: some View {
+        AdminRequestMainPanel()
+            .environmentObject(UserSessionManager())
+    }
 }

@@ -45,7 +45,7 @@ struct AddEventView: View {
         _justification = State(initialValue: "" )
         
         if let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) {
-            var timeString = createFormatter("H:mm").string(from: date)
+            var _ = createFormatter("H:mm").string(from: date)
         }
         _registeredTime = State(initialValue: "12:00")
     }
@@ -205,7 +205,7 @@ struct AddEventView: View {
         
         if let user = sessionManager.user {
             let requestedData = RequestedData(userId: user.id, timestamp: timestamp, justification: justification,
-                                              dayOff: dayOff ? 1 : 0,doctor: doctor ? 1 : 0)
+                                              dayOff: dayOff, doctor: doctor)
             let ticketRequest = TicketRequest(userId: user.id, type: "create", clockEventId: nil,
                                               justification: justification, requestedData: requestedData)
             
@@ -221,6 +221,7 @@ struct AddEventView: View {
             }
         }
     }
+    
     func validateAndCorrectTime(time: String) -> String {
         let timeComponents = time.split(separator: ":")
         if let hour = Int(timeComponents[0]), let minute = Int(timeComponents[1]) {
