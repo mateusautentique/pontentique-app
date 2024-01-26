@@ -19,7 +19,7 @@ struct UserAddEventDateView: View {
     @State private var alertMessage: String = ""
     
     //MARK: - CLOCK INFO
-    @Binding var clockReport: ClockReport?
+    @Binding var clockReport: ClockReport
     @Binding var startDate: Date
     @Binding var endDate: Date
     let clockEntry: ClockEntry
@@ -34,7 +34,7 @@ struct UserAddEventDateView: View {
     let onEventEdited: () -> Void
     
     //MARK: - INIT
-    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
+    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
         self.clockEntry = clockEntry
         self._clockReport = clockReport
         self._startDate = startDate
@@ -67,7 +67,7 @@ struct UserAddEventDateView: View {
     var body: some View {
         VStack {
             HStack{
-                Text("Editar registro")
+                Text("Registrar Folga")
                 Spacer()
             }
             .padding()
@@ -169,8 +169,7 @@ struct UserAddEventDateView: View {
                         errorMessage = "ⓘ Insira um horário válido"
                     } else {
                         errorMessage = ""
-                        createAddTicket(clockEntry, justification, startRegisteredTime)
-                        createAddTicket(clockEntry, justification, endRegisteredTime)
+                        setDayOff(clockEntry, clockReport, justification, startRegisteredTime, endRegisteredTime, dayOff, doctor)
                     }
                 }){
                     Text("Salvar")
@@ -214,27 +213,40 @@ struct UserAddEventDateView: View {
     
     //MARK: - AUX FUNCTIONS
     
-    func createAddTicket(_ event: ClockEntry, _ justification: String, _ timestamp: String) {
-        let justification = justification
-        let timestamp = replaceTimeInTimestamp(event.day, timestamp)
-        
+    func setDayOff(_ entry: ClockEntry, _ report: ClockReport, _ justification: String,
+                   _ startTime: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool){
         if let user = sessionManager.user {
-            let requestedData = RequestedData(userId: user.id, timestamp: timestamp, justification: justification,
-                                              dayOff: dayOff, doctor: doctor)
-            let ticketRequest = TicketRequest(userId: user.id, type: "create", clockEventId: nil,
-                                              justification: justification, requestedData: requestedData)
+            let startTimeFormatted = formatTime(startTime)
+            let endTimeFormatted = formatTime(endTime)
             
-            createTicket(ticketRequest, user.token ?? ""){ (message, error) in
-                if let message = message {
-                    DispatchQueue.main.async {
-                        alertMessage = message
-                        showingAlert = true
-                    }
-                } else if let error = error {
-                    errorMessage = "ⓘ \(error.localizedDescription)"
+            setDayOffForDate(user.id, justification, entry.day, startTimeFormatted,
+                             entry.day, endTimeFormatted, dayOff, doctor, user.token ?? "")
+            { (message, error) in
+                if let error = error {
+                    errorMessage = error.localizedDescription
+                } else if let message = message {
+                    alertMessage = message
+                    showingAlert = true
                 }
             }
         }
+    }
+    
+    func formatDate(_ date: String, _ eventDay: String) -> String {
+        let year = String(eventDay.prefix(4))
+        let dateWithYear = date + "/" + year
+        
+        let dateFormatterGet = createFormatter("dd/MM/yyyy")
+        let dateFormatterPrint = createFormatter("yyyy-MM-dd")
+        
+        if let date = dateFormatterGet.date(from: dateWithYear) {
+            return dateFormatterPrint.string(from: date)
+        } else { return "" }
+    }
+    
+    func formatTime(_ time: String) -> String {
+        if time.count == 4 { return "0" + time
+        } else { return time }
     }
     
     func isValidTime(_ time: String) -> Bool {
@@ -246,10 +258,6 @@ struct UserAddEventDateView: View {
         
         let components = time.split(separator: ":")
         return components[1].count == 2
-    }
-    
-    func replaceTimeInTimestamp(_ date: String, _ time: String) -> String {
-        return "\(date) \(time):00"
     }
     
     func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
@@ -271,7 +279,7 @@ struct UserAddEventDateView: View {
 
 struct UserAddEventDateView_Previews: PreviewProvider {
     static var previews: some View {
-        @State var clockReport: ClockReport? = ClockReport()
+        @State var clockReport: ClockReport = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         let clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
