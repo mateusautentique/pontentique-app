@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-let API_HOST = "http://localhost/api"
+let API_HOST = "http://localhost:8000/api"
 
 @main
 struct PontentiqueApp: App {

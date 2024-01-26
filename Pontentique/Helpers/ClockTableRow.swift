@@ -30,6 +30,8 @@ struct ClockTableRow: View {
             HStack (spacing: 0){
                 DateText(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, date: clockEntry.day, onEventEdited: onEventEdited)
                 EventGroup(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                
+                
                 Spacer()
                 BalanceValue(balanceHours: $clockEntry.balanceHoursOnDay)
                     .bold()

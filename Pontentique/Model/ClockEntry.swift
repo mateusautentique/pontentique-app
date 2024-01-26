@@ -16,6 +16,7 @@ class ClockEntry: Codable, Identifiable, ObservableObject{
     let eventCount: Int
     let events: [ClockEvent]
     
+    
     var id: String { day }
     
     

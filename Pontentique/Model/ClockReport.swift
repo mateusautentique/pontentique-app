@@ -13,7 +13,7 @@ class ClockReport: ObservableObject, Codable {
     let totalHoursWorked: String
     let totalNormalHoursWorked: String
     @Published var totalHourBalance: String
-    let entries: [ClockEntry]
+    var entries: [ClockEntry]
 
     enum CodingKeys: CodingKey {
         case userId, userName, totalHoursWorked, totalNormalHoursWorked, totalHourBalance, entries

@@ -108,6 +108,12 @@ struct EditEventView: View {
                     .cornerRadius(5)
                     .padding(.bottom, 10)
                     .lineLimit(5...10)
+                    .onChange(of: justification) { oldValue, newValue in
+                        if newValue.count > 200 {
+                            justification = String(newValue.prefix(200))
+                        }
+                    }
+                    
                 
                 HStack{
                     VStack (alignment: .leading) {
