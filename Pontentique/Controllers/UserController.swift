@@ -110,7 +110,7 @@ func deleteUser(userId: Int, token: String, completion: @escaping (Bool, Error?)
     request.httpBody = try? JSONSerialization.data(withJSONObject: bodyData, options: [])
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-        guard let data = data, error == nil else {
+        guard error == nil else {
             completion(false, error)
             return
         }
