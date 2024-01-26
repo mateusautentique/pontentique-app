@@ -58,7 +58,7 @@ func addClockEvent(_ userId: Int,_ timestamp: String,_ justification: String,
                     -> (Void))
 {
     var request = URLRequest(url: URL(string: host)!)
-    request.httpMethod = "PUT"
+    request.httpMethod = "POST"
     
     let parameters: [String: Any] = [
         "user_id": "\(userId)",

@@ -20,7 +20,7 @@ struct AddEventView: View {
     
     //MARK: - CLOCK INFO
     var clockEntry: ClockEntry
-    @Binding var clockReport: ClockReport?
+    @Binding var clockReport: ClockReport
     @Binding var startDate: Date
     @Binding var endDate: Date
     
@@ -33,7 +33,7 @@ struct AddEventView: View {
     let onEventEdited: () -> Void
     
     //MARK: - INIT
-    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
+    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
         self.clockEntry = clockEntry
         self._clockReport = clockReport
         self._startDate = startDate
@@ -155,7 +155,11 @@ struct AddEventView: View {
                         errorMessage = "ⓘ Insira um horário válido"
                     } else {
                         errorMessage = ""
-                        createAddTicket(clockEntry, justification, registeredTime)
+                        if let user = sessionManager.user {
+                            user.role == "admin" ?
+                            addEvent(clockEntry, justification, registeredTime) :
+                            createAddTicket(clockEntry, justification, registeredTime)
+                        }
                     }
                 }){
                     Text("Salvar")
@@ -198,8 +202,28 @@ struct AddEventView: View {
     }
     
     //MARK: - AUX FUNCTIONS
+    
+    func addEvent(_ entry: ClockEntry, _ justification: String, _ timestamp: String) {
+        let timestamp = replaceTimeInTimestamp(entry.day, timestamp)
+        print("Timestamp: \(timestamp)")
+
+        if let user = sessionManager.user {
+            addClockEvent(clockReport.userId, timestamp, justification, user.token ?? "", dayOff, doctor) { (message, error) in
+                if let message = message {
+                    print("Message: \(message)")
+                    DispatchQueue.main.async {
+                        alertMessage = message
+                        showingAlert = true
+                    }
+                } else if let error = error {
+                    print("Error: \(error)")
+                    errorMessage = "ⓘ \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+    
     func createAddTicket(_ event: ClockEntry, _ justification: String, _ timestamp: String) {
-        let justification = justification
         let timestamp = replaceTimeInTimestamp(event.day, timestamp)
         
         if let user = sessionManager.user {
@@ -231,6 +255,10 @@ struct AddEventView: View {
         return time
     }
     
+    func replaceTimeInTimestamp(_ date: String, _ time: String) -> String {
+        return "\(date) \(time):00"
+    }
+    
     func isValidTime(_ time: String) -> Bool {
         let formatter = DateFormatter()
         formatter.dateFormat = time.count == 4 ? "H:mm" : "HH:mm"
@@ -242,13 +270,9 @@ struct AddEventView: View {
         return components[1].count == 2
     }
     
-    func replaceTimeInTimestamp(_ date: String, _ time: String) -> String {
-        return "\(date) \(time):00"
-    }
-    
     func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
         if let user = sessionManager.user {
-            getClockEntriesByPeriod(user.id, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
+            getClockEntriesByPeriod(clockReport.userId, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
                 if let clockReport = clockReport {
                     DispatchQueue.main.async {
                         self.clockReport = clockReport
@@ -265,7 +289,7 @@ struct AddEventView: View {
 
 struct AddEventView_Previews: PreviewProvider {
     static var previews: some View {
-        @State var clockReport: ClockReport? = ClockReport()
+        @State var clockReport: ClockReport = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         let clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])

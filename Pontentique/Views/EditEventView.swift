@@ -19,7 +19,7 @@ struct EditEventView: View {
     @State private var alertMessage: String = ""
     
     //MARK: - CLOCK INFO
-    @Binding var clockReport: ClockReport?
+    @Binding var clockReport: ClockReport
     @Binding var startDate: Date
     @Binding var endDate: Date
     let event: ClockEvent
@@ -33,7 +33,7 @@ struct EditEventView: View {
     let onEventEdited: () -> Void
     
     //MARK: - INIT
-    init(event: ClockEvent, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
+    init(event: ClockEvent, clockReport: Binding<ClockReport>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
         self.event = event
         self._clockReport = clockReport
         self._startDate = startDate
@@ -169,7 +169,11 @@ struct EditEventView: View {
                         errorMessage = "ⓘ Insira um horário válido"
                     } else {
                         errorMessage = ""
-                        createEditTicket(event, justification, registeredTime)
+                        if let user = sessionManager.user {
+                            user.role == "admin" ? 
+                            editEvent(event, justification, registeredTime) :
+                            createEditTicket(event, justification, registeredTime)
+                        }
                     }
                 }){
                     Text("Salvar")
@@ -213,9 +217,26 @@ struct EditEventView: View {
     
     //MARK: - AUX FUNCTIONS
     
+    func editEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
+        let eventId = event.id
+        let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
+
+        if let user = sessionManager.user {
+            editClockEvent(eventId, timestamp, justification, user.token ?? "", dayOff, doctor) { (message, error) in
+                if let message = message {
+                    DispatchQueue.main.async {
+                        alertMessage = message
+                        showingAlert = true
+                    }
+                } else if let error = error {
+                    errorMessage = "ⓘ \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+    
     func createEditTicket(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
         let eventId = event.id
-        let justification = justification
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
         
         if let user = sessionManager.user {
@@ -257,7 +278,7 @@ struct EditEventView: View {
     
     func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
         if let user = sessionManager.user {
-            getClockEntriesByPeriod(user.id, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
+            getClockEntriesByPeriod(clockReport.userId, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
                 if let clockReport = clockReport {
                     DispatchQueue.main.async {
                         self.clockReport = clockReport
@@ -275,7 +296,7 @@ struct EditEventView: View {
 struct EditEventView_Previews: PreviewProvider {
     static var previews: some View {
         let exampleEvent: ClockEvent
-        @State var clockReport: ClockReport?
+        @State var clockReport = ClockReport() // Initialize clockReport here
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         
@@ -293,7 +314,7 @@ struct EditEventView_Previews: PreviewProvider {
         
         return NavigationView {
             EditEventView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
-                // DEGUG
+                // DEBUG
             })
         }
     }
