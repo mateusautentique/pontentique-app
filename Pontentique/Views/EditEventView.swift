@@ -116,7 +116,7 @@ struct EditEventView: View {
                             justification = String(newValue.prefix(200))
                         }
                     }
-                    
+                
                 
                 HStack{
                     VStack (alignment: .leading) {
@@ -166,9 +166,13 @@ struct EditEventView: View {
                 }
                 
                 Button(action: {
-                    errorMessage = ""
-                    self.activeAlert = .delete
-                    self.showAlert = true
+                    if justification.isEmpty {
+                        errorMessage = "ⓘ A justificativa é obrigatória"
+                    } else {
+                        errorMessage = ""
+                        self.activeAlert = .delete
+                        self.showAlert = true
+                    }
                 }) {
                     Text("Excluir registro")
                         .foregroundColor(.red)
@@ -177,7 +181,7 @@ struct EditEventView: View {
             .alert(isPresented: $showAlert) {
                 switch activeAlert {
                 case .edit:
-                    return Alert(title: Text("Sucesso!"), 
+                    return Alert(title: Text("Sucesso!"),
                                  message: Text("\(editAlertMessage)"),
                                  dismissButton: .default(Text("OK"), action: {
                         self.presentationMode.wrappedValue.dismiss()
@@ -187,18 +191,19 @@ struct EditEventView: View {
                     return Alert(title: Text("Confirmar exclusão"),
                                  message: Text("Tem certeza que deseja deletar esse registro?"),
                                  primaryButton: .destructive(Text("Excluir")) {
-                        if let user = sessionManager.user {
-                            user.role == "admin" ?
-                            deleteEvent(event) : 
-                            createDeleteTicket(event, justification)
-                        }
-                        self.activeAlert = .doneDelete
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.showAlert = true
-                        }
+                            errorMessage = ""
+                            if let user = sessionManager.user {
+                                user.role == "admin" ?
+                                deleteEvent(event) :
+                                createDeleteTicket(event, justification, registeredTime)
+                            }
+                            self.activeAlert = .doneDelete
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                self.showAlert = true
+                            }
                     }, secondaryButton: .cancel())
                 case .doneDelete:
-                    return Alert(title: Text("Sucesso!"), 
+                    return Alert(title: Text("Sucesso!"),
                                  message: Text("\(deleteAlertMessage)"),
                                  dismissButton: .default(Text("OK"), action: {
                         self.presentationMode.wrappedValue.dismiss()
@@ -248,7 +253,7 @@ struct EditEventView: View {
     func editEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
         let eventId = event.id
         let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
-
+        
         if let user = sessionManager.user {
             editClockEvent(eventId, timestamp, justification, user.token ?? "", dayOff, doctor) { (message, error) in
                 if let message = message {
@@ -305,14 +310,15 @@ struct EditEventView: View {
         }
     }
     
-    func createDeleteTicket(_ event: ClockEvent, _ justification: String) {
+    func createDeleteTicket(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
         let eventId = event.id
         
         if let user = sessionManager.user {
-            let requestedData = RequestedData(userId: user.id, timestamp: "",
-                                              justification: justification, dayOff: dayOff, doctor: doctor)
-            let ticketRequest = TicketRequest(userId: user.id, type: "delete", clockEventId: eventId,
-                                              justification: justification, requestedData: requestedData)
+            let ticketRequest = TicketRequest(userId: user.id,
+                                              type: "delete",
+                                              clockEventId: eventId,
+                                              justification: justification,
+                                              requestedData: nil)
             
             createTicket(ticketRequest, user.token ?? ""){ (message, error) in
                 if let message = message {

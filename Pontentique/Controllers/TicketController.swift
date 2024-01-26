@@ -19,7 +19,6 @@ func createTicket(_ ticket: TicketRequest, _ token: String,
     encoder.keyEncodingStrategy = .convertToSnakeCase
     request.httpBody = try? encoder.encode(ticket)
     
-    
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")

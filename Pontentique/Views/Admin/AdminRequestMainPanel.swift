@@ -36,7 +36,9 @@ struct AdminRequestMainPanel: View {
             List(tickets) { ticket in
                 VStack(alignment: .leading) {
                     Text(ticket.userName).font(.headline)
-                    Text(createDetailsString(ticket)).font(.subheadline)
+                    Text(createDetailsString(ticket))
+                        .font(.subheadline)
+                        .foregroundColor(ticket.type == "delete" ? .red : .primary)
                     Text(ticket.justification).font(.caption)
                 }
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -63,7 +65,7 @@ struct AdminRequestMainPanel: View {
                 get: { self.errorMessage != nil },
                 set: { _ in self.errorMessage = nil }
             )) {
-                Alert(title: Text("Error"), message: Text(errorMessage ?? "Unknown error"), dismissButton: .default(Text("OK")))
+                Alert(title: Text("Erro"), message: Text(errorMessage ?? "Unknown error"), dismissButton: .default(Text("OK")))
             }
         }
     }
@@ -109,7 +111,7 @@ struct AdminRequestMainPanel: View {
         
         switch ticket.type {
         case "delete":
-            return ""
+            details += "Exclusão"
         case "create":
             if let timestamp = ticket.requestedData?.timestamp {
                 details += convertDateFormat(timestamp)
