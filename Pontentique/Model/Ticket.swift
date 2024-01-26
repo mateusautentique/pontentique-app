@@ -85,6 +85,7 @@ struct RequestedData: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         do {
             userId = try container.decode(Int.self, forKey: .userId)
         } catch DecodingError.typeMismatch {
@@ -96,16 +97,14 @@ struct RequestedData: Codable {
         justification = try container.decode(String.self, forKey: .justification)
 
         do {
-            let dayOffInt = try container.decode(Int.self, forKey: .dayOff)
-            dayOff = dayOffInt == 1
+            dayOff = try container.decode(Bool.self, forKey: .dayOff)
         } catch DecodingError.typeMismatch {
             let dayOffString = try container.decode(String.self, forKey: .dayOff)
             dayOff = dayOffString == "1"
         }
 
         do {
-            let doctorInt = try container.decode(Int.self, forKey: .doctor)
-            doctor = doctorInt == 1
+            doctor = try container.decode(Bool.self, forKey: .doctor)
         } catch DecodingError.typeMismatch {
             let doctorString = try container.decode(String.self, forKey: .doctor)
             doctor = doctorString == "1"

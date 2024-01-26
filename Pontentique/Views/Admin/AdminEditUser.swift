@@ -30,7 +30,6 @@ struct AdminEditUser: View {
     
     func saveChanges(completion: @escaping (String?, Error?) -> Void) {
         if let token = self.token {
-            
             let userId = user.id
             let name = user.name
             let email = user.email
@@ -44,13 +43,7 @@ struct AdminEditUser: View {
                 }
             }
         }
-        var saveSuccessful = true
-                
-        if saveSuccessful {
-            completion("As alterações foram salvas com sucesso", nil)
-        } else {
-            completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Erro ao tentar salvar!"]))
-        }
+        completion("As alterações foram salvas com sucesso", nil)
     }
     
     var body: some View {

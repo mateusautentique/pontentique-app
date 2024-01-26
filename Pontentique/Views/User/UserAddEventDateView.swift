@@ -187,7 +187,7 @@ struct UserAddEventDateView: View {
                 }
             }
             .alert(isPresented: $showingAlert) {
-                Alert(title: Text("Ponto editado com sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
+                Alert(title: Text("Sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
                     self.presentationMode.wrappedValue.dismiss()
                     self.onEventEdited()
                 }))

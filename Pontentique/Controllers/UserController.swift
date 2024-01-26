@@ -137,8 +137,9 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
        }
        task.resume()
    }
+
 func deleteUser(userId: Int, token: String, completion: @escaping (Bool, Error?) -> Void) {
-    let url = URL(string: "http://localhost:8000/api/admin/manageUsers/user/")!
+    let url = URL(string: "\(API_HOST)/api/admin/manageUsers/user/")!
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
