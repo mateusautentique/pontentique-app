@@ -39,9 +39,9 @@
 		457DA01D2B5AE25C000167A2 /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA01C2B5AE25C000167A2 /* UserController.swift */; };
 		457DA01F2B5AF2EE000167A2 /* LoadingIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA01E2B5AF2EE000167A2 /* LoadingIconView.swift */; };
 		457DA0212B5B0356000167A2 /* AdminMainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA0202B5B0356000167A2 /* AdminMainPanel.swift */; };
-		457DA0242B5EA273000167A2 /* UserEditEventDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA0232B5EA273000167A2 /* UserEditEventDateView.swift */; };
+		457DA0242B5EA273000167A2 /* UserAddEventDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA0232B5EA273000167A2 /* UserAddEventDateView.swift */; };
 		457DA0262B5EA4ED000167A2 /* TimeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA0252B5EA4ED000167A2 /* TimeTextField.swift */; };
-		457DA0282B5EB070000167A2 /* AdminEditEventDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA0272B5EB070000167A2 /* AdminEditEventDateView.swift */; };
+		457DA0282B5EB070000167A2 /* AdminAddEventDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA0272B5EB070000167A2 /* AdminAddEventDateView.swift */; };
 		457DA02A2B5EB330000167A2 /* DateTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457DA0292B5EB330000167A2 /* DateTextField.swift */; };
 		45E931842B321EBD003BED3A /* UserSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E931832B321EBD003BED3A /* UserSessionManager.swift */; };
 		45E931862B331EEF003BED3A /* ClockPunchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E931852B331EEF003BED3A /* ClockPunchController.swift */; };
@@ -96,9 +96,9 @@
 		457DA01C2B5AE25C000167A2 /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		457DA01E2B5AF2EE000167A2 /* LoadingIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIconView.swift; sourceTree = "<group>"; };
 		457DA0202B5B0356000167A2 /* AdminMainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminMainPanel.swift; sourceTree = "<group>"; };
-		457DA0232B5EA273000167A2 /* UserEditEventDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditEventDateView.swift; sourceTree = "<group>"; };
+		457DA0232B5EA273000167A2 /* UserAddEventDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAddEventDateView.swift; sourceTree = "<group>"; };
 		457DA0252B5EA4ED000167A2 /* TimeTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTextField.swift; sourceTree = "<group>"; };
-		457DA0272B5EB070000167A2 /* AdminEditEventDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminEditEventDateView.swift; sourceTree = "<group>"; };
+		457DA0272B5EB070000167A2 /* AdminAddEventDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminAddEventDateView.swift; sourceTree = "<group>"; };
 		457DA0292B5EB330000167A2 /* DateTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTextField.swift; sourceTree = "<group>"; };
 		45E931832B321EBD003BED3A /* UserSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionManager.swift; sourceTree = "<group>"; };
 		45E931852B331EEF003BED3A /* ClockPunchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockPunchController.swift; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 		455F82C12B31F9D700CB161C /* User */ = {
 			isa = PBXGroup;
 			children = (
-				457DA0232B5EA273000167A2 /* UserEditEventDateView.swift */,
+				457DA0232B5EA273000167A2 /* UserAddEventDateView.swift */,
 				455F82A92B307D9E00CB161C /* UserMainPanel.swift */,
 			);
 			path = User;
@@ -254,7 +254,7 @@
 				8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */,
 				8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */,
 				8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */,
-				457DA0272B5EB070000167A2 /* AdminEditEventDateView.swift */,
+				457DA0272B5EB070000167A2 /* AdminAddEventDateView.swift */,
 			);
 			path = Admin;
 			sourceTree = "<group>";
@@ -349,7 +349,7 @@
 				45E931862B331EEF003BED3A /* ClockPunchController.swift in Sources */,
 				455F82AF2B30AF6F00CB161C /* ClockTableRow.swift in Sources */,
 				457DA02A2B5EB330000167A2 /* DateTextField.swift in Sources */,
-				457DA0282B5EB070000167A2 /* AdminEditEventDateView.swift in Sources */,
+				457DA0282B5EB070000167A2 /* AdminAddEventDateView.swift in Sources */,
 				455F82A42B2B6E9B00CB161C /* RegisterScreen.swift in Sources */,
 				8B59EC842B5962FF00B10E40 /* AdminUsersMainPainel.swift in Sources */,
 				455F82B12B30B0A700CB161C /* ClockEvent.swift in Sources */,
@@ -367,7 +367,7 @@
 				457DA0212B5B0356000167A2 /* AdminMainPanel.swift in Sources */,
 				457DA01F2B5AF2EE000167A2 /* LoadingIconView.swift in Sources */,
 				45E931882B33204F003BED3A /* ErrorController.swift in Sources */,
-				457DA0242B5EA273000167A2 /* UserEditEventDateView.swift in Sources */,
+				457DA0242B5EA273000167A2 /* UserAddEventDateView.swift in Sources */,
 				8BE7B2F92B599034004B6B6D /* AddEventView.swift in Sources */,
 				455F82A82B2C8E7700CB161C /* UserSession.swift in Sources */,
 				451887392B4C5EE600C692F9 /* EditLinkView.swift in Sources */,

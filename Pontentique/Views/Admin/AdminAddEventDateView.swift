@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AdminEditEventDateView: View {
+struct AdminAddEventDateView: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
@@ -20,10 +20,10 @@ struct AdminEditEventDateView: View {
     @State private var alertMessage: String = ""
     
     //MARK: - CLOCK INFO
-    @Binding var clockReport: ClockReport?
+    @Binding var clockReport: ClockReport
     @Binding var startDate: Date
     @Binding var endDate: Date
-    let event: ClockEvent
+    let clockEntry: ClockEntry
     
     //MARK: - UPDATE INFO
     @State var startRegisteredTime: String
@@ -37,51 +37,43 @@ struct AdminEditEventDateView: View {
     let onEventEdited: () -> Void
     
     //MARK: - INIT
-    init(event: ClockEvent, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
-        self.event = event
+    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
+        self.clockEntry = clockEntry
         self._clockReport = clockReport
         self._startDate = startDate
         self._endDate = endDate
         self.onEventEdited = onEventEdited
-
-        _doctor = State(initialValue: event.doctor)
-        _dayOff = State(initialValue: event.dayOff)
-        _justification = State(initialValue: event.justification )
-
-        var timeString = ""
+        
+        _doctor = State(initialValue: false)
+        _dayOff = State(initialValue: true)
+        _justification = State(initialValue: "" )
+        
         var dateString = ""
-        if let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) {
-            timeString = createFormatter("H:mm").string(from: date)
-            dateString = createFormatter("dd/MM").string(from: date)
+        if let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) {
+            dateString = createFormatter("d/MM").string(from: date)
         }
-        _startRegisteredTime = State(initialValue: timeString)
-        _endRegisteredTime = State(initialValue: timeString)
+        
+        _startRegisteredTime = State(initialValue: "12:00")
+        _endRegisteredTime = State(initialValue: "18:00")
         _startRegisteredDate = State(initialValue: dateString)
         _endRegisteredDate = State(initialValue: dateString)
     }
-
+    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     //MARK: - DATE FORMATTING
     var dayAndMonth: String {
-        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
-            return ""
+        guard let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) else {
+            return "12/01"
         }
         return createFormatter("d/MM").string(from: date)
-    }
-
-    var time: String {
-        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
-            return ""
-        }
-        return createFormatter("H:mm").string(from: date)
     }
     
     //MARK: - VIEW
     var body: some View {
         VStack {
             HStack{
-                Text("Editar registro")
+                Text("Registrar folga")
                 Spacer()
             }
             .padding()
@@ -98,7 +90,7 @@ struct AdminEditEventDateView: View {
                             .font(.system(size: 20))
                         Spacer()
                         DateTextField(registeredDate: $startRegisteredDate, dayAndMonth: dayAndMonth)
-                        TimeTextField(registeredTime: $startRegisteredTime, time: time)
+                        TimeTextField(registeredTime: $startRegisteredTime, time: "12:00")
                     }
                     
                     HStack{
@@ -107,7 +99,7 @@ struct AdminEditEventDateView: View {
                             .font(.system(size: 20))
                         Spacer()
                         DateTextField(registeredDate: $endRegisteredDate, dayAndMonth: dayAndMonth)
-                        TimeTextField(registeredTime: $endRegisteredTime, time: time)
+                        TimeTextField(registeredTime: $endRegisteredTime, time: "18:00")
                     }
                 }
                 .background(ColorScheme.appBackgroudColor)
@@ -139,10 +131,9 @@ struct AdminEditEventDateView: View {
                     }
                     Spacer()
                     Toggle("", isOn: $dayOff)
-                        .onChange(of: dayOff){ oldValue, newValue in
-                            if newValue {
-                                doctor = false
-                            }
+                        .onChange(of: dayOff) {
+                            if dayOff {doctor = false}
+                            else {doctor = true}
                         }
                         .padding()
                 }
@@ -158,12 +149,10 @@ struct AdminEditEventDateView: View {
                     }
                     Spacer()
                     Toggle("", isOn: $doctor)
-                        .onChange(of: doctor) { oldValue, newValue in
-                            if newValue {
-                                dayOff = false
-                            }
+                        .onChange(of: doctor) {
+                            if doctor {dayOff = false}
+                            else {dayOff = true}
                         }
-                    
                         .padding()
                 }
                 Divider()
@@ -178,14 +167,15 @@ struct AdminEditEventDateView: View {
                 }
                 
                 Button(action: {
-//                    if justification.isEmpty {
-//                        errorMessage = "ⓘ A justificativa é obrigatória"
-//                    } else if !isValidTime(registeredTime) {
-//                        errorMessage = "ⓘ Insira um horário válido"
-//                    } else {
-//                        errorMessage = ""
-//                        editSelectedEvent(event, justification, registeredTime)
-//                    }
+                    if justification.isEmpty {
+                        errorMessage = "ⓘ A justificativa é obrigatória"
+                    } else if !isValidTime(startRegisteredTime) || !isValidTime(endRegisteredTime){
+                        errorMessage = "ⓘ Insira um horário válido"
+                    } else {
+                        errorMessage = ""
+                        setDayOff(clockEntry, clockReport, justification, startRegisteredDate, startRegisteredTime,
+                                  endRegisteredDate, endRegisteredTime, dayOff, doctor)
+                    }
                 }){
                     Text("Salvar")
                         .padding(15)
@@ -202,7 +192,7 @@ struct AdminEditEventDateView: View {
                 }
             }
             .alert(isPresented: $showingAlert) {
-                Alert(title: Text("Ponto editado com sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
+                Alert(title: Text("Sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
                     self.presentationMode.wrappedValue.dismiss()
                     self.onEventEdited()
                 }))
@@ -227,36 +217,48 @@ struct AdminEditEventDateView: View {
     }
     
     //MARK: - AUX FUNCTIONS
-    
-    func editSelectedEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
-        let id = event.id
-        let justification = justification
-        let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
-        
+    func setDayOff(_ entry: ClockEntry, _ report: ClockReport, _ justification: String,
+                   _ startDate: String, _ startTime: String,
+                   _ endDate: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool){
         if let user = sessionManager.user {
-            editClockEvent(id, timestamp, justification, user.token ?? "", dayOff, doctor){ (message, error) in
-                if let message = message {
-                    DispatchQueue.main.async {
-                        alertMessage = message
-                        showingAlert = true
-                    }
-                } else if let error = error {
-                    errorMessage = "ⓘ \(error.localizedDescription)"
+            let startDateConverted = formatDate(startDate, entry.day)
+            let endDateConverted = formatDate(endDate, entry.day)
+            let startTimeFormatted = formatTime(startTime)
+            let endTimeFormatted = formatTime(endTime)
+            
+            setDayOffForDate(report.userId, justification, startDateConverted, startTimeFormatted,
+                             endDateConverted, endTimeFormatted, dayOff, doctor, user.token ?? "")
+            { (message, error) in
+                if let error = error {
+                    errorMessage = error.localizedDescription
+                } else if let message = message {
+                    alertMessage = message
+                    showingAlert = true
                 }
             }
         }
     }
     
-    func replaceTimeInTimestamp(originalTimestamp: String, newTime: String) -> String {
-        let timeIndex = originalTimestamp.index(originalTimestamp.startIndex, offsetBy: 11)
-        let datePart = originalTimestamp[..<timeIndex]
-        let formattedTime = newTime.count == 4 ? "0\(newTime)" : newTime
-        return "\(datePart)\(formattedTime):00"
+    func formatDate(_ date: String, _ eventDay: String) -> String {
+        let year = String(eventDay.prefix(4))
+        let dateWithYear = date + "/" + year
+        
+        let dateFormatterGet = createFormatter("dd/MM/yyyy")
+        let dateFormatterPrint = createFormatter("yyyy-MM-dd")
+        
+        if let date = dateFormatterGet.date(from: dateWithYear) {
+            return dateFormatterPrint.string(from: date)
+        } else { return "" }
     }
     
-    func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
+    func formatTime(_ time: String) -> String {
+        if time.count == 4 { return "0" + time
+        } else { return time }
+    }
+    
+    func fetchUpdatedClockReport(_ startDate: String, _ endDate: String, _ report: ClockReport) {
         if let user = sessionManager.user {
-            getClockEntriesByPeriod(user.id, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
+            getClockEntriesByPeriod(report.userId, user.token ?? "", startDate: startDate, endDate: endDate) { (clockReport, error) in
                 if let clockReport = clockReport {
                     DispatchQueue.main.async {
                         self.clockReport = clockReport
@@ -267,35 +269,42 @@ struct AdminEditEventDateView: View {
             }
         }
     }
+    
+    func isValidTime(_ time: String) -> Bool {
+        let formatter = DateFormatter()
+        formatter.dateFormat = time.count == 4 ? "H:mm" : "HH:mm"
+        if formatter.date(from: time) == nil {
+            return false
+        }
+        
+        let components = time.split(separator: ":")
+        return components[1].count == 2
+    }
 }
-
 //MARK: - PREVIEW
 
-struct AdminEditEventDateView_Previews: PreviewProvider {
+struct AdminAddEventDateView_Previews: PreviewProvider {
     static var previews: some View {
-        let exampleEvent: ClockEvent
-        @State var clockReport: ClockReport?
+        @State var clockReport: ClockReport = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         
         do {
             let url = Bundle.main.url(forResource: "EventExampleData", withExtension: "json")!
-            let data = try Data(contentsOf: url)
+            _ = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             decoder.dateDecodingStrategy = .formatted(createFormatter("yyyy-MM-dd HH:mm:ss"))
-            exampleEvent = try decoder.decode(ClockEvent.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")
-            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", _justification: nil, doctor: false, dayOff: false)
         }
         
         return NavigationView {
-            AdminEditEventDateView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
-                // DEGUG
+            AdminAddEventDateView(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
+                // DEBUG
             })
         }
     }
 }
-
 

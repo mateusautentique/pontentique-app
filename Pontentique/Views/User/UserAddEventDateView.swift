@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UserEditEventDateView: View {
+struct UserAddEventDateView: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
     
@@ -22,7 +22,7 @@ struct UserEditEventDateView: View {
     @Binding var clockReport: ClockReport?
     @Binding var startDate: Date
     @Binding var endDate: Date
-    let event: ClockEvent
+    let clockEntry: ClockEntry
     
     //MARK: - UPDATE INFO
     @State var startRegisteredTime: String
@@ -34,40 +34,33 @@ struct UserEditEventDateView: View {
     let onEventEdited: () -> Void
     
     //MARK: - INIT
-    init(event: ClockEvent, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
-        self.event = event
+    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport?>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
+        self.clockEntry = clockEntry
         self._clockReport = clockReport
         self._startDate = startDate
         self._endDate = endDate
         self.onEventEdited = onEventEdited
+        
+        _doctor = State(initialValue: false)
+        _dayOff = State(initialValue: true)
+        _justification = State(initialValue: "" )
 
-        _doctor = State(initialValue: event.doctor)
-        _dayOff = State(initialValue: event.dayOff)
-        _justification = State(initialValue: event.justification )
-
-        var timeString = ""
-        if let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) {
-            timeString = createFormatter("H:mm").string(from: date)
+        if let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) {
+            var _ = createFormatter("H:mm").string(from: date)
         }
-        _startRegisteredTime = State(initialValue: timeString)
-        _endRegisteredTime = State(initialValue: timeString)
+        _startRegisteredTime = State(initialValue: "12:00")
+        _endRegisteredTime = State(initialValue: "18:00")
     }
+    
 
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     //MARK: - DATE FORMATTING
     var dayAndMonth: String {
-        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
-            return ""
+        guard let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) else {
+            return "12/01"
         }
         return createFormatter("d/MM").string(from: date)
-    }
-
-    var time: String {
-        guard let date = createFormatter("yyyy-MM-dd HH:mm:ss").date(from: event.timestamp) else {
-            return ""
-        }
-        return createFormatter("H:mm").string(from: date)
     }
     
     //MARK: - VIEW
@@ -92,7 +85,7 @@ struct UserEditEventDateView: View {
                         Spacer()
                         Text("\(dayAndMonth)")
                             .foregroundColor(ColorScheme.tableTextColor)
-                        TimeTextField(registeredTime: $startRegisteredTime, time: time)
+                        TimeTextField(registeredTime: $startRegisteredTime, time: "12:00")
                     }
                     
                     HStack{
@@ -102,7 +95,7 @@ struct UserEditEventDateView: View {
                         Spacer()
                         Text("\(dayAndMonth)")
                             .foregroundColor(ColorScheme.tableTextColor)
-                        TimeTextField(registeredTime: $endRegisteredTime, time: time)
+                        TimeTextField(registeredTime: $endRegisteredTime, time: "18:00")
                     }
                 }
                 .background(ColorScheme.appBackgroudColor)
@@ -134,12 +127,11 @@ struct UserEditEventDateView: View {
                     }
                     Spacer()
                     Toggle("", isOn: $dayOff)
-                                .onChange(of: dayOff) { oldValue, newValue in
-                                    if newValue {
-                                        doctor = false
-                                    }
-                                }
-                    .padding()
+                        .onChange(of: dayOff) {
+                            if dayOff {doctor = false}
+                            else {doctor = true}
+                        }
+                        .padding()
                 }
                 Divider()
                 
@@ -153,13 +145,11 @@ struct UserEditEventDateView: View {
                     }
                     Spacer()
                     Toggle("", isOn: $doctor)
-                        .onChange(of: doctor) { oldValue, newValue in
-                            if newValue {
-                                dayOff = false
-                            }
+                        .onChange(of: doctor) {
+                            if doctor {dayOff = false}
+                            else {dayOff = true}
                         }
-                    
-                    .padding()
+                        .padding()
                 }
                 Divider()
                 
@@ -173,14 +163,15 @@ struct UserEditEventDateView: View {
                 }
                 
                 Button(action: {
-//                    if justification.isEmpty {
-//                        errorMessage = "ⓘ A justificativa é obrigatória"
-//                    } else if !isValidTime(registeredTime) {
-//                        errorMessage = "ⓘ Insira um horário válido"
-//                    } else {
-//                        errorMessage = ""
-//                        editSelectedEvent(event, justification, registeredTime)
-//                    }
+                    if justification.isEmpty {
+                        errorMessage = "ⓘ A justificativa é obrigatória"
+                    } else if !isValidTime(startRegisteredTime) || !isValidTime(endRegisteredTime) {
+                        errorMessage = "ⓘ Insira um horário válido"
+                    } else {
+                        errorMessage = ""
+                        createAddTicket(clockEntry, justification, startRegisteredTime)
+                        createAddTicket(clockEntry, justification, endRegisteredTime)
+                    }
                 }){
                     Text("Salvar")
                         .padding(15)
@@ -223,13 +214,17 @@ struct UserEditEventDateView: View {
     
     //MARK: - AUX FUNCTIONS
     
-    func editSelectedEvent(_ event: ClockEvent, _ justification: String, _ timestamp: String) {
-        let id = event.id
+    func createAddTicket(_ event: ClockEntry, _ justification: String, _ timestamp: String) {
         let justification = justification
-        let timestamp = replaceTimeInTimestamp(originalTimestamp: event.timestamp, newTime: timestamp)
+        let timestamp = replaceTimeInTimestamp(event.day, timestamp)
         
         if let user = sessionManager.user {
-            editClockEvent(id, timestamp, justification, user.token ?? "", dayOff, doctor){ (message, error) in
+            let requestedData = RequestedData(userId: user.id, timestamp: timestamp, justification: justification,
+                                              dayOff: dayOff, doctor: doctor)
+            let ticketRequest = TicketRequest(userId: user.id, type: "create", clockEventId: nil,
+                                              justification: justification, requestedData: requestedData)
+            
+            createTicket(ticketRequest, user.token ?? ""){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
                         alertMessage = message
@@ -242,11 +237,19 @@ struct UserEditEventDateView: View {
         }
     }
     
-    func replaceTimeInTimestamp(originalTimestamp: String, newTime: String) -> String {
-        let timeIndex = originalTimestamp.index(originalTimestamp.startIndex, offsetBy: 11)
-        let datePart = originalTimestamp[..<timeIndex]
-        let formattedTime = newTime.count == 4 ? "0\(newTime)" : newTime
-        return "\(datePart)\(formattedTime):00"
+    func isValidTime(_ time: String) -> Bool {
+        let formatter = DateFormatter()
+        formatter.dateFormat = time.count == 4 ? "H:mm" : "HH:mm"
+        if formatter.date(from: time) == nil {
+            return false
+        }
+        
+        let components = time.split(separator: ":")
+        return components[1].count == 2
+    }
+    
+    func replaceTimeInTimestamp(_ date: String, _ time: String) -> String {
+        return "\(date) \(time):00"
     }
     
     func fetchUpdatedClockReport(_ startDate: String, _ endDate: String) {
@@ -266,28 +269,26 @@ struct UserEditEventDateView: View {
 
 //MARK: - PREVIEW
 
-struct UserEditEventDateView_Previews: PreviewProvider {
+struct UserAddEventDateView_Previews: PreviewProvider {
     static var previews: some View {
-        let exampleEvent: ClockEvent
-        @State var clockReport: ClockReport?
+        @State var clockReport: ClockReport? = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         
         do {
             let url = Bundle.main.url(forResource: "EventExampleData", withExtension: "json")!
-            let data = try Data(contentsOf: url)
+            _ = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             decoder.dateDecodingStrategy = .formatted(createFormatter("yyyy-MM-dd HH:mm:ss"))
-            exampleEvent = try decoder.decode(ClockEvent.self, from: data)
         } catch {
             print("Error decoding JSON: \(error)")
-            exampleEvent = ClockEvent(id: 0, timestamp: "", type: "", _justification: nil, doctor: false, dayOff: false)
         }
         
         return NavigationView {
-            UserEditEventDateView(event: exampleEvent, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
-                // DEGUG
+            UserAddEventDateView(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
+                // DEBUG
             })
         }
     }

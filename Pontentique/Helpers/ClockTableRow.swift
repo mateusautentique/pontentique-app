@@ -9,16 +9,17 @@ import SwiftUI
 
 struct ClockTableRow: View {
     //MARK: - VARIABLES
-    @ObservedObject var clockReport: ClockReport
+    @EnvironmentObject var sessionManager: UserSessionManager
+    @Binding var clockReport: ClockReport
     @ObservedObject var clockEntry: ClockEntry
     @Binding var startDate: Date
     @Binding var endDate: Date
     
     let onEventEdited: () -> Void
     
-    init(clockEntry: ClockEntry, clockReport: ClockReport, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
+    init(clockEntry: ClockEntry, clockReport: Binding<ClockReport>, startDate: Binding<Date>, endDate: Binding<Date>, onEventEdited: @escaping () -> Void) {
         self.clockEntry = clockEntry
-        self._clockReport = ObservedObject(initialValue: clockReport)
+        self._clockReport = clockReport
         self._startDate = startDate
         self._endDate = endDate
         self.onEventEdited = onEventEdited
@@ -27,7 +28,7 @@ struct ClockTableRow: View {
     var body: some View {
         NavigationStack {
             HStack (spacing: 0){
-                DateText(date: clockEntry.day)
+                DateText(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, date: clockEntry.day, onEventEdited: onEventEdited)
                 EventGroup(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
                 Spacer()
                 BalanceValue(balanceHours: $clockEntry.balanceHoursOnDay)
@@ -107,7 +108,7 @@ extension Array {
 struct ClockTableRow_Previews: PreviewProvider {
     static var previews: some View {
         let clockEntry: ClockEntry
-        let clockReport = ClockReport()
+        @State var clockReport = ClockReport()
         @State var endDate = Date()
         @State var startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         
@@ -123,7 +124,7 @@ struct ClockTableRow_Previews: PreviewProvider {
             clockEntry = ClockEntry(day: "", normalHoursWorkedOnDay: "", extraHoursWorkedOnDay: "", balanceHoursOnDay: "", totalTimeWorkedInSeconds: 0, eventCount: 0, events: [])
         }
         
-        return ClockTableRow(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
+        return ClockTableRow(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: {
             //DEBUG
         })
     }

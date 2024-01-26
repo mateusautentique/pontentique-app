@@ -198,7 +198,6 @@ struct AddEventView: View {
     }
     
     //MARK: - AUX FUNCTIONS
-    
     func createAddTicket(_ event: ClockEntry, _ justification: String, _ timestamp: String) {
         let justification = justification
         let timestamp = replaceTimeInTimestamp(event.day, timestamp)

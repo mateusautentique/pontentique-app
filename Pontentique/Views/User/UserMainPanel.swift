@@ -87,7 +87,7 @@ struct UserMainPanel: View {
                 
                 ScrollView {
                     ForEach(clockReport.entries) { entry in
-                        ClockTableRow(clockEntry: entry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: refreshReport)
+                        ClockTableRow(clockEntry: entry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: refreshReport)
                     }
                 }
                 

@@ -138,7 +138,7 @@ struct AdminReportPanel: View {
                 ScrollView {
                     if appIsFullyLoaded {
                         ForEach(clockReport.entries) { entry in
-                            ClockTableRow(clockEntry: entry, clockReport: clockReport,
+                            ClockTableRow(clockEntry: entry, clockReport: $clockReport,
                                           startDate: $startDate, endDate: $endDate,
                                           onEventEdited: refreshAdminReport)
                         }
