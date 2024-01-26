@@ -15,8 +15,11 @@ struct EditEventView: View {
     @State private var errorMessage: String?
     
     //MARK: - ALERT
-    @State private var showingAlert: Bool = false
-    @State private var alertMessage: String = ""
+    enum ActiveAlert { case edit, delete, doneDelete }
+    @State private var showAlert: Bool = false
+    @State private var activeAlert: ActiveAlert = .edit
+    @State private var editAlertMessage = ""
+    @State private var deleteAlertMessage = ""
     
     //MARK: - CLOCK INFO
     @Binding var clockReport: ClockReport
@@ -163,38 +166,45 @@ struct EditEventView: View {
                 }
                 
                 Button(action: {
-                    if justification.isEmpty {
-                        errorMessage = "ⓘ A justificativa é obrigatória"
-                    } else if !isValidTime(registeredTime) {
-                        errorMessage = "ⓘ Insira um horário válido"
-                    } else {
-                        errorMessage = ""
-                        if let user = sessionManager.user {
-                            user.role == "admin" ? 
-                            editEvent(event, justification, registeredTime) :
-                            createEditTicket(event, justification, registeredTime)
-                        }
-                    }
-                }){
-                    Text("Salvar")
-                        .padding(15)
-                        .frame(maxWidth: .infinity)
-                        .background(ColorScheme.fieldBgColor)
-                        .foregroundColor(ColorScheme.primaryColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.leading, 10)
-                        .padding(.trailing, 10)
-                        .padding(.bottom, 25)
-                        .font(.system(size: 20))
-                    
+                    errorMessage = ""
+                    self.activeAlert = .delete
+                    self.showAlert = true
+                }) {
+                    Text("Excluir registro")
+                        .foregroundColor(.red)
                 }
             }
-            .alert(isPresented: $showingAlert) {
-                Alert(title: Text("Sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                    self.onEventEdited()
-                }))
+            .alert(isPresented: $showAlert) {
+                switch activeAlert {
+                case .edit:
+                    return Alert(title: Text("Sucesso!"), 
+                                 message: Text("\(editAlertMessage)"),
+                                 dismissButton: .default(Text("OK"), action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                        self.onEventEdited()
+                    }))
+                case .delete:
+                    return Alert(title: Text("Confirmar exclusão"),
+                                 message: Text("Tem certeza que deseja deletar esse registro?"),
+                                 primaryButton: .destructive(Text("Excluir")) {
+                        if let user = sessionManager.user {
+                            user.role == "admin" ?
+                            deleteEvent(event) : 
+                            createDeleteTicket(event, justification)
+                        }
+                        self.activeAlert = .doneDelete
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.showAlert = true
+                        }
+                    }, secondaryButton: .cancel())
+                case .doneDelete:
+                    return Alert(title: Text("Sucesso!"), 
+                                 message: Text("\(deleteAlertMessage)"),
+                                 dismissButton: .default(Text("OK"), action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                        self.onEventEdited()
+                    }))
+                }
             }
             .padding()
             .padding(.leading, 5)
@@ -212,6 +222,24 @@ struct EditEventView: View {
                     }
                 }
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    if justification.isEmpty {
+                        errorMessage = "ⓘ A justificativa é obrigatória"
+                    } else if !isValidTime(registeredTime) {
+                        errorMessage = "ⓘ Insira um horário válido"
+                    } else {
+                        errorMessage = ""
+                        if let user = sessionManager.user {
+                            user.role == "admin" ?
+                            editEvent(event, justification, registeredTime) :
+                            createEditTicket(event, justification, registeredTime)
+                        }
+                    }
+                }){
+                    Text("Salvar")
+                }
+            }
         }
     }
     
@@ -225,8 +253,9 @@ struct EditEventView: View {
             editClockEvent(eventId, timestamp, justification, user.token ?? "", dayOff, doctor) { (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
-                        alertMessage = message
-                        showingAlert = true
+                        self.editAlertMessage = message
+                        self.showAlert = true
+                        self.activeAlert = .edit
                     }
                 } else if let error = error {
                     errorMessage = "ⓘ \(error.localizedDescription)"
@@ -248,8 +277,49 @@ struct EditEventView: View {
             createTicket(ticketRequest, user.token ?? ""){ (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
-                        alertMessage = message
-                        showingAlert = true
+                        self.editAlertMessage = message
+                        self.showAlert = true
+                        self.activeAlert = .edit
+                    }
+                } else if let error = error {
+                    errorMessage = "ⓘ \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+    
+    func deleteEvent(_ event: ClockEvent) {
+        if let user = sessionManager.user {
+            deleteClockEvent(event.id, user.token ?? "") { (message, error) in
+                if let message = message {
+                    DispatchQueue.main.async {
+                        self.deleteAlertMessage = message
+                        self.activeAlert = .doneDelete
+                        self.showAlert = true
+                    }
+                }
+                if let error = error {
+                    errorMessage = "ⓘ \(error.localizedDescription)"
+                }
+            }
+        }
+    }
+    
+    func createDeleteTicket(_ event: ClockEvent, _ justification: String) {
+        let eventId = event.id
+        
+        if let user = sessionManager.user {
+            let requestedData = RequestedData(userId: user.id, timestamp: "",
+                                              justification: justification, dayOff: dayOff, doctor: doctor)
+            let ticketRequest = TicketRequest(userId: user.id, type: "delete", clockEventId: eventId,
+                                              justification: justification, requestedData: requestedData)
+            
+            createTicket(ticketRequest, user.token ?? ""){ (message, error) in
+                if let message = message {
+                    DispatchQueue.main.async {
+                        self.editAlertMessage = message
+                        self.showAlert = true
+                        self.activeAlert = .edit
                     }
                 } else if let error = error {
                     errorMessage = "ⓘ \(error.localizedDescription)"

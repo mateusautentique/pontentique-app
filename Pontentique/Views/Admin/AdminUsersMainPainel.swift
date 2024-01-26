@@ -34,7 +34,6 @@ struct AdminUsersMainPainel: View {
                 .padding(.bottom, 30)
             
             List(users) { user in
-                
                 Button(action: {
                        self.selectedUser = user
                    }) {

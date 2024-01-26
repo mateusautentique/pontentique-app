@@ -129,10 +129,8 @@ struct AdminEditUser: View {
                 Text("\(errorMessage)")
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                     .foregroundColor(.red)
-
+                
             }
-            
-            
             .navigationBarItems(
                 leading: Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
@@ -151,7 +149,7 @@ struct AdminEditUser: View {
                         return Alert(title: Text("Confirmar"),
                                      message: Text("Você quer mesmo salvar as alterações?"),
                                      primaryButton: .default(Text("Sim"), action: {
-                        
+                            
                             saveChanges { (success, error) in
                                 if let error = error {
                                     print("Error saving changes: \(error)")
@@ -166,14 +164,13 @@ struct AdminEditUser: View {
                                     }
                                 } else {
                                     print("Failed to save changes")
-                                    self.errorMessage = "ⓘFalha ao salvar as mudanças"
+                                    self.errorMessage = "ⓘ Falha ao salvar as mudanças"
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                         self.errorMessage = ""
                                     }
                                 }
                             }
-                        }),
-                                     secondaryButton: .cancel())
+                        }), secondaryButton: .cancel())
                     case .second:
                         return Alert(title: Text("Boa deu certo!"),
                                      message: Text(successMessage),
