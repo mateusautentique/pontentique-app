@@ -147,34 +147,6 @@ struct AddEventView: View {
                         .padding(.top, 10)
                         .padding(.bottom, 15)
                 }
-                
-                Button(action: {
-                    if justification.isEmpty {
-                        errorMessage = "ⓘ A justificativa é obrigatória"
-                    } else if !isValidTime(registeredTime) {
-                        errorMessage = "ⓘ Insira um horário válido"
-                    } else {
-                        errorMessage = ""
-                        if let user = sessionManager.user {
-                            user.role == "admin" ?
-                            addEvent(clockEntry, justification, registeredTime) :
-                            createAddTicket(clockEntry, justification, registeredTime)
-                        }
-                    }
-                }){
-                    Text("Salvar")
-                        .padding(15)
-                        .frame(maxWidth: .infinity)
-                        .background(ColorScheme.fieldBgColor)
-                        .foregroundColor(ColorScheme.primaryColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.leading, 10)
-                        .padding(.trailing, 10)
-                        .padding(.bottom, 25)
-                        .font(.system(size: 20))
-                    
-                }
             }
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text("Sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
@@ -196,6 +168,24 @@ struct AddEventView: View {
                         Image(systemName: "arrow.backward")
                         Text("Registros de ponto")
                     }
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    if justification.isEmpty {
+                        errorMessage = "ⓘ A justificativa é obrigatória"
+                    } else if !isValidTime(registeredTime) {
+                        errorMessage = "ⓘ Insira um horário válido"
+                    } else {
+                        errorMessage = ""
+                        if let user = sessionManager.user {
+                            user.role == "admin" ?
+                            addEvent(clockEntry, justification, registeredTime) :
+                            createAddTicket(clockEntry, justification, registeredTime)
+                        }
+                    }
+                }){
+                    Text("Salvar")
                 }
             }
         }

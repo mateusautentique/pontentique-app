@@ -161,30 +161,6 @@ struct UserAddEventDateView: View {
                         .padding(.top, 10)
                         .padding(.bottom, 15)
                 }
-                
-                Button(action: {
-                    if justification.isEmpty {
-                        errorMessage = "ⓘ A justificativa é obrigatória"
-                    } else if !isValidTime(startRegisteredTime) || !isValidTime(endRegisteredTime) {
-                        errorMessage = "ⓘ Insira um horário válido"
-                    } else {
-                        errorMessage = ""
-                        setDayOff(clockEntry, clockReport, justification, startRegisteredTime, endRegisteredTime, dayOff, doctor)
-                    }
-                }){
-                    Text("Salvar")
-                        .padding(15)
-                        .frame(maxWidth: .infinity)
-                        .background(ColorScheme.fieldBgColor)
-                        .foregroundColor(ColorScheme.primaryColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.leading, 10)
-                        .padding(.trailing, 10)
-                        .padding(.bottom, 25)
-                        .font(.system(size: 20))
-                    
-                }
             }
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text("Sucesso!"), message: Text("\(alertMessage)"), dismissButton: .default(Text("OK"), action: {
@@ -206,6 +182,20 @@ struct UserAddEventDateView: View {
                         Image(systemName: "arrow.backward")
                         Text("Registros de ponto")
                     }
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    if justification.isEmpty {
+                        errorMessage = "ⓘ A justificativa é obrigatória"
+                    } else if !isValidTime(startRegisteredTime) || !isValidTime(endRegisteredTime) {
+                        errorMessage = "ⓘ Insira um horário válido"
+                    } else {
+                        errorMessage = ""
+                        setDayOff(clockEntry, clockReport, justification, startRegisteredTime, endRegisteredTime, dayOff, doctor)
+                    }
+                }){
+                    Text("Salvar")
                 }
             }
         }
