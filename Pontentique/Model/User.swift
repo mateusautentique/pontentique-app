@@ -12,11 +12,12 @@ struct User: Codable, Identifiable{
     var name: String
     var cpf: String
     var email: String
-    let role: String
-    let workJourneyHours: Int
+    var role: String
+    var workJourneyHours: Int
     let createdAt: Date
     let updatedAt: Date
     var token: String?
+    
     
     
     init(id: Int = 0, name: String = "Default User", cpf: String = "00000000000", email: String = "default@email.com", role: String = "user", workJourneyHours: Int = 0, createdAt: Date = Date(), updatedAt: Date = Date(), token: String? = nil) {
@@ -29,5 +30,6 @@ struct User: Codable, Identifiable{
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.token = token
+
     }
 }

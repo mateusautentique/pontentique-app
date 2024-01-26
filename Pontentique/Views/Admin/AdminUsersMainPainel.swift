@@ -14,7 +14,7 @@ func colorFromString(_ colorName: String) -> Color {
         return Color.green
     case "gray":
         return Color.gray
-       
+        
     default:
         return Color.blue
     }
@@ -36,29 +36,29 @@ struct AdminUsersMainPainel: View {
             List(users) { user in
                 
                 Button(action: {
-                       self.selectedUser = user
-                   }) {
-                       HStack {
-                           Text(user.name)
-                               .foregroundColor(.white)
-                           Spacer()
-                           Circle()
-                               .fill(colorFromString(userStatus[String(user.id)] ?? "gray"))
-                               .frame(width: 10, height: 10)
-                           Image(systemName: "chevron.right")
-                               .foregroundColor(.gray)
-                       }
-                   }
-                   .buttonStyle(PlainButtonStyle())
-                   .sheet(item: $selectedUser, onDismiss: fetchUsers) { user in
-                           AdminEditUser(user: user, token: self.sessionManager.user?.token ?? "")
-                       }
-               }
-               .listStyle(PlainListStyle())
+                    self.selectedUser = user
+                }) {
+                    HStack {
+                        Text(user.name)
+                            .foregroundColor(.white)
+                        Spacer()
+                        Circle()
+                            .fill(colorFromString(userStatus[String(user.id)] ?? "gray"))
+                            .frame(width: 10, height: 10)
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .sheet(item: $selectedUser, onDismiss: fetchUsers) { user in
+                    AdminEditUser(user: user, token: self.sessionManager.user?.token ?? "")
+                }
+            }
+            .listStyle(PlainListStyle())
         }
         .onAppear {
-                fetchUsers()
-            }
+            fetchUsers()
+        }
     }
     func fetchUsers() {
         if let token = sessionManager.user?.token {
@@ -69,7 +69,9 @@ struct AdminUsersMainPainel: View {
                     self.users = users
                     for user in users {
                         fetchUserStatus(userId: String(user.id), token: token) { status, error in
-                            // handle status and error...
+                            if let status = status {
+                                self.userStatus[String(user.id)] = status.lowercased()
+                            }
                         }
                     }
                 }

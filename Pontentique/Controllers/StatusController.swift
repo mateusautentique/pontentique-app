@@ -9,7 +9,7 @@ import Foundation
 
 func fetchUserStatus(userId: String, token: String, completion: @escaping (String?, Error?) -> Void) {
     
-    let url = URL(string: "http://localhost:8000/api/admin/manageUsers/user/status")!
+    let url = URL(string: "\(API_HOST)/admin/manageUsers/user/status")!
     let parameters = ["user_id": userId]
     var request = URLRequest(url: url)
     
