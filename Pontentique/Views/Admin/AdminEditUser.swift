@@ -105,6 +105,8 @@ struct AdminEditUser: View {
                                           }    
                             .pickerStyle(MenuPickerStyle())
                             .labelsHidden()
+                            .padding(.leading,14)
+
                     }
                     HStack(alignment: .center){
                         Text("Jornada")
