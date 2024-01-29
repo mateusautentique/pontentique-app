@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-//MARK: REQUEST STRUCT
-struct AdminRequest: Identifiable {
-    var id = UUID()
-    var name: String
-    var details: String
-    var time: String
-    var reason: String
-}
-
 struct AdminRequestMainPanel: View {
 //MARK: USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -36,9 +27,15 @@ struct AdminRequestMainPanel: View {
             List(tickets) { ticket in
                 VStack(alignment: .leading) {
                     Text(ticket.userName).font(.headline)
-                    Text(createDetailsString(ticket))
-                        .font(.subheadline)
-                        .foregroundColor(ticket.type == "delete" ? .red : .primary)
+                    HStack {
+                        Text(createDetailsString(ticket))
+                            .font(.subheadline)
+                        if ticket.type == "delete" {
+                            Text("Exclusão")
+                                .font(.subheadline)
+                                .foregroundColor(.red)
+                        }
+                    }
                     Text(ticket.justification).font(.caption)
                 }
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -111,7 +108,8 @@ struct AdminRequestMainPanel: View {
         
         switch ticket.type {
         case "delete":
-            details += "Exclusão"
+            details += convertDateFormat(ticket.clockEventTimestamp ?? "")
+            details += " →"
         case "create":
             if let timestamp = ticket.requestedData?.timestamp {
                 details += convertDateFormat(timestamp)
