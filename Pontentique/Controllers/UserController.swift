@@ -90,6 +90,7 @@ func userDecoder() -> JSONDecoder {
 }
 
 func editUser(userId: Int, name: String, email: String, cpf: String, role: String = "user", workJourneyHours: Int = 8, token: String, host: String = "\(API_HOST)/admin/manageUsers/user/", completion: @escaping (User?, Error?) -> Void) {
+     
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "PUT"
     
@@ -139,7 +140,11 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
    }
 
 func deleteUser(userId: Int, token: String, completion: @escaping (Bool, Error?) -> Void) {
+<<<<<<< HEAD
     let url = URL(string: "\(API_HOST)/api/admin/manageUsers/user/")!
+=======
+    let url = URL(string: "\(API_HOST)/admin/manageUsers/user/")!
+>>>>>>> gui
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")

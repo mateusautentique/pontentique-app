@@ -1,10 +1,3 @@
-//
-//  AdminEditUser.swift
-//  Pontentique
-//
-//  Created by Guilherme Luiz Cella on 18/01/24.
-//
-
 import SwiftUI
 
 enum ActiveAlert { case  deleteConfirmation, success}
@@ -20,13 +13,25 @@ struct AdminEditUser: View {
     @State private var errorMessage = ""
     //MARK: - User info
     @State var user: User
-    @State var token: String?
+    var token: String?
     @State private var showAlert = false
     @State private var successMessage = ""
+    @State private var selectedRole: String = ""
+    @State private var workJourneyHours: Int
+    let roles = ["user", "admin"]
+    let hours = Array(4...12)
+    
+    
     //MARK: - Deleting User
     @State private var showingAlert = false
     @State private var activeAlert: ActiveAlert = .deleteConfirmation
     
+    init(user: User, token: String?) {
+        _user = State(initialValue: user)
+        _selectedRole = State(initialValue: user.role)
+        _workJourneyHours = State(initialValue: user.workJourneyHours)
+        self.token = token
+    }
     
     func saveChanges(completion: @escaping (String?, Error?) -> Void) {
         if let token = self.token {
@@ -34,7 +39,9 @@ struct AdminEditUser: View {
             let name = user.name
             let email = user.email
             let cpf = user.cpf
-            editUser(userId: userId, name: name, email: email, cpf: cpf, token: token) { (updatedUser, error) in
+            let role = selectedRole // Use selectedRole directly
+            let workJourneyHours = Int(self.workJourneyHours)
+            editUser(userId: userId, name: name, email: email, cpf: cpf, role: role, workJourneyHours: workJourneyHours, token: token) { (updatedUser, error) in
                 if let error = error as? NSError, error.code == 401 {
                 } else if error != nil {
                 } else if let updatedUser = updatedUser {
@@ -88,8 +95,33 @@ struct AdminEditUser: View {
                             .padding(.leading,25)
                         
                     }
+                    HStack(alignment: .center){
+                                          Text("Cargo")
+                                              .frame(width: 80, alignment: .leading)
+                                          Picker(selection: $selectedRole, label: EmptyView()) {
+                                              ForEach(roles, id: \.self) {
+                                                  Text($0.capitalized)
+                                              }
+                                          }    
+                            .pickerStyle(MenuPickerStyle())
+                            .labelsHidden()
+                            .padding(.leading,14)
+
+                    }
+                    HStack(alignment: .center){
+                        Text("Jornada")
+                            .frame(width: 80, alignment: .leading)
+                            .keyboardType(.numberPad)
+                        Picker(selection: $workJourneyHours, label: Text("\(workJourneyHours)")) {
+                            ForEach(hours, id: \.self) { hour in
+                                Text("\(hour)")
+                            }
+                        }
+                        .padding(.leading,25)
+                        .labelsHidden()
+                        .pickerStyle(DefaultPickerStyle())
+                    }
                 }
-                
                 Button(action: {
                     self.activeAlert = .deleteConfirmation
                     self.showingAlert = true
@@ -98,7 +130,8 @@ struct AdminEditUser: View {
                     Text("Excluir usuário")
                         .foregroundColor(.red)
                 }
-                .padding(.bottom,300)
+                .padding(.top, 25)
+                .padding(.bottom,150)
                 .alert(isPresented: $showingAlert) {
                     switch activeAlert {
                     case .deleteConfirmation:
@@ -143,6 +176,7 @@ struct AdminEditUser: View {
                     self.showAlert = true
                 }) {
                     Text("Salvar")
+<<<<<<< HEAD
                 }.alert(isPresented: $showAlert) {
                     switch ActiveAlertSave.self {
                     case .first:
@@ -178,8 +212,47 @@ struct AdminEditUser: View {
                             self.showAlert = false
                             self.presentationMode.wrappedValue.dismiss()
                         })
-                    }
+=======
                 }
+                    .alert(isPresented: $showAlert) {
+                        switch ActiveAlertSave.self {
+                        case .first:
+                            return Alert(title: Text("Confirmar"),
+                                         message: Text("Você quer mesmo salvar as alterações?"),
+                                         primaryButton: .default(Text("Sim"), action: {
+                                
+                                saveChanges { (success, error) in
+                                    if let error = error {
+                                        print("Error saving changes: \(error)")
+                                        self.errorMessage = "ⓘErro ao salvar: \(error.localizedDescription)"
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                            self.errorMessage = ""
+                                        }
+                                    } else if success != nil {
+                                        DispatchQueue.main.async {
+                                            self.ActiveAlertSave = .second
+                                            self.showAlert = true
+                                        }
+                                    } else {
+                                        print("Failed to save changes")
+                                        self.errorMessage = "ⓘFalha ao salvar as mudanças"
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                            self.errorMessage = ""
+                                        }
+                                    }
+                                }
+                            }),
+                                         secondaryButton: .cancel())
+                        case .second:
+                            return Alert(title: Text("Boa deu certo!"),
+                                         message: Text(successMessage),
+                                         dismissButton: .default(Text("=]")) {
+                                self.showAlert = false
+                                self.presentationMode.wrappedValue.dismiss()
+                            })
+                        }
+>>>>>>> gui
+                    }
                 
             )
             .listStyle(PlainListStyle())
@@ -189,7 +262,7 @@ struct AdminEditUser: View {
 
 
 #Preview {
-    AdminEditUser(user: User(name: "Existing User", cpf: "123456789", email: "existing.user@example.com")
-                  , token: "")
+    AdminEditUser(user: User(name: "Existing User", cpf: "123456789", email: "existing.user@example.com"),token: ""
+    )
 }
 
