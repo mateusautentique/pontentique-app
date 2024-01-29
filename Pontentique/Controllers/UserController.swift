@@ -72,23 +72,6 @@ func getUserById (_ token: String, _ userId: Int,
     task.resume()
 }
 
-// MARK: - UTILS
-func userDecoder() -> JSONDecoder {
-    let decoder = JSONDecoder()
-    let dateFormatter = ISO8601DateFormatter()
-    dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-    decoder.dateDecodingStrategy = .custom { decoder in
-        let container = try decoder.singleValueContainer()
-        let dateString = try container.decode(String.self)
-        if let date = dateFormatter.date(from: dateString) {
-            return date
-        }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date: \(dateString)")
-    }
-    decoder.keyDecodingStrategy = .convertFromSnakeCase
-    return decoder
-}
-
 func editUser(userId: Int, name: String, email: String, cpf: String, role: String = "user", workJourneyHours: Int = 8, token: String, host: String = "\(API_HOST)/admin/manageUsers/user/", completion: @escaping (User?, Error?) -> Void) {
      
     var request = URLRequest(url: URL(string: host)!)
@@ -140,11 +123,7 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
    }
 
 func deleteUser(userId: Int, token: String, completion: @escaping (Bool, Error?) -> Void) {
-<<<<<<< HEAD
-    let url = URL(string: "\(API_HOST)/api/admin/manageUsers/user/")!
-=======
     let url = URL(string: "\(API_HOST)/admin/manageUsers/user/")!
->>>>>>> gui
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -167,3 +146,21 @@ func deleteUser(userId: Int, token: String, completion: @escaping (Bool, Error?)
     
     task.resume()
 }
+
+// MARK: - UTILS
+func userDecoder() -> JSONDecoder {
+    let decoder = JSONDecoder()
+    let dateFormatter = ISO8601DateFormatter()
+    dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    decoder.dateDecodingStrategy = .custom { decoder in
+        let container = try decoder.singleValueContainer()
+        let dateString = try container.decode(String.self)
+        if let date = dateFormatter.date(from: dateString) {
+            return date
+        }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date: \(dateString)")
+    }
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    return decoder
+}
+

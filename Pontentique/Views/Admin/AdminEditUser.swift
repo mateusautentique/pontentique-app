@@ -102,7 +102,7 @@ struct AdminEditUser: View {
                                               ForEach(roles, id: \.self) {
                                                   Text($0.capitalized)
                                               }
-                                          }    
+                                          }
                             .pickerStyle(MenuPickerStyle())
                             .labelsHidden()
                             .padding(.leading,14)
@@ -164,6 +164,8 @@ struct AdminEditUser: View {
                     .foregroundColor(.red)
                 
             }
+            
+            
             .navigationBarItems(
                 leading: Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
@@ -176,43 +178,6 @@ struct AdminEditUser: View {
                     self.showAlert = true
                 }) {
                     Text("Salvar")
-<<<<<<< HEAD
-                }.alert(isPresented: $showAlert) {
-                    switch ActiveAlertSave.self {
-                    case .first:
-                        return Alert(title: Text("Confirmar"),
-                                     message: Text("Você quer mesmo salvar as alterações?"),
-                                     primaryButton: .default(Text("Sim"), action: {
-                            
-                            saveChanges { (success, error) in
-                                if let error = error {
-                                    print("Error saving changes: \(error)")
-                                    self.errorMessage = "ⓘErro ao salvar: \(error.localizedDescription)"
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                        self.errorMessage = ""
-                                    }
-                                } else if success != nil {
-                                    DispatchQueue.main.async {
-                                        self.ActiveAlertSave = .second
-                                        self.showAlert = true
-                                    }
-                                } else {
-                                    print("Failed to save changes")
-                                    self.errorMessage = "ⓘ Falha ao salvar as mudanças"
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                        self.errorMessage = ""
-                                    }
-                                }
-                            }
-                        }), secondaryButton: .cancel())
-                    case .second:
-                        return Alert(title: Text("Boa deu certo!"),
-                                     message: Text(successMessage),
-                                     dismissButton: .default(Text("=]")) {
-                            self.showAlert = false
-                            self.presentationMode.wrappedValue.dismiss()
-                        })
-=======
                 }
                     .alert(isPresented: $showAlert) {
                         switch ActiveAlertSave.self {
@@ -251,7 +216,6 @@ struct AdminEditUser: View {
                                 self.presentationMode.wrappedValue.dismiss()
                             })
                         }
->>>>>>> gui
                     }
                 
             )
@@ -265,4 +229,3 @@ struct AdminEditUser: View {
     AdminEditUser(user: User(name: "Existing User", cpf: "123456789", email: "existing.user@example.com"),token: ""
     )
 }
-
