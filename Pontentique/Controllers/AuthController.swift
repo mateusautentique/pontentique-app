@@ -23,6 +23,11 @@ func userLogin (_ cpf: String, _ password: String, host: String = "\(API_HOST)/l
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
+        
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -60,6 +65,11 @@ func userRegister(cpf: String, name: String, email: String, password: String, pa
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
+        
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -91,6 +101,11 @@ func getLoggedUser(_ token: String, host: String = "\(API_HOST)/user/", completi
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
+        
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -110,12 +125,4 @@ func getLoggedUser(_ token: String, host: String = "\(API_HOST)/user/", completi
         }
     }
     task.resume()
-}
-
-func userLogout(_ token: String, host: String = "\(API_HOST)/logout") {
-    
-}
-
-func validateSessionToken (_ token: String, host: String = "\(API_HOST)/validateToken") {
-    
 }

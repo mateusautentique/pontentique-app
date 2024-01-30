@@ -24,6 +24,10 @@ func createTicket(_ ticket: TicketRequest, _ token: String,
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -64,6 +68,10 @@ func handleTicket(_ ticketId: Int, _ action: String, _ token: String,
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {

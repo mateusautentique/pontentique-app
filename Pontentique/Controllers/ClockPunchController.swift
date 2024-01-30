@@ -24,6 +24,10 @@ func punchClock(_ userId: Int, _ token: String, host: String = "\(API_HOST)/user
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {

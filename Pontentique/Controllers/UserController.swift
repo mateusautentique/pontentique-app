@@ -17,6 +17,10 @@ func getAllUsers (_ token: String, host: String = "\(API_HOST)/admin/manageUsers
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -53,6 +57,10 @@ func getUserById (_ token: String, _ userId: Int,
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -100,6 +108,10 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
     }
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
            guard let response = response as? HTTPURLResponse, let data = data else { return }
            
            do {

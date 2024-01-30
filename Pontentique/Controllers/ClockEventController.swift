@@ -30,6 +30,10 @@ func editClockEvent(_ id: Int,_ timestamp: String,_ justification: String,
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -74,6 +78,10 @@ func addClockEvent(_ userId: Int,_ timestamp: String,_ justification: String,
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
@@ -106,6 +114,10 @@ func deleteClockEvent(_ id: Int, _ token: String, completion: @escaping (String?
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            completion(nil, error)
+            return
+        }
         guard let response = response as? HTTPURLResponse, let data = data else { return }
         
         do {
