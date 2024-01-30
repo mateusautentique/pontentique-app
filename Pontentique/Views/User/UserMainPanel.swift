@@ -30,6 +30,7 @@ struct UserMainPanel: View {
     
     //MARK: - VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
+    @State private var appIsFullyLoaded = false
     
     //MARK: - VIEW
     var body: some View {
@@ -86,8 +87,14 @@ struct UserMainPanel: View {
                 .padding(.bottom, 15)
                 
                 ScrollView {
-                    ForEach(clockReport.entries) { entry in
-                        ClockTableRow(clockEntry: entry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: refreshReport)
+                    if appIsFullyLoaded {
+                        ForEach(clockReport.entries) { entry in
+                            ClockTableRow(clockEntry: entry, clockReport: $clockReport,
+                                          startDate: $startDate, endDate: $endDate,
+                                          onEventEdited: refreshReport)
+                        }
+                    } else {
+                        LoadingIconView()
                     }
                 }
                 
@@ -172,6 +179,7 @@ struct UserMainPanel: View {
             if let fetchedClockReport = fetchedClockReport {
                 DispatchQueue.main.async {
                     self.clockReport = fetchedClockReport
+                    self.appIsFullyLoaded = true
                 }
             } else if let error = error {
                 DispatchQueue.main.async {
