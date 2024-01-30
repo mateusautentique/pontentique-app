@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 enum ActiveAlert { case  deleteConfirmation, success}
 
 enum ActiveAlertSave { case first, second }
@@ -39,14 +40,18 @@ struct AdminEditUser: View {
             let name = user.name
             let email = user.email
             let cpf = user.cpf
-            let role = selectedRole // Use selectedRole directly
+            let role = selectedRole
             let workJourneyHours = Int(self.workJourneyHours)
             editUser(userId: userId, name: name, email: email, cpf: cpf, role: role, workJourneyHours: workJourneyHours, token: token) { (updatedUser, error) in
-                if let error = error as? NSError, error.code == 401 {
-                } else if error != nil {
-                } else if let updatedUser = updatedUser {
-                    self.user = updatedUser
-                    print("User updated successfully")
+                DispatchQueue.main.async {
+                    if let error = error as? NSError, error.code == 401 {
+                        // Handle error...
+                    } else if error != nil {
+                        // Handle error...
+                    } else if let updatedUser = updatedUser {
+                        self.user = updatedUser
+                        print("User updated successfully")
+                    }
                 }
             }
         }
@@ -55,7 +60,8 @@ struct AdminEditUser: View {
     
     var body: some View {
         NavigationView {
-            Group{
+            
+            VStack{
                 Text("Editar usuário")
                     .frame(maxWidth: .infinity, minHeight: 50)
                     .padding(.trailing, 200)
@@ -63,20 +69,24 @@ struct AdminEditUser: View {
                     .font(.system(size: 28))
                     .padding(.bottom, 10)
                 
-                List {
-                    HStack(alignment: .center) {
+                VStack{
+                    HStack{
                         Text("Nome")
                             .frame(width: 80, alignment: .leading)
+                            .padding(.leading, 12)
                         TextField("Nome", text: $user.name)
                             .padding(.leading,25)
                     }
-                    
-                    HStack(alignment: .center) {
+                    .padding(.bottom,3)
+                    .padding(.top,3)
+                    Divider()
+                    HStack(){
                         Text("CPF")
                             .frame(width: 80, alignment: .leading)
+                            .padding(.leading, 12)
                         TextField("CPF", text: $user.cpf)
                             .padding(.leading,25)
-                        
+                            .keyboardType(.numberPad)
                             .onChange(of: user.cpf) {oldValue, newValue in
                                 let filtered = newValue.filter { $0.isNumber }
                                 if filtered.count > 11 {
@@ -85,87 +95,105 @@ struct AdminEditUser: View {
                                     user.cpf = filtered
                                 }
                             }
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                     }
-                    
-                    
+                    .padding(.bottom,3)
+                    .padding(.top,3)
+                    Divider()
                     HStack(alignment: .center) {
                         Text("Email")
                             .frame(width: 80, alignment: .leading)
+                            .padding(.leading, 12)
                         TextField("Email", text: $user.email)
                             .padding(.leading,25)
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
+                    }
+                    .padding(.bottom,3)
+                    .padding(.top,3)
+                    Divider()
+                    HStack{
+                        Text("Cargo")
+                            .frame(width: 80, alignment: .leading)
+                            .padding(.leading, 12)
+                        Picker(selection: $selectedRole, label: EmptyView()) {
+                            ForEach(roles, id: \.self) {
+                                Text($0.capitalized)
+                            }
+                        }
+                        .padding(.leading,14)
+                        Spacer()
+                        .pickerStyle(MenuPickerStyle())
+                        .labelsHidden()
                         
                     }
-                    HStack(alignment: .center){
-                                          Text("Cargo")
-                                              .frame(width: 80, alignment: .leading)
-                                          Picker(selection: $selectedRole, label: EmptyView()) {
-                                              ForEach(roles, id: \.self) {
-                                                  Text($0.capitalized)
-                                              }
-                                          }
-                            .pickerStyle(MenuPickerStyle())
-                            .labelsHidden()
-                            .padding(.leading,14)
-
-                    }
-                    HStack(alignment: .center){
+                    Divider()
+                    HStack{
                         Text("Jornada")
                             .frame(width: 80, alignment: .leading)
+                            .padding(.leading, 12)
                             .keyboardType(.numberPad)
                         Picker(selection: $workJourneyHours, label: Text("\(workJourneyHours)")) {
                             ForEach(hours, id: \.self) { hour in
                                 Text("\(hour)")
                             }
                         }
-                        .padding(.leading,25)
-                        .labelsHidden()
+                        .padding(.leading,15)
                         .pickerStyle(DefaultPickerStyle())
+                        .labelsHidden()
+                        Spacer()
+                        
                     }
-                }
-                Button(action: {
-                    self.activeAlert = .deleteConfirmation
-                    self.showingAlert = true
+                    .padding(.bottom, 50)
                     
-                }) {
-                    Text("Excluir usuário")
-                        .foregroundColor(.red)
-                }
-                .padding(.top, 25)
-                .padding(.bottom,150)
-                .alert(isPresented: $showingAlert) {
-                    switch activeAlert {
-                    case .deleteConfirmation:
-                        return Alert(title: Text("Tem certeza?"),
-                                     message: Text("Você quer mesmo deletar \(user.name)?"),
-                                     primaryButton: .destructive(Text("Sim")) {
-                            deleteUser(userId: user.id, token: self.sessionManager.user?.token ?? "") { (success, error) in
-                                if let error = error {
-                                    print("Error deleting user: \(error)")
-                                } else if success {
-                                    self.activeAlert = .success
-                                    self.showingAlert = true
-                                } else {
-                                    print("Failed to delete user")
-                                }
-                            }
-                        },
-                                     secondaryButton: .cancel())
-                    case .success:
-                        return Alert(title: Text("Boa deu certo!"),
-                                     message: Text("\(user.name) foi deletado com sucesso."),
-                                     dismissButton: .default(Text("=]")) {
-                            self.showingAlert = false
-                            self.presentationMode.wrappedValue.dismiss()
-                        })
+                    
+                    Button(action: {
+                        self.activeAlert = .deleteConfirmation
+                        self.showingAlert = true
+                        
+                    }) {
+                        Text("Excluir usuário")
+                            .foregroundColor(.red)
+     
                     }
+                    
+                    Text("\(errorMessage)")
+                        .frame(maxWidth: .infinity, alignment: .bottom)
+                        .foregroundColor(.red)
+                    
+                    Spacer()
                 }
-                Text("\(errorMessage)")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .foregroundColor(.red)
-                
             }
-            
-            
+            .alert(isPresented: $showingAlert) {
+                switch activeAlert {
+                case .deleteConfirmation:
+                    return Alert(title: Text("Tem certeza?"),
+                                 message: Text("Você quer mesmo deletar \(user.name)?"),
+                                 primaryButton: .destructive(Text("Sim")) {
+                        deleteUser(userId: user.id, token: self.sessionManager.user?.token ?? "") { (success, error) in
+                            if let error = error {
+                                print("Error deleting user: \(error)")
+                            } else if success {
+                                self.activeAlert = .success
+                                self.showingAlert = true
+                            } else {
+                                print("Failed to delete user")
+                            }
+                        }
+                    },
+                                 secondaryButton: .cancel())
+                case .success:
+                    return Alert(title: Text("Boa deu certo!"),
+                                 message: Text("\(user.name) foi deletado com sucesso."),
+                                 dismissButton: .default(Text("=]")) {
+                        self.showingAlert = false
+                        self.presentationMode.wrappedValue.dismiss()
+                    })
+                }
+            }
             .navigationBarItems(
                 leading: Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
@@ -194,9 +222,10 @@ struct AdminEditUser: View {
                                             self.errorMessage = ""
                                         }
                                     } else if success != nil {
-                                        DispatchQueue.main.async {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                             self.ActiveAlertSave = .second
                                             self.showAlert = true
+                                            
                                         }
                                     } else {
                                         print("Failed to save changes")
@@ -223,6 +252,13 @@ struct AdminEditUser: View {
         }
     }
 }
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif
 
 
 #Preview {

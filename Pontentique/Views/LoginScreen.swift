@@ -49,6 +49,7 @@ struct LoginScreen: View {
                             .cornerRadius(10)
                             .frame(width: 220)
                             .padding(.bottom, 10)
+                            .keyboardType(.numberPad)
                             .onReceive(Just(textFieldLogin)) { newValue in
                                 let filtered = newValue.filter { "0123456789".contains($0) }
                                 if filtered != newValue {
