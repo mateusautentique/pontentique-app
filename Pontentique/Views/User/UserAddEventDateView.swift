@@ -204,14 +204,12 @@ struct UserAddEventDateView: View {
     //MARK: - AUX FUNCTIONS
     
     func createDayOffTicket(_ entry: ClockEntry, _ report: ClockReport, _ justification: String,
-                       _ startTime: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool){
-        if let user = sessionManager.user {
-            let startTimeFormatted = replaceTimeInTimestamp(entry.day, formatTime(startTime))
-            let endTimeFormatted = replaceTimeInTimestamp(entry.day, formatTime(endTime))
-            
-            createAddTicket(entry, justification, startTimeFormatted)
-            createAddTicket(entry, justification, endTimeFormatted)
-        }
+                            _ startTime: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool){
+        let startTimeFormatted = replaceTimeInTimestamp(entry.day, formatTime(startTime))
+        let endTimeFormatted = replaceTimeInTimestamp(entry.day, formatTime(endTime))
+        
+        createAddTicket(entry, justification, startTimeFormatted)
+        createAddTicket(entry, justification, endTimeFormatted)
     }
     
     func createAddTicket(_ entry: ClockEntry, _ justification: String, _ timestamp: String) {

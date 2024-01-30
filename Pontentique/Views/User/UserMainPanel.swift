@@ -34,7 +34,7 @@ struct UserMainPanel: View {
     
     //MARK: - VIEW
     var body: some View {
-        let myHour = Text(Date(), formatter: createFormatter("HH:mm"))
+        let 🕒 = Text(Date(), formatter: createFormatter("HH:mm"))
             .font(.system(size: 330))
         NavigationStack{
             VStack {
@@ -138,7 +138,7 @@ struct UserMainPanel: View {
                 .alert(isPresented: $showAlert) {
                     switch activeAlert {
                     case .first:
-                        return Alert(title: Text("Gerar registro de ponto"), message: Text("Tem certeza que você gostaria de registrar o ponto? Ele será registrado às\n \(myHour)"), primaryButton: .default(Text("Registrar"), action: {
+                        return Alert(title: Text("Gerar registro de ponto"), message: Text("Tem certeza que você gostaria de registrar o ponto? Ele será registrado às\n \(🕒)"), primaryButton: .default(Text("Registrar"), action: {
                             if let user = sessionManager.user {
                                 punchClock(user.id, user.token ?? "") { (message, error) in
                                     if let message = message {
