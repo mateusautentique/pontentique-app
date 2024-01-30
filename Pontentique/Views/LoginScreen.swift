@@ -15,7 +15,6 @@ struct LoginScreen: View {
     @State private var cpf: String = ""
     @State private var maskedCPF: String = ""
     @State private var showRegisterScreen = false
-    @State private var isLoggedIn = false
     @EnvironmentObject var sessionManager: UserSessionManager
     
     var body: some View {
@@ -75,9 +74,6 @@ struct LoginScreen: View {
                                         getLoggedUser(token){ (user, error) in
                                             if let user = user {
                                                 self.sessionManager.session = .loggedIn(user)
-                                                DispatchQueue.main.async {
-                                                    isLoggedIn = true
-                                                }
                                             } else if let error = error {
                                                 self.errorMessage = error.localizedDescription
                                             }
@@ -97,10 +93,6 @@ struct LoginScreen: View {
                                 .frame(width: 220)
                         }
                         .buttonStyle(PlainButtonStyle())
-                        .navigationDestination(isPresented: $isLoggedIn) {
-                            UserMainPanel()
-                                .navigationBarBackButtonHidden(true)
-                        }
                         .padding(.top, 20)
                     }
                     .padding(.top, 15)
