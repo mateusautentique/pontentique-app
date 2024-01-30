@@ -45,7 +45,6 @@ struct ForEachChunk: View {
                             }
                         }
                     )
-                
                     .padding(.trailing, 5)
             }
         }

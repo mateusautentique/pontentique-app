@@ -13,7 +13,6 @@ struct EventLinkView: View {
     @Binding var startDate: Date
     @Binding var endDate: Date
     
-    
     let onEventEdited: () -> Void
     
     var body: some View {

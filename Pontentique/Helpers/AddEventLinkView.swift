@@ -25,8 +25,8 @@ struct AddEventLinkView: View {
                 .frame(width: 35, height: 35)
                 .background(ColorScheme.clockBtnBgColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding(.leading, 0)
         }
-        
     }
 }
 

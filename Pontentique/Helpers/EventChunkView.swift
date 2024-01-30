@@ -42,7 +42,6 @@ struct EventChunkView: View {
                                      onEventEdited: self.onEventEdited)
                 }
             }
-            
             .padding(.bottom, index < chunks.count - 1 ? 7 : 0)
             if chunk.count == 4 && index == chunks.count - 1 {
                 VStack {

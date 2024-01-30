@@ -29,9 +29,19 @@ struct EventGroup: View {
                 if !clockEntry.events.isEmpty {
                     EventChunkView(clockEntry: clockEntry, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
                 } else if isWeekday(clockEntry.day) {
-                    AbsenceView()
+                    HStack {
+                        AbsenceView()
+                        AddEventLinkView(clockReport: clockReport, clockEntry: clockEntry,
+                                         startDate: $startDate, endDate: $endDate,
+                                         onEventEdited: self.onEventEdited)
+                    }
                 } else {
-                    WeekendView()
+                    HStack {
+                        WeekendView()
+                        AddEventLinkView(clockReport: clockReport, clockEntry: clockEntry,
+                                         startDate: $startDate, endDate: $endDate,
+                                         onEventEdited: self.onEventEdited)
+                    }
                 }
             }
         }
