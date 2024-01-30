@@ -32,12 +32,11 @@ struct ForEachChunk: View {
             } else {
                 EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
                     .padding(7)
-                    .frame(width: 60)
+                    .frame(width: 62)
                     .fixedSize()
                     .modifier(EventBackgroundColor(event: event))
                     .modifier(EventForegroundColor(event: event))
                     .cornerRadius(10)
-                
                     .overlay(
                         Group {
                             if event.justification != "" {
