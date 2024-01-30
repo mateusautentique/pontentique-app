@@ -75,8 +75,8 @@ struct RegisterScreen: View {
                             .padding(.bottom, 10)
                             .onChange(of: maskedCPF) {oldValue, newValue in
                                 cpf = newValue.filter { "0123456789".contains($0) }
-                                            maskedCPF = applyMask(on: cpf)
-                                    }
+                                maskedCPF = applyMask(on: cpf)
+                            }
                         
                         Text("Email")
                             .font(.subheadline)

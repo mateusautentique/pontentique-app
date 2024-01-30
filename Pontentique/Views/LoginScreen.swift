@@ -35,8 +35,6 @@ struct LoginScreen: View {
                     .foregroundColor(ColorScheme.textColor)
                     .padding(.bottom, 40)
                     
-                    //Spacer()
-                    
                     VStack(alignment: .leading) {
                         Text("CPF")
                             .font(.subheadline)
@@ -54,8 +52,8 @@ struct LoginScreen: View {
                             .keyboardType(.numberPad)
                             .onChange(of: maskedCPF) {oldValue, newValue in
                                 textFieldLogin = newValue.filter { "0123456789".contains($0) }
-                                            maskedCPF = applyMask(on: textFieldLogin)
-                                    }
+                                maskedCPF = applyMask(on: textFieldLogin)
+                            }
                         Text("Senha")
                             .font(.subheadline)
                             .padding(.bottom, 0)
@@ -69,64 +67,62 @@ struct LoginScreen: View {
                             .frame(width: 220)
                             .padding(.bottom, 10)
                         
-                        HStack {
-                            Button(action: {
-                                showRegisterScreen = true
-                            }) {
-                                Text("Registrar")
-                                    .padding(12)
-                                    .frame(width: 100)
-                                    .background(ColorScheme.primaryColor)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                                    .fullScreenCover(isPresented: $showRegisterScreen) {
-                                        RegisterScreen()
-                                            .foregroundColor(ColorScheme.textColor)
-                                            .multilineTextAlignment(.leading)
-                                            .transition(.move(edge: .trailing))
-                                            .animation(.default, value: showRegisterScreen)
-                                    }
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.trailing, 10)
-                            
-                            Button(action: {
-                                Task {
-                                    userLogin(textFieldLogin, textFieldPassword) { (token, error) in
-                                        if let token = token {
-                                            self.errorMessage = nil
-                                            getLoggedUser(token){ (user, error) in
-                                                if let user = user {
-                                                    self.sessionManager.session = .loggedIn(user)
-                                                    DispatchQueue.main.async {
-                                                        isLoggedIn = true
-                                                    }
-                                                } else if let error = error {
-                                                    self.errorMessage = error.localizedDescription
+                        Button(action: {
+                            Task {
+                                userLogin(textFieldLogin, textFieldPassword) { (token, error) in
+                                    if let token = token {
+                                        self.errorMessage = nil
+                                        getLoggedUser(token){ (user, error) in
+                                            if let user = user {
+                                                self.sessionManager.session = .loggedIn(user)
+                                                DispatchQueue.main.async {
+                                                    isLoggedIn = true
                                                 }
+                                            } else if let error = error {
+                                                self.errorMessage = error.localizedDescription
                                             }
-                                        } else if let error = error {
-                                            self.errorMessage = error.localizedDescription
                                         }
+                                    } else if let error = error {
+                                        self.errorMessage = error.localizedDescription
                                     }
                                 }
-                            }) {
-                                Text("Entrar")
-                                    .padding(12)
-                                    .frame(width: 100)
-                                    .background(ColorScheme.primaryColor)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .navigationDestination(isPresented: $isLoggedIn) {
-                                UserMainPanel()
-                                    .navigationBarBackButtonHidden(true)
-                            }
+                        }) {
+                            Text("Entrar")
+                                .padding(12)
+                                .frame(maxWidth: .infinity)
+                                .background(ColorScheme.primaryColor)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .frame(width: 220)
                         }
-                        .padding(.top, 15)
+                        .buttonStyle(PlainButtonStyle())
+                        .navigationDestination(isPresented: $isLoggedIn) {
+                            UserMainPanel()
+                                .navigationBarBackButtonHidden(true)
+                        }
+                        .padding(.top, 20)
                     }
-                    .padding()
+                    .padding(.top, 15)
+                    
+                    Button(action: {
+                        showRegisterScreen = true
+                    }) {
+                        Text("Registre-se")
+                            .padding(12)
+                            .foregroundColor(ColorScheme.primaryColor)
+                            .fontWeight(.bold)
+                            .cornerRadius(10)
+                            .fullScreenCover(isPresented: $showRegisterScreen) {
+                                RegisterScreen()
+                                    .foregroundColor(ColorScheme.textColor)
+                                    .multilineTextAlignment(.leading)
+                                    .transition(.move(edge: .trailing))
+                                    .animation(.default, value: showRegisterScreen)
+                            }
+                            .padding(.top, 5)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                     
                     HStack {
                         Spacer()
@@ -149,9 +145,8 @@ struct LoginScreen: View {
             .background(ColorScheme.appBackgroudColor)
         }
     }
-
+    
     func applyMask(on value: String) -> String {
-        print("applyMask called")
         let cleanCPF = value.filter { "0123456789".contains($0) }
         var maskedCPF = ""
         
@@ -164,7 +159,6 @@ struct LoginScreen: View {
             }
             maskedCPF += String(char)
         }
-        print("Masked CPF: \(maskedCPF)")
         return maskedCPF
     }
 }
