@@ -11,6 +11,7 @@ import Combine
 struct RegisterScreen: View {
     @State private var name: String = ""
     @State private var cpf: String = ""
+    @State private var maskedCPF: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var password_confirmation: String = ""
@@ -63,7 +64,7 @@ struct RegisterScreen: View {
                             .font(.subheadline)
                             .padding(.bottom, 0)
                             .padding(.leading, 5)
-                        TextField("12345678900", text: $cpf)
+                        TextField("123.456.789-00", text: $maskedCPF)
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
@@ -72,15 +73,10 @@ struct RegisterScreen: View {
                             .frame(width: 220)
                             .keyboardType(.numberPad)
                             .padding(.bottom, 10)
-                            .onReceive(Just(cpf)) { newValue in
-                                let filtered = newValue.filter { "0123456789".contains($0) }
-                                if filtered != newValue {
-                                    self.cpf = filtered
-                                }
-                                if cpf.count > 11 {
-                                    cpf = String(cpf.prefix(11))
-                                }
-                            }
+                            .onChange(of: maskedCPF) {oldValue, newValue in
+                                cpf = newValue.filter { "0123456789".contains($0) }
+                                            maskedCPF = applyMask(on: cpf)
+                                    }
                         
                         Text("Email")
                             .font(.subheadline)
@@ -175,6 +171,24 @@ struct RegisterScreen: View {
             .background(ColorScheme.appBackgroudColor)
         }
     }
+    func applyMask(on value: String) -> String {
+        print("applyMask called")
+        let cleanCPF = value.filter { "0123456789".contains($0) }
+        var maskedCPF = ""
+        
+        for (index, char) in cleanCPF.enumerated() {
+            if index == 11 { break }
+            if index == 3 || index == 6 {
+                maskedCPF += "."
+            } else if index == 9 {
+                maskedCPF += "-"
+            }
+            maskedCPF += String(char)
+        }
+        print("Masked CPF: \(maskedCPF)")
+        return maskedCPF
+    }
+
 }
 
 

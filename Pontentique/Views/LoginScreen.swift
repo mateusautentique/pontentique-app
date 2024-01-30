@@ -9,10 +9,11 @@ import SwiftUI
 import Combine
 
 struct LoginScreen: View {
-    @State var textFieldLogin: String = ""
+    @State private var textFieldLogin: String = ""
     @State var textFieldPassword: String = ""
     @State private var errorMessage: String?
-    
+    @State private var cpf: String = ""
+    @State private var maskedCPF: String = ""
     @State private var showRegisterScreen = false
     @State private var isLoggedIn = false
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -41,24 +42,20 @@ struct LoginScreen: View {
                             .font(.subheadline)
                             .padding(.bottom, 0)
                             .padding(.leading, 5)
-                        TextField("CPF", text: $textFieldLogin)
+                        TextField("CPF", text: $maskedCPF)
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
+                            .keyboardType(.numberPad)
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
                             .padding(.bottom, 10)
                             .keyboardType(.numberPad)
-                            .onReceive(Just(textFieldLogin)) { newValue in
-                                let filtered = newValue.filter { "0123456789".contains($0) }
-                                if filtered != newValue {
-                                    self.textFieldLogin = filtered
-                                }
-                                if textFieldLogin.count > 11 {
-                                    textFieldLogin = String(textFieldLogin.prefix(11))
-                                }
-                            }
+                            .onChange(of: maskedCPF) {oldValue, newValue in
+                                textFieldLogin = newValue.filter { "0123456789".contains($0) }
+                                            maskedCPF = applyMask(on: textFieldLogin)
+                                    }
                         Text("Senha")
                             .font(.subheadline)
                             .padding(.bottom, 0)
@@ -151,6 +148,23 @@ struct LoginScreen: View {
             .padding()
             .background(ColorScheme.appBackgroudColor)
         }
+    }
+    func applyMask(on value: String) -> String {
+        print("applyMask called")
+        let cleanCPF = value.filter { "0123456789".contains($0) }
+        var maskedCPF = ""
+        
+        for (index, char) in cleanCPF.enumerated() {
+            if index == 11 { break }
+            if index == 3 || index == 6 {
+                maskedCPF += "."
+            } else if index == 9 {
+                maskedCPF += "-"
+            }
+            maskedCPF += String(char)
+        }
+        print("Masked CPF: \(maskedCPF)")
+        return maskedCPF
     }
 }
 
