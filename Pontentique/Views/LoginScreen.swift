@@ -25,7 +25,7 @@ struct LoginScreen: View {
                 VStack {
                     Spacer()
                     VStack {
-                        Text("Seja bem vindo ao Pontentique™!")
+                        Text("Seja bem vindo ao Pontentique!")
                             .font(.headline)
                             .padding(.bottom, 10)
                         Text("Faça login ou registre-se")
@@ -73,6 +73,26 @@ struct LoginScreen: View {
                         
                         HStack {
                             Button(action: {
+                                showRegisterScreen = true
+                            }) {
+                                Text("Registrar")
+                                    .padding(12)
+                                    .frame(width: 100)
+                                    .background(ColorScheme.primaryColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                    .fullScreenCover(isPresented: $showRegisterScreen) {
+                                        RegisterScreen()
+                                            .foregroundColor(ColorScheme.textColor)
+                                            .multilineTextAlignment(.leading)
+                                            .transition(.move(edge: .trailing))
+                                            .animation(.default, value: showRegisterScreen)
+                                    }
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.trailing, 10)
+                            
+                            Button(action: {
                                 Task {
                                     userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                         if let token = token {
@@ -103,30 +123,10 @@ struct LoginScreen: View {
                                     .cornerRadius(10)
                             }
                             .buttonStyle(PlainButtonStyle())
-                            .padding(.trailing, 10)
                             .navigationDestination(isPresented: $isLoggedIn) {
                                 UserMainPanel()
                                     .navigationBarBackButtonHidden(true)
                             }
-                            
-                            Button(action: {
-                                showRegisterScreen = true
-                            }) {
-                                Text("Registrar")
-                                    .padding(12)
-                                    .frame(width: 100)
-                                    .background(ColorScheme.primaryColor)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                                    .fullScreenCover(isPresented: $showRegisterScreen) {
-                                        RegisterScreen()
-                                            .foregroundColor(ColorScheme.textColor)
-                                            .multilineTextAlignment(.leading)
-                                            .transition(.move(edge: .trailing))
-                                            .animation(.default, value: showRegisterScreen)
-                                    }
-                            }
-                            .buttonStyle(PlainButtonStyle())
                         }
                         .padding(.top, 15)
                     }
