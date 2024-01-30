@@ -70,6 +70,7 @@ struct RegisterScreen: View {
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
+                            .keyboardType(.numberPad)
                             .padding(.bottom, 10)
                             .onReceive(Just(cpf)) { newValue in
                                 let filtered = newValue.filter { "0123456789".contains($0) }
