@@ -192,7 +192,7 @@ struct UserAddEventDateView: View {
                         errorMessage = "ⓘ Insira um horário válido"
                     } else {
                         errorMessage = ""
-                        setDayOff(clockEntry, clockReport, justification, startRegisteredTime, endRegisteredTime, dayOff, doctor)
+                        createDayOffTicket(clockEntry, clockReport, justification, startRegisteredTime, endRegisteredTime, dayOff, doctor)
                     }
                 }){
                     Text("Salvar")
@@ -203,23 +203,39 @@ struct UserAddEventDateView: View {
     
     //MARK: - AUX FUNCTIONS
     
-    func setDayOff(_ entry: ClockEntry, _ report: ClockReport, _ justification: String,
-                   _ startTime: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool){
+    func createDayOffTicket(_ entry: ClockEntry, _ report: ClockReport, _ justification: String,
+                       _ startTime: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool){
         if let user = sessionManager.user {
-            let startTimeFormatted = formatTime(startTime)
-            let endTimeFormatted = formatTime(endTime)
+            let startTimeFormatted = replaceTimeInTimestamp(entry.day, formatTime(startTime))
+            let endTimeFormatted = replaceTimeInTimestamp(entry.day, formatTime(endTime))
             
-            setDayOffForDate(user.id, justification, entry.day, startTimeFormatted,
-                             entry.day, endTimeFormatted, dayOff, doctor, user.token ?? "")
-            { (message, error) in
-                if let error = error {
-                    errorMessage = error.localizedDescription
-                } else if let message = message {
-                    alertMessage = message
-                    showingAlert = true
+            createAddTicket(entry, justification, startTimeFormatted)
+            createAddTicket(entry, justification, endTimeFormatted)
+        }
+    }
+    
+    func createAddTicket(_ entry: ClockEntry, _ justification: String, _ timestamp: String) {
+        if let user = sessionManager.user {
+            let requestedData = RequestedData(userId: user.id, timestamp: timestamp, justification: justification,
+                                              dayOff: dayOff, doctor: doctor)
+            let ticketRequest = TicketRequest(userId: user.id, type: "create", clockEventId: nil,
+                                              justification: justification, requestedData: requestedData)
+            
+            createTicket(ticketRequest, user.token ?? ""){ (message, error) in
+                if let message = message {
+                    DispatchQueue.main.async {
+                        alertMessage = message
+                        showingAlert = true
+                    }
+                } else if let error = error {
+                    errorMessage = "ⓘ \(error.localizedDescription)"
                 }
             }
         }
+    }
+
+    func replaceTimeInTimestamp(_ date: String, _ time: String) -> String {
+        return "\(date) \(time):00"
     }
     
     func formatDate(_ date: String, _ eventDay: String) -> String {

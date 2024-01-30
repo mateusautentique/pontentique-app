@@ -213,8 +213,8 @@ struct AddEventView: View {
         }
     }
     
-    func createAddTicket(_ event: ClockEntry, _ justification: String, _ timestamp: String) {
-        let timestamp = replaceTimeInTimestamp(event.day, timestamp)
+    func createAddTicket(_ entry: ClockEntry, _ justification: String, _ timestamp: String) {
+        let timestamp = replaceTimeInTimestamp(entry.day, timestamp)
         
         if let user = sessionManager.user {
             let requestedData = RequestedData(userId: user.id, timestamp: timestamp, justification: justification,
