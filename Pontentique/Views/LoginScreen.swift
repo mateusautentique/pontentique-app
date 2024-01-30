@@ -9,140 +9,163 @@ import SwiftUI
 import Combine
 
 struct LoginScreen: View {
-    @State var textFieldLogin: String = ""
+    @State private var textFieldLogin: String = ""
     @State var textFieldPassword: String = ""
     @State private var errorMessage: String?
-    
+    @State private var cpf: String = ""
+    @State private var maskedCPF: String = ""
     @State private var showRegisterScreen = false
     @State private var isLoggedIn = false
     @EnvironmentObject var sessionManager: UserSessionManager
     
     var body: some View {
         NavigationStack {
-            VStack {
+            HStack {
                 Spacer()
-                VStack {
-                    Text("Seja bem vindo ao Pontentique!")
-                        .font(.headline)
-                        .padding(.bottom, 10)
-                    Text("Faça login ou registre-se")
-                        .font(.subheadline)
-                }
-                .foregroundColor(ColorScheme.textColor)
-                .padding(.bottom, 40)
                 
-                VStack(alignment: .leading) {
-                    Text("CPF")
-                        .font(.subheadline)
-                        .padding(.bottom, 0)
-                        .padding(.leading, 5)
-                    TextField("CPF", text: $textFieldLogin)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding(10)
-                        .background(ColorScheme.fieldBgColor)
-                        .foregroundColor(ColorScheme.textColor)
-                        .cornerRadius(10)
-                        .frame(width: 220)
-                        .padding(.bottom, 10)
-                        .keyboardType(.numberPad)
-                        .onReceive(Just(textFieldLogin)) { newValue in
-                            let filtered = newValue.filter { "0123456789".contains($0) }
-                            if filtered != newValue {
-                                self.textFieldLogin = filtered
-                            }
-                            if textFieldLogin.count > 11 {
-                                textFieldLogin = String(textFieldLogin.prefix(11))
-                            }
-                        }
-                    Text("Senha")
-                        .font(.subheadline)
-                        .padding(.bottom, 0)
-                        .padding(.leading, 5)
-                    SecureField("Senha", text: $textFieldPassword)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding(10)
-                        .background(ColorScheme.fieldBgColor)
-                        .foregroundColor(ColorScheme.textColor)
-                        .cornerRadius(10)
-                        .frame(width: 220)
-                        .padding(.bottom, 10)
+                VStack {
+                    Spacer()
+                    VStack {
+                        Text("Seja bem vindo ao Pontentique!")
+                            .font(.headline)
+                            .padding(.bottom, 10)
+                        Text("Faça login ou registre-se")
+                            .font(.subheadline)
+                    }
+                    .foregroundColor(ColorScheme.textColor)
+                    .padding(.bottom, 40)
                     
-                    Button(action: {
-                        Task {
-                            userLogin(textFieldLogin, textFieldPassword) { (token, error) in
-                                if let token = token {
-                                    self.errorMessage = nil
-                                    getLoggedUser(token){ (user, error) in
-                                        if let user = user {
-                                            self.sessionManager.session = .loggedIn(user)
-                                            DispatchQueue.main.async {
-                                                isLoggedIn = true
+                    //Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("CPF")
+                            .font(.subheadline)
+                            .padding(.bottom, 0)
+                            .padding(.leading, 5)
+                        TextField("CPF", text: $maskedCPF)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding(10)
+                            .background(ColorScheme.fieldBgColor)
+                            .keyboardType(.numberPad)
+                            .foregroundColor(ColorScheme.textColor)
+                            .cornerRadius(10)
+                            .frame(width: 220)
+                            .padding(.bottom, 10)
+                            .keyboardType(.numberPad)
+                            .onChange(of: maskedCPF) {oldValue, newValue in
+                                textFieldLogin = newValue.filter { "0123456789".contains($0) }
+                                            maskedCPF = applyMask(on: textFieldLogin)
+                                    }
+                        Text("Senha")
+                            .font(.subheadline)
+                            .padding(.bottom, 0)
+                            .padding(.leading, 5)
+                        SecureField("Senha", text: $textFieldPassword)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding(10)
+                            .background(ColorScheme.fieldBgColor)
+                            .foregroundColor(ColorScheme.textColor)
+                            .cornerRadius(10)
+                            .frame(width: 220)
+                            .padding(.bottom, 10)
+                        
+                        HStack {
+                            Button(action: {
+                                showRegisterScreen = true
+                            }) {
+                                Text("Registrar")
+                                    .padding(12)
+                                    .frame(width: 100)
+                                    .background(ColorScheme.primaryColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                    .fullScreenCover(isPresented: $showRegisterScreen) {
+                                        RegisterScreen()
+                                            .foregroundColor(ColorScheme.textColor)
+                                            .multilineTextAlignment(.leading)
+                                            .transition(.move(edge: .trailing))
+                                            .animation(.default, value: showRegisterScreen)
+                                    }
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.trailing, 10)
+                            
+                            Button(action: {
+                                Task {
+                                    userLogin(textFieldLogin, textFieldPassword) { (token, error) in
+                                        if let token = token {
+                                            self.errorMessage = nil
+                                            getLoggedUser(token){ (user, error) in
+                                                if let user = user {
+                                                    self.sessionManager.session = .loggedIn(user)
+                                                    DispatchQueue.main.async {
+                                                        isLoggedIn = true
+                                                    }
+                                                } else if let error = error {
+                                                    self.errorMessage = error.localizedDescription
+                                                }
                                             }
                                         } else if let error = error {
                                             self.errorMessage = error.localizedDescription
                                         }
                                     }
-                                } else if let error = error {
-                                    self.errorMessage = error.localizedDescription
                                 }
+                            }) {
+                                Text("Entrar")
+                                    .padding(12)
+                                    .frame(width: 100)
+                                    .background(ColorScheme.primaryColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .navigationDestination(isPresented: $isLoggedIn) {
+                                UserMainPanel()
+                                    .navigationBarBackButtonHidden(true)
                             }
                         }
-                    }) {
-                        Text("Entrar")
-                            .padding(12)
-                            .frame(maxWidth: .infinity)
-                            .background(ColorScheme.primaryColor)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .frame(width: 220)
+                        .padding(.top, 15)
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .navigationDestination(isPresented: $isLoggedIn) {
-                        UserMainPanel()
-                            .navigationBarBackButtonHidden(true)
-                    }
-                    .padding(.top, 20)
-                }
-                .padding(.top, 15)
-                
-                Button(action: {
-                    showRegisterScreen = true
-                }) {
-                    Text("Registre-se")
-                        .padding(12)
-                        .foregroundColor(ColorScheme.primaryColor)
-                        .fontWeight(.bold)
-                        .cornerRadius(10)
-                        .fullScreenCover(isPresented: $showRegisterScreen) {
-                            RegisterScreen()
-                                .foregroundColor(ColorScheme.textColor)
-                                .multilineTextAlignment(.leading)
-                                .transition(.move(edge: .trailing))
-                                .animation(.default, value: showRegisterScreen)
+                    .padding()
+                    
+                    HStack {
+                        Spacer()
+                        if let errorMessage = errorMessage {
+                            Text("ⓘ \(errorMessage)")
+                                .foregroundColor(.red)
+                                .padding(.top, 10)
                         }
-                        .padding(.top, 5)
-                }
-                .buttonStyle(PlainButtonStyle())
-                
-                HStack {
-                    Spacer()
-                    if let errorMessage = errorMessage {
-                        Text("ⓘ \(errorMessage)")
-                            .foregroundColor(.red)
-                            .padding(.top, 10)
+                        Spacer()
                     }
+                    
                     Spacer()
                 }
+                .padding()
+                .background(ColorScheme.appBackgroudColor)
                 
                 Spacer()
             }
             .padding()
             .background(ColorScheme.appBackgroudColor)
-            
-            Spacer()
         }
-        .padding()
-        .background(ColorScheme.appBackgroudColor)
+    }
+
+    func applyMask(on value: String) -> String {
+        print("applyMask called")
+        let cleanCPF = value.filter { "0123456789".contains($0) }
+        var maskedCPF = ""
+        
+        for (index, char) in cleanCPF.enumerated() {
+            if index == 11 { break }
+            if index == 3 || index == 6 {
+                maskedCPF += "."
+            } else if index == 9 {
+                maskedCPF += "-"
+            }
+            maskedCPF += String(char)
+        }
+        print("Masked CPF: \(maskedCPF)")
+        return maskedCPF
     }
 }
 
