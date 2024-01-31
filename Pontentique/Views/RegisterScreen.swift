@@ -83,6 +83,7 @@ struct RegisterScreen: View {
                             .padding(.leading, 5)
                         TextField(placeHolderEmail, text: $email)
                             .textFieldStyle(PlainTextFieldStyle())
+                            .keyboardType(.emailAddress)
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
                             .foregroundColor(ColorScheme.textColor)

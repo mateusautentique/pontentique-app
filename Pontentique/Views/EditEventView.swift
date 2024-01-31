@@ -328,7 +328,7 @@ struct EditEventView: View {
                         self.activeAlert = .edit
                     }
                 } else if let error = error {
-                    errorMessage = "ⓘ \(error.localizedDescription)"
+                    self.errorMessage = "ⓘ \(error.localizedDescription)"
                 }
             }
         }
@@ -360,7 +360,7 @@ struct EditEventView: View {
                         self.clockReport = clockReport
                     }
                 } else if let error = error {
-                    print(error)
+                    self.errorMessage = "ⓘ \(error.localizedDescription)"
                 }
             }
         }

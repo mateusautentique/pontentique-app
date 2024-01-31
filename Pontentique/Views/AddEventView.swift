@@ -195,12 +195,10 @@ struct AddEventView: View {
     
     func addEvent(_ entry: ClockEntry, _ justification: String, _ timestamp: String) {
         let timestamp = replaceTimeInTimestamp(entry.day, timestamp)
-        print("Timestamp: \(timestamp)")
 
         if let user = sessionManager.user {
             addClockEvent(clockReport.userId, timestamp, justification, user.token ?? "", dayOff, doctor) { (message, error) in
                 if let message = message {
-                    print("Message: \(message)")
                     DispatchQueue.main.async {
                         alertMessage = message
                         showingAlert = true
@@ -268,7 +266,7 @@ struct AddEventView: View {
                         self.clockReport = clockReport
                     }
                 } else if let error = error {
-                    print(error)
+                    errorMessage = "ⓘ \(error.localizedDescription)"
                 }
             }
         }

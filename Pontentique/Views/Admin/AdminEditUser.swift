@@ -79,6 +79,7 @@ struct AdminEditUser: View {
                             .frame(width: 80, alignment: .leading)
                             .padding(.leading, 12)
                         TextField("Email", text: $user.email)
+                            .keyboardType(.emailAddress)
                             .padding(.leading,25)
                             .onTapGesture {
                                 hideKeyboard()
