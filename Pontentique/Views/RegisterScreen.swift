@@ -16,7 +16,6 @@ struct RegisterScreen: View {
     @State private var password: String = ""
     @State private var password_confirmation: String = ""
     @State private var errorMessage: String?
-    @State private var isLoggedIn = false
     @State private var registerUser = false
     let placeHolderEmail = "jair@tuamaeaquelaursa.com"
     
@@ -128,9 +127,8 @@ struct RegisterScreen: View {
                                     errorMessage = nil
                                     getLoggedUser(token){ (user, error) in
                                         if let user = user {
-                                            self.sessionManager.session = .loggedIn(user)
                                             DispatchQueue.main.async {
-                                                isLoggedIn = true
+                                                self.sessionManager.session = .loggedIn(user)
                                             }
                                         } else if let error = error {
                                             self.errorMessage = error.localizedDescription
@@ -138,8 +136,6 @@ struct RegisterScreen: View {
                                     }
                                 } else if let error = error {
                                     self.errorMessage = error.localizedDescription
-                                } else {
-                                    self.errorMessage = "Não foi possível conectar-se ao servidor"
                                 }
                             }
                         }
@@ -150,13 +146,9 @@ struct RegisterScreen: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
-                    .navigationDestination(isPresented: $isLoggedIn) {
-                        UserMainPanel()
-                            .navigationBarBackButtonHidden(true)
-                            .foregroundColor(ColorScheme.textColor)
-                            .multilineTextAlignment(.leading)
-                    }
+                    
                     Spacer()
+                    
                     if let errorMessage = errorMessage {
                         Text("ⓘ \(errorMessage)")
                             .foregroundColor(.red)
@@ -172,7 +164,6 @@ struct RegisterScreen: View {
         }
     }
     func applyMask(on value: String) -> String {
-        print("applyMask called")
         let cleanCPF = value.filter { "0123456789".contains($0) }
         var maskedCPF = ""
         
@@ -185,7 +176,6 @@ struct RegisterScreen: View {
             }
             maskedCPF += String(char)
         }
-        print("Masked CPF: \(maskedCPF)")
         return maskedCPF
     }
 

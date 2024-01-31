@@ -73,7 +73,9 @@ struct LoginScreen: View {
                                         self.errorMessage = nil
                                         getLoggedUser(token){ (user, error) in
                                             if let user = user {
-                                                self.sessionManager.session = .loggedIn(user)
+                                                DispatchQueue.main.async {
+                                                    self.sessionManager.session = .loggedIn(user)
+                                                }
                                             } else if let error = error {
                                                 self.errorMessage = error.localizedDescription
                                             }

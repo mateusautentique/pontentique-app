@@ -2,21 +2,24 @@ import SwiftUI
 
 
 enum ActiveAlert { case  deleteConfirmation, success}
-
 enum ActiveAlertSave { case first, second }
 
-
 struct AdminEditUser: View {
-    //MARK: - Call other files
+    //MARK: - VIEW VARIABLES
     @Environment(\.presentationMode) var presentationMode
+    
+    //MARK: - SESSION INFO
     @EnvironmentObject var sessionManager: UserSessionManager
+    
+    //MARK: - ALERT INFO
     @State private var ActiveAlertSave: ActiveAlertSave = .first
-    @State private var errorMessage = ""
-    //MARK: - User info
-    @State var user: User
-    var token: String?
     @State private var showAlert = false
+    @State private var errorMessage = ""
     @State private var successMessage = ""
+    
+    //MARK: - User info
+    var token: String?
+    @State var user: User
     @State private var selectedRole: String = ""
     @State private var workJourneyHours: Int
     let roles = ["user", "admin"]
@@ -34,33 +37,8 @@ struct AdminEditUser: View {
         self.token = token
     }
     
-    func saveChanges(completion: @escaping (String?, Error?) -> Void) {
-        if let token = self.token {
-            let userId = user.id
-            let name = user.name
-            let email = user.email
-            let cpf = user.cpf
-            let role = selectedRole
-            let workJourneyHours = Int(self.workJourneyHours)
-            editUser(userId: userId, name: name, email: email, cpf: cpf, role: role, workJourneyHours: workJourneyHours, token: token) { (updatedUser, error) in
-                DispatchQueue.main.async {
-                    if let error = error as? NSError, error.code == 401 {
-                        // Handle error...
-                    } else if error != nil {
-                        // Handle error...
-                    } else if let updatedUser = updatedUser {
-                        self.user = updatedUser
-                        print("User updated successfully")
-                    }
-                }
-            }
-        }
-        completion("As alterações foram salvas com sucesso", nil)
-    }
-    
     var body: some View {
         NavigationView {
-            
             VStack{
                 Text("Editar usuário")
                     .frame(maxWidth: .infinity, minHeight: 50)
@@ -126,8 +104,8 @@ struct AdminEditUser: View {
                         }
                         .padding(.leading,14)
                         Spacer()
-                        .pickerStyle(MenuPickerStyle())
-                        .labelsHidden()
+                            .pickerStyle(MenuPickerStyle())
+                            .labelsHidden()
                         
                     }
                     Divider()
@@ -144,11 +122,9 @@ struct AdminEditUser: View {
                         .padding(.leading,15)
                         .pickerStyle(DefaultPickerStyle())
                         .labelsHidden()
-                        Spacer()
-                        
+                        Spacer() 
                     }
                     .padding(.bottom, 50)
-                    
                     
                     Button(action: {
                         self.activeAlert = .deleteConfirmation
@@ -157,13 +133,11 @@ struct AdminEditUser: View {
                     }) {
                         Text("Excluir usuário")
                             .foregroundColor(.red)
-     
                     }
                     
                     Text("\(errorMessage)")
                         .frame(maxWidth: .infinity, alignment: .bottom)
                         .foregroundColor(.red)
-                    
                     Spacer()
                 }
             }
@@ -179,12 +153,9 @@ struct AdminEditUser: View {
                             } else if success {
                                 self.activeAlert = .success
                                 self.showingAlert = true
-                            } else {
-                                print("Failed to delete user")
                             }
                         }
-                    },
-                                 secondaryButton: .cancel())
+                    }, secondaryButton: .cancel())
                 case .success:
                     return Alert(title: Text("Boa deu certo!"),
                                  message: Text("\(user.name) foi deletado com sucesso."),
@@ -213,11 +184,10 @@ struct AdminEditUser: View {
                             return Alert(title: Text("Confirmar"),
                                          message: Text("Você quer mesmo salvar as alterações?"),
                                          primaryButton: .default(Text("Sim"), action: {
-                                
                                 saveChanges { (success, error) in
                                     if let error = error {
                                         print("Error saving changes: \(error)")
-                                        self.errorMessage = "ⓘErro ao salvar: \(error.localizedDescription)"
+                                        self.errorMessage = "ⓘ Erro ao salvar: \(error.localizedDescription)"
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                             self.errorMessage = ""
                                         }
@@ -229,14 +199,13 @@ struct AdminEditUser: View {
                                         }
                                     } else {
                                         print("Failed to save changes")
-                                        self.errorMessage = "ⓘFalha ao salvar as mudanças"
+                                        self.errorMessage = "ⓘ Falha ao salvar as mudanças"
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                             self.errorMessage = ""
                                         }
                                     }
                                 }
-                            }),
-                                         secondaryButton: .cancel())
+                            }), secondaryButton: .cancel())
                         case .second:
                             return Alert(title: Text("Boa deu certo!"),
                                          message: Text(successMessage),
@@ -251,6 +220,29 @@ struct AdminEditUser: View {
             .listStyle(PlainListStyle())
         }
     }
+    
+    func saveChanges(completion: @escaping (String?, Error?) -> Void) {
+        if let token = self.token {
+            let userId = user.id
+            let name = user.name
+            let email = user.email
+            let cpf = user.cpf
+            let role = selectedRole
+            let workJourneyHours = Int(self.workJourneyHours)
+            editUser(userId: userId, name: name, email: email, cpf: cpf, role: role, workJourneyHours: workJourneyHours, token: token) {
+                (updatedUser, error) in
+                DispatchQueue.main.async {
+                    if let error = error as? NSError, error.code == 401 {
+                        errorMessage = error.localizedDescription
+                    } else if let updatedUser = updatedUser {
+                        self.user = updatedUser
+                    }
+                }
+            }
+        }
+        completion("As alterações foram salvas com sucesso", nil)
+    }
+
 }
 #if canImport(UIKit)
 extension View {

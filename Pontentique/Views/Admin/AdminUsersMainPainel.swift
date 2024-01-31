@@ -6,26 +6,20 @@
 //
 
 import SwiftUI
-func colorFromString(_ colorName: String) -> Color {
-    switch colorName {
-    case "red":
-        return Color.red
-    case "green":
-        return Color.green
-    case "gray":
-        return Color.gray
-        
-    default:
-        return Color.blue
-    }
-}
 
 struct AdminUsersMainPainel: View {
+    //MARK: - SESSION INFO
+    @EnvironmentObject var sessionManager: UserSessionManager
+    
+    //MARK: - USER INFO
     @State private var users: [User] = []
     @State private var userStatus: [String: String] = [:]
-    @EnvironmentObject var sessionManager: UserSessionManager
     @State private var selectedUser: User? = nil
     
+    //MARK: - ERROR
+    @State private var errorMessage: String?
+    
+    //MARK: - VIEW
     var body: some View {
         VStack {
             Text("Usuários")
@@ -59,17 +53,20 @@ struct AdminUsersMainPainel: View {
             fetchUsers()
         }
     }
+    
     func fetchUsers() {
         if let token = sessionManager.user?.token {
             getAllUsers(token) { (users, error) in
                 if let error = error {
                     print("Failed to fetch users: \(error)")
                 } else if let users = users {
-                    self.users = users
-                    for user in users {
-                        fetchUserStatus(userId: String(user.id), token: token) { status, error in
-                            if let status = status {
-                                self.userStatus[String(user.id)] = status.lowercased()
+                    DispatchQueue.main.async {
+                        self.users = users
+                        for user in users {
+                            fetchUserStatus(userId: String(user.id), token: token) { status, error in
+                                if let status = status {
+                                    self.userStatus[String(user.id)] = status.lowercased()
+                                }
                             }
                         }
                     }
@@ -77,12 +74,26 @@ struct AdminUsersMainPainel: View {
             }
         }
     }
-}
-
-
-
-struct AdminUsersMainPainel_Previews: PreviewProvider {
-    static var previews: some View {
-        AdminUsersMainPainel()
+    
+    //MARK: - AUX
+    func colorFromString(_ colorName: String) -> Color {
+        switch colorName {
+        case "red":
+            return Color.red
+        case "green":
+            return Color.green
+        case "gray":
+            return Color.gray
+        default:
+            return Color.blue
+        }
     }
 }
+
+
+//
+//struct AdminUsersMainPainel_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AdminUsersMainPainel()
+//    }
+//}
