@@ -49,7 +49,7 @@ func userLogin (_ cpf: String, _ password: String, host: String = "\(API_HOST)/l
     task.resume()
 }
 
-func userRegister(cpf: String, name: String, email: String, password: String, password_confirmation: String, host: String = "\(API_HOST)/register", completion: @escaping (String?, Error?) -> Void) {
+func userRegister(cpf: String, name: String, email: String, password: String, password_confirmation: String, host: String = "\(API_HOST)/register", completion: @escaping (String?, Int?, Error?) -> Void) {
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "POST"
     
@@ -66,7 +66,7 @@ func userRegister(cpf: String, name: String, email: String, password: String, pa
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
         if let error = error {
-            completion(nil, error)
+            completion(nil, nil, error)
             return
         }
         
@@ -76,17 +76,16 @@ func userRegister(cpf: String, name: String, email: String, password: String, pa
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 if response.statusCode == 200 {
                     if let token = json["token"] as? String {
-                        print(token)
-                        completion(token, nil)
+                        completion(token, response.statusCode, nil)
                     }
                 } else {
                     let error = createError(from: json, with: response.statusCode)
-                    completion(nil, error)
+                    completion(json["error"] as? String, response.statusCode, error)
                 }
             }
         } catch {
             print("Error parsing JSON: \(error)")
-            completion(nil, error)
+            completion(nil, response.statusCode, error)
         }
     }
     task.resume()

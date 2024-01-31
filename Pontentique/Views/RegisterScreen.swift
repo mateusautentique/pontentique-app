@@ -18,7 +18,23 @@ struct RegisterScreen: View {
     @State private var password_confirmation: String = ""
     @State private var errorMessage: String?
     @State private var registerUser = false
-    let placeHolderEmail = "jair@tuamaeaquelaursa.com" 
+    @State private var fields: [String: Bool] = [
+        "name": false,
+        "cpf": false,
+        "email": false,
+        "password": false,
+        "password_confirmation": false
+    ]
+    
+    let statusCodesToFields: [Int: String] = [
+        490: "name",
+        491: "cpf",
+        492: "email",
+        493: "password",
+        494: "password_confirmation"
+    ]
+    
+    let placeHolderEmail = "jair@tuamaeaquelaursa.com"
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -57,13 +73,17 @@ struct RegisterScreen: View {
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(fields["name"] == true ? Color.red : Color.clear, lineWidth: 1)
+                            )
                             .padding(.bottom, 10)
                             .gesture(
-                                   TapGesture()
-                                       .onEnded { _ in
-                                           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                       }
-                               )
+                                TapGesture()
+                                    .onEnded { _ in
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                    }
+                            )
                         
                         Text("CPF")
                             .font(.subheadline)
@@ -76,18 +96,22 @@ struct RegisterScreen: View {
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(fields["cpf"] == true ? Color.red : Color.clear, lineWidth: 1)
+                            )
                             .keyboardType(.numberPad)
                             .padding(.bottom, 10)
                             .onChange(of: maskedCPF) {oldValue, newValue in
                                 cpf = newValue.filter { "0123456789".contains($0) }
-                                            maskedCPF = applyMask(on: cpf)
-                                    }
+                                maskedCPF = applyMask(on: cpf)
+                            }
                             .gesture(
-                                   TapGesture()
-                                       .onEnded { _ in
-                                           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                       }
-                               )
+                                TapGesture()
+                                    .onEnded { _ in
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                    }
+                            )
                         
                         Text("Email")
                             .font(.subheadline)
@@ -101,13 +125,17 @@ struct RegisterScreen: View {
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(fields["email"] == true ? Color.red : Color.clear, lineWidth: 1)
+                            )
                             .padding(.bottom, 10)
                             .gesture(
-                                   TapGesture()
-                                       .onEnded { _ in
-                                           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                       }
-                               )
+                                TapGesture()
+                                    .onEnded { _ in
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                    }
+                            )
                         
                         Text("Senha")
                             .font(.subheadline)
@@ -120,6 +148,10 @@ struct RegisterScreen: View {
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(fields["password"] == true ? Color.red : Color.clear, lineWidth: 1)
+                            )
                             .padding(.bottom, 10)
                             .textContentType(.oneTimeCode)
                         
@@ -134,6 +166,10 @@ struct RegisterScreen: View {
                             .foregroundColor(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(fields["password_confirmation"] == true ? Color.red : Color.clear, lineWidth: 1)
+                            )
                             .padding(.bottom, 10)
                             .textContentType(.oneTimeCode)
                     }
@@ -141,20 +177,36 @@ struct RegisterScreen: View {
                     
                     Button(action: {
                         Task {
-                            userRegister(cpf: cpf, name: name, email: email, password: password, password_confirmation: password_confirmation) { (token, error) in
-                                if let token = token {
-                                    errorMessage = nil
-                                    getLoggedUser(token){ (user, error) in
-                                        if let user = user {
-                                            DispatchQueue.main.async {
-                                                self.sessionManager.session = .loggedIn(user)
+                            userRegister(cpf: cpf, name: name, email: email,
+                                         password: password, password_confirmation: password_confirmation) { (reponse, statusCode, error) in
+                                fields = [
+                                    "name": false,
+                                    "cpf": false,
+                                    "email": false,
+                                    "password": false,
+                                    "password_confirmation": false
+                                ]
+                                
+                                if statusCode == 200 {
+                                    if let token = reponse {
+                                        errorMessage = nil
+                                        getLoggedUser(token){ (user, error) in
+                                            if let user = user {
+                                                DispatchQueue.main.async {
+                                                    self.sessionManager.session = .loggedIn(user)
+                                                }
+                                            } else if let error = error {
+                                                self.errorMessage = error.localizedDescription
                                             }
-                                        } else if let error = error {
-                                            self.errorMessage = error.localizedDescription
                                         }
+                                    } else if let error = error {
+                                        self.errorMessage = error.localizedDescription
                                     }
-                                } else if let error = error {
-                                    self.errorMessage = error.localizedDescription
+                                } else {
+                                    errorMessage = reponse
+                                    if let fieldName = statusCodesToFields[statusCode ?? 0] {
+                                        fields[fieldName] = true
+                                    }
                                 }
                             }
                         }
