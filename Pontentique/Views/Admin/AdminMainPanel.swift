@@ -75,8 +75,10 @@ struct AdminMainPanel: View {
             .frame(maxWidth: .infinity, minHeight: 50)
             .background(ColorScheme.clockBtnBgColor)
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
+    
 
 #Preview {
     AdminMainPanel()

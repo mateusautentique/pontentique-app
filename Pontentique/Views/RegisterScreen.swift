@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import UIKit
 
 struct RegisterScreen: View {
     @State private var name: String = ""
@@ -17,8 +18,7 @@ struct RegisterScreen: View {
     @State private var password_confirmation: String = ""
     @State private var errorMessage: String?
     @State private var registerUser = false
-    let placeHolderEmail = "jair@tuamaeaquelaursa.com"
-    
+    let placeHolderEmail = "jair@tuamaeaquelaursa.com" 
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -40,7 +40,7 @@ struct RegisterScreen: View {
             
             HStack {
                 Spacer()
-                VStack {
+                ScrollView{
                     Text("Insira as suas informações:")
                         .font(.subheadline)
                         .padding(.bottom, 10)
@@ -58,6 +58,12 @@ struct RegisterScreen: View {
                             .cornerRadius(10)
                             .frame(width: 220)
                             .padding(.bottom, 10)
+                            .gesture(
+                                   TapGesture()
+                                       .onEnded { _ in
+                                           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                       }
+                               )
                         
                         Text("CPF")
                             .font(.subheadline)
@@ -74,8 +80,14 @@ struct RegisterScreen: View {
                             .padding(.bottom, 10)
                             .onChange(of: maskedCPF) {oldValue, newValue in
                                 cpf = newValue.filter { "0123456789".contains($0) }
-                                maskedCPF = applyMask(on: cpf)
-                            }
+                                            maskedCPF = applyMask(on: cpf)
+                                    }
+                            .gesture(
+                                   TapGesture()
+                                       .onEnded { _ in
+                                           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                       }
+                               )
                         
                         Text("Email")
                             .font(.subheadline)
@@ -90,6 +102,12 @@ struct RegisterScreen: View {
                             .cornerRadius(10)
                             .frame(width: 220)
                             .padding(.bottom, 10)
+                            .gesture(
+                                   TapGesture()
+                                       .onEnded { _ in
+                                           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                       }
+                               )
                         
                         Text("Senha")
                             .font(.subheadline)
@@ -156,10 +174,12 @@ struct RegisterScreen: View {
                             .padding(.top, 10)
                     }
                 }
+                
                 .padding()
                 .background(ColorScheme.appBackgroudColor)
                 Spacer()
             }
+            
             .padding()
             .background(ColorScheme.appBackgroudColor)
         }

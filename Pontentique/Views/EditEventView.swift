@@ -4,7 +4,7 @@
 //
 //  Created by Mateus Zanella on 21/12/23.
 //
-
+import UIKit
 import SwiftUI
 
 struct EditEventView: View {
@@ -92,6 +92,12 @@ struct EditEventView: View {
                     Text("\(dayAndMonth)")
                         .foregroundColor(ColorScheme.tableTextColor)
                     TimeTextField(registeredTime: $registeredTime, time: time)
+                        .gesture(
+                               TapGesture()
+                                   .onEnded { _ in
+                                       UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                   }
+                           )
                 }
                 .background(ColorScheme.appBackgroudColor)
                 .padding(.bottom, 15)
@@ -116,6 +122,12 @@ struct EditEventView: View {
                             justification = String(newValue.prefix(200))
                         }
                     }
+                    .gesture(
+                           TapGesture()
+                               .onEnded { _ in
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                               }
+                       )
                 
                 
                 HStack{

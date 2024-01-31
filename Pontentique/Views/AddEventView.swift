@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import UIKit
 struct AddEventView: View {
     //MARK: - USER INFO
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -81,6 +81,12 @@ struct AddEventView: View {
                     Text("\(dayAndMonth)")
                         .foregroundColor(ColorScheme.tableTextColor)
                     TimeTextField(registeredTime: $registeredTime, time: "12:00")
+                        .gesture(
+                               TapGesture()
+                                   .onEnded { _ in
+                                       UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                   }
+                           )
                 }
                 .background(ColorScheme.appBackgroudColor)
                 .padding(.bottom, 15)
@@ -100,6 +106,12 @@ struct AddEventView: View {
                     .cornerRadius(5)
                     .padding(.bottom, 10)
                     .lineLimit(5...10)
+                    .gesture(
+                           TapGesture()
+                               .onEnded { _ in
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                               }
+                       )
                 
                 HStack{
                     VStack (alignment: .leading) {
@@ -272,6 +284,7 @@ struct AddEventView: View {
         }
     }
 }
+
 
 //MARK: - PREVIEW
 

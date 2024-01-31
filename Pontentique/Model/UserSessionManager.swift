@@ -8,7 +8,7 @@
 import Foundation
 
 class UserSessionManager: ObservableObject {
-    @Published var session: UserSession = .loggedOut
+      @Published var session: UserSession = .loggedOut
 
     var user: User? {
         if case let .loggedIn(user) = session {
