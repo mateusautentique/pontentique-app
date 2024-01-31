@@ -1,8 +1,7 @@
 import SwiftUI
 
 
-enum ActiveAlert { case  deleteConfirmation, success}
-enum ActiveAlertSave { case first, second }
+enum ActiveAlert { case deleteConfirmation, deleteSuccess, saveConfirmation, saveSuccess }
 
 struct AdminEditUser: View {
     //MARK: - VIEW VARIABLES
@@ -12,8 +11,8 @@ struct AdminEditUser: View {
     @EnvironmentObject var sessionManager: UserSessionManager
     
     //MARK: - ALERT INFO
-    @State private var ActiveAlertSave: ActiveAlertSave = .first
     @State private var showAlert = false
+    @State private var activeAlert: ActiveAlert = .saveConfirmation
     @State private var errorMessage = ""
     @State private var successMessage = ""
     
@@ -24,11 +23,6 @@ struct AdminEditUser: View {
     @State private var workJourneyHours: Int
     let roles = ["user", "admin"]
     let hours = Array(4...12)
-    
-    
-    //MARK: - Deleting User
-    @State private var showingAlert = false
-    @State private var activeAlert: ActiveAlert = .deleteConfirmation
     
     init(user: User, token: String?) {
         _user = State(initialValue: user)
@@ -122,13 +116,13 @@ struct AdminEditUser: View {
                         .padding(.leading,15)
                         .pickerStyle(DefaultPickerStyle())
                         .labelsHidden()
-                        Spacer() 
+                        Spacer()
                     }
                     .padding(.bottom, 50)
                     
                     Button(action: {
                         self.activeAlert = .deleteConfirmation
-                        self.showingAlert = true
+                        self.showAlert = true
                         
                     }) {
                         Text("Excluir usuário")
@@ -141,7 +135,21 @@ struct AdminEditUser: View {
                     Spacer()
                 }
             }
-            .alert(isPresented: $showingAlert) {
+            .navigationBarItems(
+                leading: Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                    Text("Usuários")
+                },
+                trailing: Button(action: {
+                    self.activeAlert = .saveConfirmation
+                    self.showAlert = true
+                }) {
+                    Text("Salvar")
+                }
+            )
+            .alert(isPresented: $showAlert) {
                 switch activeAlert {
                 case .deleteConfirmation:
                     return Alert(title: Text("Tem certeza?"),
@@ -151,73 +159,52 @@ struct AdminEditUser: View {
                             if let error = error {
                                 print("Error deleting user: \(error)")
                             } else if success {
-                                self.activeAlert = .success
-                                self.showingAlert = true
+                                self.activeAlert = .deleteSuccess
+                                self.showAlert = true
                             }
                         }
                     }, secondaryButton: .cancel())
-                case .success:
+                case .deleteSuccess:
                     return Alert(title: Text("Boa deu certo!"),
                                  message: Text("\(user.name) foi deletado com sucesso."),
                                  dismissButton: .default(Text("=]")) {
-                        self.showingAlert = false
+                        self.showAlert = false
+                        self.presentationMode.wrappedValue.dismiss()
+                    })
+                case .saveConfirmation:
+                    return Alert(title: Text("Confirmar"),
+                                 message: Text("Você quer mesmo salvar as alterações?"),
+                                 primaryButton: .default(Text("Sim"), action: {
+                        saveChanges { (success, error) in
+                            if let error = error {
+                                print("Error saving changes: \(error)")
+                                self.errorMessage = "ⓘ Erro ao salvar: \(error.localizedDescription)"
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    self.errorMessage = ""
+                                }
+                            } else if success != nil {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    self.activeAlert = .saveSuccess
+                                    self.showAlert = true
+                                }
+                            } else {
+                                print("Failed to save changes")
+                                self.errorMessage = "ⓘ Falha ao salvar as mudanças"
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    self.errorMessage = ""
+                                }
+                            }
+                        }
+                    }), secondaryButton: .cancel())
+                case .saveSuccess:
+                    return Alert(title: Text("Boa deu certo!"),
+                                 message: Text(successMessage),
+                                 dismissButton: .default(Text("=]")) {
+                        self.showAlert = false
                         self.presentationMode.wrappedValue.dismiss()
                     })
                 }
             }
-            .navigationBarItems(
-                leading: Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                    Text("Usuários")
-                },
-                trailing: Button(action: {
-                    self.ActiveAlertSave = .first
-                    self.showAlert = true
-                }) {
-                    Text("Salvar")
-                }
-                    .alert(isPresented: $showAlert) {
-                        switch ActiveAlertSave.self {
-                        case .first:
-                            return Alert(title: Text("Confirmar"),
-                                         message: Text("Você quer mesmo salvar as alterações?"),
-                                         primaryButton: .default(Text("Sim"), action: {
-                                saveChanges { (success, error) in
-                                    if let error = error {
-                                        print("Error saving changes: \(error)")
-                                        self.errorMessage = "ⓘ Erro ao salvar: \(error.localizedDescription)"
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                            self.errorMessage = ""
-                                        }
-                                    } else if success != nil {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                            self.ActiveAlertSave = .second
-                                            self.showAlert = true
-                                            
-                                        }
-                                    } else {
-                                        print("Failed to save changes")
-                                        self.errorMessage = "ⓘ Falha ao salvar as mudanças"
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                            self.errorMessage = ""
-                                        }
-                                    }
-                                }
-                            }), secondaryButton: .cancel())
-                        case .second:
-                            return Alert(title: Text("Boa deu certo!"),
-                                         message: Text(successMessage),
-                                         dismissButton: .default(Text("=]")) {
-                                self.showAlert = false
-                                self.presentationMode.wrappedValue.dismiss()
-                            })
-                        }
-                    }
-                
-            )
-            .listStyle(PlainListStyle())
         }
     }
     
@@ -242,8 +229,8 @@ struct AdminEditUser: View {
         }
         completion("As alterações foram salvas com sucesso", nil)
     }
-
 }
+
 #if canImport(UIKit)
 extension View {
     func hideKeyboard() {
@@ -251,7 +238,6 @@ extension View {
     }
 }
 #endif
-
 
 #Preview {
     AdminEditUser(user: User(name: "Existing User", cpf: "123456789", email: "existing.user@example.com"),token: ""

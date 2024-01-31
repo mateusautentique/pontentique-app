@@ -40,7 +40,9 @@ struct AdminRequestMainPanel: View {
                 }
                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
                     Button {
-                        handleSelectedTicket(ticket, action: "approve")
+                        DispatchQueue.main.async {
+                            handleSelectedTicket(ticket, action: "approve")
+                        }
                     } label: {
                         Text("Aceitar")
                     }
@@ -49,7 +51,9 @@ struct AdminRequestMainPanel: View {
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
                         withAnimation {
-                            handleSelectedTicket(ticket, action: "deny")
+                            DispatchQueue.main.async {
+                                handleSelectedTicket(ticket, action: "deny")
+                            }
                         }
                     } label: {
                         Text("Negar")

@@ -163,6 +163,7 @@ struct RegisterScreen: View {
             .background(ColorScheme.appBackgroudColor)
         }
     }
+    
     func applyMask(on value: String) -> String {
         let cleanCPF = value.filter { "0123456789".contains($0) }
         var maskedCPF = ""
@@ -178,7 +179,6 @@ struct RegisterScreen: View {
         }
         return maskedCPF
     }
-
 }
 
 
