@@ -43,6 +43,7 @@ struct AdminUsersMainPainel: View {
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
+                .disabled(selectedUser != nil)
                 .sheet(item: $selectedUser, onDismiss: fetchUsers) { user in
                     AdminEditUser(user: user, token: self.sessionManager.user?.token ?? "")
                 }

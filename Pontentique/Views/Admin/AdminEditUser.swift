@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 enum ActiveAlert { case deleteConfirmation, deleteSuccess, saveConfirmation, saveSuccess }
 
 struct AdminEditUser: View {
