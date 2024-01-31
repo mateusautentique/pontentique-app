@@ -14,7 +14,7 @@ struct AdminAddEventDateView: View {
     
     //MARK: - ERROR
     @State private var errorMessage: String?
-    
+    @State private var scrollToError: Bool = false
     //MARK: - ALERT
     @State private var showingAlert: Bool = false
     @State private var alertMessage: String = ""
@@ -81,89 +81,106 @@ struct AdminAddEventDateView: View {
             .background(ColorScheme.fieldBgColor)
             .font(.system(size: 25))
             .padding(.bottom, 10)
-            
-            VStack {
-                VStack {
-                    HStack{
-                        Text("Data de início")
-                            .foregroundColor(ColorScheme.textColor)
-                            .font(.system(size: 20))
-                        Spacer()
-                        DateTextField(registeredDate: $startRegisteredDate, dayAndMonth: dayAndMonth)
-                        TimeTextField(registeredTime: $startRegisteredTime, time: "12:00")
-                    }
-                    
-                    HStack{
-                        Text("Data de término")
-                            .foregroundColor(ColorScheme.textColor)
-                            .font(.system(size: 20))
-                        Spacer()
-                        DateTextField(registeredDate: $endRegisteredDate, dayAndMonth: dayAndMonth)
-                        TimeTextField(registeredTime: $endRegisteredTime, time: "18:00")
-                    }
-                }
-                .background(ColorScheme.appBackgroudColor)
-                .padding(.bottom, 15)
-                .font(.system(size: 18))
-                
-                HStack {
-                    Text("Motivo da alteração")
-                        .font(.system(size: 20))
-                    Spacer()
-                }
-                
-                TextField("Motivo", text: $justification, axis: .vertical)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .padding(10)
-                    .background(ColorScheme.fieldBgColor)
-                    .foregroundColor(ColorScheme.textColor)
-                    .cornerRadius(5)
-                    .padding(.bottom, 10)
-                    .lineLimit(5...10)
-                
-                HStack{
-                    VStack (alignment: .leading) {
-                        Text("Folga")
-                            .foregroundColor(ColorScheme.textColor)
-                            .font(.system(size: 20))
-                        Text("Ative se você tirou folga neste horário")
-                            .foregroundColor(ColorScheme.tableTextColor)
-                    }
-                    Spacer()
-                    Toggle("", isOn: $dayOff)
-                        .onChange(of: dayOff) {
-                            if dayOff {doctor = false}
-                            else {doctor = true}
+            ScrollView{
+                ScrollViewReader { scrollView in
+                    VStack {
+                        VStack {
+                            HStack{
+                                Text("Data de início")
+                                    .foregroundColor(ColorScheme.textColor)
+                                    .font(.system(size: 20))
+                                Spacer()
+                                DateTextField(registeredDate: $startRegisteredDate, dayAndMonth: dayAndMonth)
+                                TimeTextField(registeredTime: $startRegisteredTime, time: "12:00")
+                            }
+                            
+                            HStack{
+                                Text("Data de término")
+                                    .foregroundColor(ColorScheme.textColor)
+                                    .font(.system(size: 20))
+                                Spacer()
+                                DateTextField(registeredDate: $endRegisteredDate, dayAndMonth: dayAndMonth)
+                                TimeTextField(registeredTime: $endRegisteredTime, time: "18:00")
+                            }
                         }
-                        .padding()
-                }
-                Divider()
-                
-                HStack{
-                    VStack (alignment: .leading) {
-                        Text("Médico")
-                            .foregroundColor(ColorScheme.textColor)
-                            .font(.system(size: 20))
-                        Text("Ative se você está de atestado/laudo")
-                            .foregroundColor(ColorScheme.tableTextColor)
-                    }
-                    Spacer()
-                    Toggle("", isOn: $doctor)
-                        .onChange(of: doctor) {
-                            if doctor {dayOff = false}
-                            else {dayOff = true}
-                        }
-                        .padding()
-                }
-                Divider()
-                
-                Spacer()
-                
-                if let errorMessage = errorMessage {
-                    Text("\(errorMessage)")
-                        .foregroundColor(.red)
-                        .padding(.top, 10)
+                        .background(ColorScheme.appBackgroudColor)
                         .padding(.bottom, 15)
+                        .font(.system(size: 18))
+                        
+                        HStack {
+                            Text("Motivo da alteração")
+                                .font(.system(size: 20))
+                            Spacer()
+                        }
+                        
+                        TextField("Motivo", text: $justification, axis: .vertical)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding(10)
+                            .background(ColorScheme.fieldBgColor)
+                            .foregroundColor(ColorScheme.textColor)
+                            .cornerRadius(5)
+                            .padding(.bottom, 10)
+                            .lineLimit(5...10)
+                        
+                        HStack{
+                            VStack (alignment: .leading) {
+                                Text("Folga")
+                                    .foregroundColor(ColorScheme.textColor)
+                                    .font(.system(size: 20))
+                                Text("Ative se você tirou folga neste horário")
+                                    .foregroundColor(ColorScheme.tableTextColor)
+                            }
+                            Spacer()
+                            Toggle("", isOn: $dayOff)
+                                .onChange(of: dayOff) {
+                                    if dayOff {doctor = false}
+                                    else {doctor = true}
+                                }
+                                .padding()
+                        }
+                        Divider()
+                        
+                        HStack{
+                            VStack (alignment: .leading) {
+                                Text("Médico")
+                                    .foregroundColor(ColorScheme.textColor)
+                                    .font(.system(size: 20))
+                                Text("Ative se você está de atestado/laudo")
+                                    .foregroundColor(ColorScheme.tableTextColor)
+                            }
+                            Spacer()
+                            Toggle("", isOn: $doctor)
+                                .onChange(of: doctor) {
+                                    if doctor {dayOff = false}
+                                    else {dayOff = true}
+                                }
+                                .padding()
+                        }
+                        Divider()
+                        
+                        Spacer()
+                        
+                        if let errorMessage = errorMessage {
+                            Text("\(errorMessage)")
+                                .foregroundColor(.red)
+                                .padding(.top, 10)
+                                .padding(.bottom, 15)
+                                .id("ErrorMessage")
+                        }
+                    }
+                    .onChange(of: errorMessage) {oldValue, newValue in
+                        if errorMessage != nil {
+                            withAnimation {
+                                scrollToError = true
+                            }
+                        }
+                    }
+                    .onChange(of: scrollToError) {oldValue, newValue in
+                        if scrollToError {
+                            scrollView.scrollTo("ErrorMessage", anchor: .bottom)
+                            scrollToError = false
+                        }
+                    }
                 }
             }
             .alert(isPresented: $showingAlert) {
@@ -177,6 +194,12 @@ struct AdminAddEventDateView: View {
             .padding(.trailing, 5)
         }
         .navigationBarBackButtonHidden(true)
+        .gesture(
+            TapGesture()
+                .onEnded { _ in
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+        )
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
@@ -192,8 +215,14 @@ struct AdminAddEventDateView: View {
                 Button(action: {
                     if justification.isEmpty {
                         errorMessage = "ⓘ A justificativa é obrigatória"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                    errorMessage = nil
+                                }
                     } else if !isValidTime(startRegisteredTime) || !isValidTime(endRegisteredTime){
                         errorMessage = "ⓘ Insira um horário válido"
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                    errorMessage = nil
+                                }
                     } else {
                         errorMessage = ""
                         setDayOff(clockEntry, clockReport, justification, startRegisteredDate, startRegisteredTime,

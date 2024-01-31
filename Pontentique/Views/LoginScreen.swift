@@ -151,7 +151,7 @@ struct LoginScreen: View {
     }
 
     func applyMask(on value: String) -> String {
-        print("applyMask called")
+        
         let cleanCPF = value.filter { "0123456789".contains($0) }
         var maskedCPF = ""
         
@@ -164,7 +164,7 @@ struct LoginScreen: View {
             }
             maskedCPF += String(char)
         }
-        print("Masked CPF: \(maskedCPF)")
+        
         return maskedCPF
     }
 }
