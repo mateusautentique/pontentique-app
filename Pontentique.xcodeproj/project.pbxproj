@@ -52,6 +52,7 @@
 		8B09429D2B56F51D00F206C0 /* AdminReportPainel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B09429C2B56F51D00F206C0 /* AdminReportPainel.swift */; };
 		8B59EC822B58431600B10E40 /* AdminRequestMainPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */; };
 		8B59EC842B5962FF00B10E40 /* AdminUsersMainPainel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */; };
+		8B93C3992B6ABBB0009B21BD /* LoadingLoginScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93C3982B6ABBB0009B21BD /* LoadingLoginScreenView.swift */; };
 		8BE7B2F92B599034004B6B6D /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B2F82B599034004B6B6D /* AddEventView.swift */; };
 		8BE7B2FF2B599209004B6B6D /* AddEventLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B2FE2B599209004B6B6D /* AddEventLinkView.swift */; };
 		8BE7B3012B59A090004B6B6D /* AdminEditUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */; };
@@ -111,6 +112,7 @@
 		8B09429C2B56F51D00F206C0 /* AdminReportPainel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminReportPainel.swift; sourceTree = "<group>"; };
 		8B59EC812B58431600B10E40 /* AdminRequestMainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminRequestMainPanel.swift; sourceTree = "<group>"; };
 		8B59EC832B5962FF00B10E40 /* AdminUsersMainPainel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUsersMainPainel.swift; sourceTree = "<group>"; };
+		8B93C3982B6ABBB0009B21BD /* LoadingLoginScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingLoginScreenView.swift; sourceTree = "<group>"; };
 		8BE7B2F82B599034004B6B6D /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
 		8BE7B2FE2B599209004B6B6D /* AddEventLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventLinkView.swift; sourceTree = "<group>"; };
 		8BE7B3002B59A090004B6B6D /* AdminEditUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminEditUser.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				8BE7B3022B5AFAFF004B6B6D /* ForEachChunk.swift */,
 				8BE7B3042B5B0622004B6B6D /* EventBackgroundColor.swift */,
 				8BE7B3062B6006F6004B6B6D /* DoctorVIew.swift */,
+				8B93C3982B6ABBB0009B21BD /* LoadingLoginScreenView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				8B59EC822B58431600B10E40 /* AdminRequestMainPanel.swift in Sources */,
 				45669BEC2B10FDC8000FA293 /* LoginScreen.swift in Sources */,
 				455F82B32B30B20500CB161C /* ClockEntry.swift in Sources */,
+				8B93C3992B6ABBB0009B21BD /* LoadingLoginScreenView.swift in Sources */,
 				455F82AA2B307D9E00CB161C /* UserMainPanel.swift in Sources */,
 				451887372B36141400C692F9 /* ClockEventController.swift in Sources */,
 				4518873F2B4EFF9C00C692F9 /* EventGroup.swift in Sources */,

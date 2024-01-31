@@ -151,10 +151,16 @@ struct RegisterScreen: View {
                                             }
                                         } else if let error = error {
                                             self.errorMessage = error.localizedDescription
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                                errorMessage = nil
+                                            }
                                         }
                                     }
                                 } else if let error = error {
                                     self.errorMessage = error.localizedDescription
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                        errorMessage = nil
+                                    }
                                 }
                             }
                         }
