@@ -22,7 +22,7 @@ struct BalanceValue: View {
                     .foregroundColor(Color.green)
             } else if checkBalanceValue((balanceHours.isEmpty == false) ? balanceHours : "0:00") == 0 {
                 Text(formattedBalanceHours)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(ColorScheme.textColor)
             } else {
                 Text(formattedBalanceHours)
                     .foregroundColor(Color.red)

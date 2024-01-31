@@ -14,8 +14,8 @@ struct WeekendView: View {
                     .padding(7)
                     .frame(width: 62)
                     .fixedSize()
-                    .background(Color.white.opacity(0.17))
-                    .foregroundColor(Color.white.opacity(0.50))
+                    .background(ColorScheme.textColor.opacity(0.17))
+                    .foregroundColor(ColorScheme.textColor.opacity(0.50))
                     .cornerRadius(10)
         }
     }

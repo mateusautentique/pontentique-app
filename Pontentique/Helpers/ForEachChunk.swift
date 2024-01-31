@@ -23,7 +23,7 @@ struct ForEachChunk: View {
                         Group {
                             if event.justification != "" {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 1)
+                                    .stroke(ColorScheme.clockBtnBgColor, lineWidth: 1)
                             }
                         }
                     )

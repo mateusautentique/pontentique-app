@@ -23,6 +23,7 @@ struct AddEventLinkView: View {
                 .font(.system(size: 14))
                 .foregroundColor(.white)
                 .frame(width: 35, height: 35)
+                .foregroundColor(ColorScheme.textColor)
                 .background(ColorScheme.clockBtnBgColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.leading, 0)
