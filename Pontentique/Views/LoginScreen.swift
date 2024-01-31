@@ -74,7 +74,29 @@ struct LoginScreen: View {
                                         self.errorMessage = nil
                                         self.showLoadingScreen = true
                                     }
-                                    checkUserSession()
+                                    
+                                    userLogin(textFieldLogin, textFieldPassword) { (token, error) in
+                                        if let token = token {
+                                            UserDefaults.standard.set(token, forKey: "userToken")
+                                            
+                                            getLoggedUser(token){ (user, error) in
+                                                if let user = user {
+                                                    DispatchQueue.main.async {
+                                                        self.sessionManager.session = .loggedIn(user)
+                                                    }
+                                                } else if let error = error {
+                                                    self.errorMessage = error.localizedDescription
+                                                    self.showLoadingScreen = false
+                                                }
+                                            }
+                                            
+                                            Timer.scheduledTimer(withTimeInterval: 3600, repeats: false) { _ in
+                                                UserDefaults.standard.removeObject(forKey: "userToken")
+                                            }
+                                        } else if let error = error {
+                                            self.errorMessage = error.localizedDescription
+                                        }
+                                    }
                                 }
                             }) {
                                 Text("Entrar")
@@ -87,9 +109,6 @@ struct LoginScreen: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                             .padding(.top, 20)
-                            
-                            
-                            
                         }
                         .padding(.top, 15)
                         
@@ -140,6 +159,9 @@ struct LoginScreen: View {
                     .edgesIgnoringSafeArea(.all)
             }
         }
+        .onAppear {
+            checkUserSession()
+        }
     }
     
     func checkUserSession() {
@@ -148,28 +170,6 @@ struct LoginScreen: View {
                 if let user = user {
                     DispatchQueue.main.async {
                         self.sessionManager.session = .loggedIn(user)
-                    }
-                } else if let error = error {
-                    self.errorMessage = error.localizedDescription
-                }
-            }
-        } else {
-            userLogin(textFieldLogin, textFieldPassword) { (token, error) in
-                if let token = token {
-                    UserDefaults.standard.set(token, forKey: "userToken")
-                    
-                    getLoggedUser(token){ (user, error) in
-                        if let user = user {
-                            DispatchQueue.main.async {
-                                self.sessionManager.session = .loggedIn(user)
-                            }
-                        } else if let error = error {
-                            self.errorMessage = error.localizedDescription
-                        }
-                    }
-                    
-                    Timer.scheduledTimer(withTimeInterval: 3600, repeats: false) { _ in
-                        UserDefaults.standard.removeObject(forKey: "userToken")
                     }
                 } else if let error = error {
                     self.errorMessage = error.localizedDescription
