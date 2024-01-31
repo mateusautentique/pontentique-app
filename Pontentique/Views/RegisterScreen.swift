@@ -18,6 +18,7 @@ struct RegisterScreen: View {
     @State private var password_confirmation: String = ""
     @State private var errorMessage: String?
     @State private var registerUser = false
+    @State private var showLoadingScreen = false
     @State private var fields: [String: Bool] = [
         "name": false,
         "cpf": false,
@@ -40,6 +41,7 @@ struct RegisterScreen: View {
     @EnvironmentObject var sessionManager: UserSessionManager
     
     var body: some View {
+        ZStack{
         NavigationStack {
             NavigationLink(destination: LoginScreen()){}
                 .navigationBarTitle("Retornar para o Login", displayMode: .inline)
@@ -177,6 +179,7 @@ struct RegisterScreen: View {
                     
                     Button(action: {
                         Task {
+                            
                             userRegister(cpf: cpf, name: name, email: email,
                                          password: password, password_confirmation: password_confirmation) { (reponse, statusCode, error) in
                                 fields = [
@@ -188,6 +191,10 @@ struct RegisterScreen: View {
                                 ]
                                 
                                 if statusCode == 200 {
+                                    DispatchQueue.main.async {
+                                        self.errorMessage = nil
+                                        self.showLoadingScreen = true
+                                    }
                                     if let token = reponse {
                                         errorMessage = nil
                                         getLoggedUser(token){ (user, error) in
@@ -235,6 +242,12 @@ struct RegisterScreen: View {
             .padding()
             .background(ColorScheme.appBackgroudColor)
         }
+        .blur(radius: showLoadingScreen ? 3 : 0)
+        if showLoadingScreen {
+            LoadingLoginScreenView()
+                .edgesIgnoringSafeArea(.all)
+        }
+    }
     }
     
     func applyMask(on value: String) -> String {

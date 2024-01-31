@@ -15,9 +15,11 @@ struct LoginScreen: View {
     @State private var cpf: String = ""
     @State private var maskedCPF: String = ""
     @State private var showRegisterScreen = false
+    @State private var showLoadingScreen = false
     @EnvironmentObject var sessionManager: UserSessionManager
     
     var body: some View {
+        ZStack{
         NavigationStack {
             HStack {
                 Spacer()
@@ -68,9 +70,12 @@ struct LoginScreen: View {
                         
                         Button(action: {
                             Task {
+                                DispatchQueue.main.async {
+                                        self.errorMessage = nil
+                                        self.showLoadingScreen = true
+                                    }
                                 userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                     if let token = token {
-                                        self.errorMessage = nil
                                         getLoggedUser(token){ (user, error) in
                                             if let user = user {
                                                 DispatchQueue.main.async {
@@ -96,6 +101,9 @@ struct LoginScreen: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         .padding(.top, 20)
+                        
+                        
+                        
                     }
                     .padding(.top, 15)
                     
@@ -106,6 +114,7 @@ struct LoginScreen: View {
                             .padding(12)
                             .foregroundColor(ColorScheme.primaryColor)
                             .fontWeight(.bold)
+                            .underline()
                             .cornerRadius(10)
                             .fullScreenCover(isPresented: $showRegisterScreen) {
                                 RegisterScreen()
@@ -115,6 +124,7 @@ struct LoginScreen: View {
                                     .animation(.default, value: showRegisterScreen)
                             }
                             .padding(.top, 5)
+                            
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -138,7 +148,13 @@ struct LoginScreen: View {
             .padding()
             .background(ColorScheme.appBackgroudColor)
         }
+        .blur(radius: showLoadingScreen ? 3 : 0)
+        if showLoadingScreen {
+            LoadingLoginScreenView()
+                .edgesIgnoringSafeArea(.all)
+        }
     }
+}
     
     func applyMask(on value: String) -> String {
         let cleanCPF = value.filter { "0123456789".contains($0) }
