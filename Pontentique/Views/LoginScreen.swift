@@ -159,23 +159,6 @@ struct LoginScreen: View {
                     .edgesIgnoringSafeArea(.all)
             }
         }
-        .onAppear {
-            checkUserSession()
-        }
-    }
-    
-    func checkUserSession() {
-        if let token = UserDefaults.standard.string(forKey: "userToken") {
-            getLoggedUser(token){ (user, error) in
-                if let user = user {
-                    DispatchQueue.main.async {
-                        self.sessionManager.session = .loggedIn(user)
-                    }
-                } else if let error = error {
-                    self.errorMessage = error.localizedDescription
-                }
-            }
-        }
     }
     
     func applyMask(on value: String) -> String {

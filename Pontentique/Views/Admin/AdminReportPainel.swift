@@ -178,6 +178,9 @@ struct AdminReportPanel: View {
                 VStack {
                     if appIsFullyLoaded, let currentUser = sessionManager.user, users[currentUserIndex].id == currentUser.id {
                         Button(action: {
+                            //DEBUG
+                            UserDefaults.standard.removeObject(forKey: "userToken")
+                            //DEBUG
                             self.activeAlert = .first
                             showAlert = true
                         }) {
@@ -222,9 +225,7 @@ struct AdminReportPanel: View {
             getAllUsers {
                 refreshAdminReport()
             }
-            
         }
-      
     }
     
     //MARK: - UPDATE VIEW
