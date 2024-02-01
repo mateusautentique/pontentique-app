@@ -35,7 +35,6 @@ struct ForEachChunk: View {
                     .frame(width: 62)
                     .fixedSize()
                     .modifier(EventBackgroundColor(event: event))
-                    .modifier(EventForegroundColor(event: event))
                     .cornerRadius(10)
                     .overlay(
                         Group {

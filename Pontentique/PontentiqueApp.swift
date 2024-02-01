@@ -20,3 +20,12 @@ struct PontentiqueApp: App {
         }
     }
 }
+
+extension DateFormatter {
+    static var appTimeFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }
+}
