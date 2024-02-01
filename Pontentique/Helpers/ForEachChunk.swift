@@ -47,5 +47,6 @@ struct ForEachChunk: View {
                     .padding(.trailing, 5)
             }
         }
+        .foregroundStyle(ColorScheme.textColor)
     }
 }

@@ -25,6 +25,7 @@ struct EventLinkView: View {
                 Text(timeFormat(event.timestamp))
             }
         }
+        .foregroundStyle(ColorScheme.textColor)
     }
 }
 
