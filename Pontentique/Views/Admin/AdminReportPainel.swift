@@ -203,7 +203,6 @@ struct AdminReportPanel: View {
                                     if let message = message {
                                         DispatchQueue.main.async {
                                             refreshAdminReport()
-                                            
                                             sucessPunchMessage = message
                                             self.activeAlert = .second
                                             showAlert = true

@@ -88,10 +88,6 @@ struct LoginScreen: View {
                                                     self.showLoadingScreen = false
                                                 }
                                             }
-                                            
-                                            Timer.scheduledTimer(withTimeInterval: 3600, repeats: false) { _ in
-                                                UserDefaults.standard.removeObject(forKey: "userToken")
-                                            }
                                         } else if let error = error {
                                             self.errorMessage = error.localizedDescription
                                         }

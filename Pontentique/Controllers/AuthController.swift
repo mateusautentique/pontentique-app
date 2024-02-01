@@ -9,7 +9,9 @@ import Foundation
 
 // MARK: - AUTH
 
-func userLogin (_ cpf: String, _ password: String, host: String = "\(API_HOST)/login", completion: @escaping (String?, Error?) -> Void) {
+func userLogin (_ cpf: String, _ password: String, host: String = "\(API_HOST)/login",
+                completion: @escaping (String?, Error?) -> Void)
+{
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "POST"
     
@@ -49,7 +51,11 @@ func userLogin (_ cpf: String, _ password: String, host: String = "\(API_HOST)/l
     task.resume()
 }
 
-func userRegister(cpf: String, name: String, email: String, password: String, password_confirmation: String, host: String = "\(API_HOST)/register", completion: @escaping (String?, Int?, Error?) -> Void) {
+func userRegister(cpf: String, name: String, email: String, 
+                  password: String, password_confirmation: String,
+                  host: String = "\(API_HOST)/register", completion: @escaping
+                  (String?, Int?, Error?) -> Void)
+{
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "POST"
     
@@ -91,7 +97,9 @@ func userRegister(cpf: String, name: String, email: String, password: String, pa
     task.resume()
 }
 
-func getLoggedUser(_ token: String, host: String = "\(API_HOST)/user/", completion: @escaping (User?, Error?) -> Void) {
+func getLoggedUser(_ token: String, host: String = "\(API_HOST)/user/", 
+                   completion: @escaping (User?, Error?) -> Void)
+{
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "GET"
     
