@@ -16,6 +16,9 @@ struct AdminUsersMainPainel: View {
     @State private var userStatus: [String: String] = [:]
     @State private var selectedUser: User? = nil
     
+    //MARK: - TIMER
+    @State private var timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+    
     //MARK: - ERROR
     @State private var errorMessage: String?
     
@@ -51,6 +54,9 @@ struct AdminUsersMainPainel: View {
             .listStyle(PlainListStyle())
         }
         .onAppear {
+            fetchUsers()
+        }
+        .onReceive(timer) { _ in
             fetchUsers()
         }
     }
