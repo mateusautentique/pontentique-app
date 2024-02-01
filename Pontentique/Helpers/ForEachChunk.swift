@@ -17,36 +17,16 @@ struct ForEachChunk: View {
     
     var body: some View {
         Group {
-            if event.dayOff || event.doctor {
-                EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                    .overlay(
-                        Group {
-                            if event.justification != "" {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(ColorScheme.clockBtnBgColor, lineWidth: 1)
-                            }
+            EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
+                .overlay(
+                    Group {
+                        if event.justification != "" {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
                         }
-                    )
-                    .padding(.trailing, 5)
-                
-            } else {
-                EventLinkView(event: event, clockReport: clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)
-                    .padding(7)
-                    .frame(width: 62)
-                    .fixedSize()
-                    .modifier(EventBackgroundColor(event: event))
-                    .cornerRadius(10)
-                    .overlay(
-                        Group {
-                            if event.justification != "" {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 1)
-                            }
-                        }
-                    )
-                    .padding(.trailing, 5)
-            }
+                    }
+                )
+                .padding(.trailing, 5)
         }
-        .foregroundStyle(ColorScheme.textColor)
     }
 }

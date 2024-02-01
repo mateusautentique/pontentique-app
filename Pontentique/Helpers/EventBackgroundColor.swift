@@ -24,7 +24,7 @@ struct EventForegroundColor: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .foregroundColor(
+            .foregroundStyle(
                 isToday(event.timestamp) ? ColorScheme.todaysColor :
                 ColorScheme.textColor
             )

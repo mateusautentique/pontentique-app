@@ -18,14 +18,19 @@ struct EventLinkView: View {
     var body: some View {
         NavigationLink(destination: EditEventView(event: event, clockReport: Binding.constant(clockReport), startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)) {
             if event.dayOff {
-                WeekendView()
+                DayOffView(text: "Folga", backgroundOpacity: 0.17, foregroundOpacity: 0.50)
             } else if event.doctor {
-                DoctorView()
+                DayOffView(text: "Med", backgroundOpacity: 0.17, foregroundOpacity: 0.50)
             } else {
                 Text(timeFormat(event.timestamp))
+                    .padding(7)
+                    .frame(width: 62)
+                    .fixedSize()
+                    .modifier(EventBackgroundColor(event: event))
+                    .modifier(EventForegroundColor(event: event))
             }
         }
-        .foregroundStyle(ColorScheme.textColor)
+        .cornerRadius(10)
     }
 }
 

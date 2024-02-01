@@ -10,13 +10,13 @@ import SwiftUI
 struct WeekendView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 0){
-                Text("Folga")
-                    .padding(7)
-                    .frame(width: 62)
-                    .fixedSize()
-                    .background(ColorScheme.textColor.opacity(0.17))
-                    .foregroundColor(ColorScheme.textColor.opacity(0.50))
-                    .cornerRadius(10)
+            Text("Folga")
+                .padding(7)
+                .frame(width: 62)
+                .fixedSize()
+                .background(ColorScheme.textColor.opacity(0.17))
+                .foregroundColor(ColorScheme.textColor.opacity(0.50))
+                .cornerRadius(10)
         }
     }
 }
