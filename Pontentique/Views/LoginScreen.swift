@@ -70,15 +70,14 @@ struct LoginScreen: View {
                             
                             Button(action: {
                                 Task {
-                                    DispatchQueue.main.async {
-                                        self.errorMessage = nil
-                                        self.showLoadingScreen = true
-                                    }
                                     
                                     userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                         if let token = token {
                                             UserDefaults.standard.set(token, forKey: "userToken")
-                                            
+                                            DispatchQueue.main.async {
+                                                self.errorMessage = nil
+                                                self.showLoadingScreen = true
+                                            }
                                             getLoggedUser(token){ (user, error) in
                                                 if let user = user {
                                                     DispatchQueue.main.async {
