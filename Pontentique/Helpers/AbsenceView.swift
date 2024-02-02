@@ -15,7 +15,7 @@ struct AbsenceView: View {
                 .frame(width: 62)
                 .fixedSize()
                 .background(ColorScheme.BackAbsDay)
-                .foregroundColor(ColorScheme.AbsDay)
+                .foregroundStyle(ColorScheme.AbsDay)
                 .cornerRadius(10)
         }
     }

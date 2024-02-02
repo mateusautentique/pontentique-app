@@ -87,10 +87,10 @@ struct EditEventView: View {
             VStack {
                 HStack{
                     Text("Horário registrado")
-                        .foregroundColor(ColorScheme.textColor)
+                        .foregroundStyle(ColorScheme.textColor)
                     Spacer()
                     Text("\(dayAndMonth)")
-                        .foregroundColor(ColorScheme.tableTextColor)
+                        .foregroundStyle(ColorScheme.tableTextColor)
                     TimeTextField(registeredTime: $registeredTime, time: time)
                         .gesture(
                                TapGesture()
@@ -113,7 +113,7 @@ struct EditEventView: View {
                     .textFieldStyle(PlainTextFieldStyle())
                     .padding(10)
                     .background(ColorScheme.fieldBgColor)
-                    .foregroundColor(ColorScheme.textColor)
+                    .foregroundStyle(ColorScheme.textColor)
                     .cornerRadius(5)
                     .padding(.bottom, 10)
                     .lineLimit(5...10)
@@ -133,10 +133,10 @@ struct EditEventView: View {
                 HStack{
                     VStack (alignment: .leading) {
                         Text("Folga")
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .font(.system(size: 20))
                         Text("Ative se você tirou folga neste horário")
-                            .foregroundColor(ColorScheme.tableTextColor)
+                            .foregroundStyle(ColorScheme.tableTextColor)
                     }
                     Spacer()
                     Toggle("", isOn: $dayOff)
@@ -152,10 +152,10 @@ struct EditEventView: View {
                 HStack{
                     VStack (alignment: .leading) {
                         Text("Médico")
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .font(.system(size: 20))
                         Text("Ative se você está de atestado/laudo")
-                            .foregroundColor(ColorScheme.tableTextColor)
+                            .foregroundStyle(ColorScheme.tableTextColor)
                     }
                     Spacer()
                     Toggle("", isOn: $doctor)
@@ -172,7 +172,7 @@ struct EditEventView: View {
                 
                 if let errorMessage = errorMessage {
                     Text("\(errorMessage)")
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                         .padding(.top, 10)
                         .padding(.bottom, 15)
                 }
@@ -187,7 +187,7 @@ struct EditEventView: View {
                     }
                 }) {
                     Text("Excluir registro")
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                 }
             }
             .alert(isPresented: $showAlert) {

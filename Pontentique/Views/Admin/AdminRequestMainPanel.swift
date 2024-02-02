@@ -33,7 +33,7 @@ struct AdminRequestMainPanel: View {
                         if ticket.type == "delete" {
                             Text("Exclusão")
                                 .font(.subheadline)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                         }
                     }
                     Text(ticket.justification).font(.caption)

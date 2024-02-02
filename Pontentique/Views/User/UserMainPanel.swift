@@ -81,7 +81,7 @@ struct UserMainPanel: View {
                     Text("BANCO")
                         .padding(.trailing, 6)
                 }
-                .foregroundColor(ColorScheme.tableTextColor)
+                .foregroundStyle(ColorScheme.tableTextColor)
                 .background(ColorScheme.appBackgroudColor)
                 .fontWeight(.semibold)
                 .padding(.bottom, 15)
@@ -102,7 +102,7 @@ struct UserMainPanel: View {
                     Spacer()
                     Text("BANCO TOTAL")
                         .padding(.trailing, 20)
-                        .foregroundColor(ColorScheme.tableTextColor)
+                        .foregroundStyle(ColorScheme.tableTextColor)
                     BalanceValue(balanceHours: $clockReport.totalHourBalance)
                         .bold()
                         .frame(width: 60)
@@ -117,7 +117,7 @@ struct UserMainPanel: View {
                 
                 if let errorMessage = errorMessage {
                     Text("\(errorMessage)")
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                         .padding(.top, 10)
                 }
                               
@@ -134,7 +134,7 @@ struct UserMainPanel: View {
                             .padding(15)
                             .frame(maxWidth: .infinity)
                             .background(ColorScheme.primaryColor)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .cornerRadius(10)
                     }
                 }

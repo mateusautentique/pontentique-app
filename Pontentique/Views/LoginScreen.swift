@@ -33,7 +33,7 @@ struct LoginScreen: View {
                             Text("Faça login ou registre-se")
                                 .font(.subheadline)
                         }
-                        .foregroundColor(ColorScheme.textColor)
+                        .foregroundStyle(ColorScheme.textColor)
                         .padding(.bottom, 40)
                         
                         VStack(alignment: .leading) {
@@ -46,7 +46,7 @@ struct LoginScreen: View {
                                 .padding(10)
                                 .background(ColorScheme.fieldBgColor)
                                 .keyboardType(.numberPad)
-                                .foregroundColor(ColorScheme.textColor)
+                                .foregroundStyle(ColorScheme.textColor)
                                 .cornerRadius(10)
                                 .frame(width: 220)
                                 .padding(.bottom, 10)
@@ -63,7 +63,7 @@ struct LoginScreen: View {
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .padding(10)
                                 .background(ColorScheme.fieldBgColor)
-                                .foregroundColor(ColorScheme.textColor)
+                                .foregroundStyle(ColorScheme.textColor)
                                 .cornerRadius(10)
                                 .frame(width: 220)
                                 .padding(.bottom, 10)
@@ -98,7 +98,7 @@ struct LoginScreen: View {
                                     .padding(12)
                                     .frame(maxWidth: .infinity)
                                     .background(ColorScheme.primaryColor)
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
                                     .cornerRadius(10)
                                     .frame(width: 220)
                             }
@@ -112,13 +112,13 @@ struct LoginScreen: View {
                         }) {
                             Text("Registre-se")
                                 .padding(12)
-                                .foregroundColor(ColorScheme.primaryColor)
+                                .foregroundStyle(ColorScheme.primaryColor)
                                 .fontWeight(.bold)
                                 .underline()
                                 .cornerRadius(10)
                                 .fullScreenCover(isPresented: $showRegisterScreen) {
                                     RegisterScreen()
-                                        .foregroundColor(ColorScheme.textColor)
+                                        .foregroundStyle(ColorScheme.textColor)
                                         .multilineTextAlignment(.leading)
                                         .transition(.move(edge: .trailing))
                                         .animation(.default, value: showRegisterScreen)
@@ -132,7 +132,7 @@ struct LoginScreen: View {
                             Spacer()
                             if let errorMessage = errorMessage {
                                 Text("ⓘ \(errorMessage)")
-                                    .foregroundColor(.red)
+                                    .foregroundStyle(.red)
                                     .padding(.top, 10)
                             }
                             Spacer()

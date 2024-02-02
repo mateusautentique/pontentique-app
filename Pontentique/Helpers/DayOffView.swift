@@ -18,7 +18,7 @@ struct DayOffView: View {
             .frame(width: 62)
             .fixedSize()
             .background(ColorScheme.textColor.opacity(backgroundOpacity))
-            .foregroundColor(ColorScheme.textColor.opacity(foregroundOpacity))
+            .foregroundStyle(ColorScheme.textColor.opacity(foregroundOpacity))
     }
 }
 

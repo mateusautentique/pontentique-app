@@ -126,12 +126,12 @@ struct AdminEditUser: View {
                         
                     }) {
                         Text("Excluir usuário")
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                     
                     Text("\(errorMessage)")
                         .frame(maxWidth: .infinity, alignment: .bottom)
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                     Spacer()
                 }
             }

@@ -31,7 +31,7 @@ struct DateText: View {
                        AnyView(AdminAddEventDateView(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: onEventEdited)) :
                        AnyView(UserAddEventDateView(clockEntry: clockEntry, clockReport: $clockReport, startDate: $startDate, endDate: $endDate, onEventEdited: onEventEdited))) {
             Text(dateFormat(date))
-                .foregroundColor(isEventToday(date) ? ColorScheme.todaysColor : ColorScheme.tableTextColor)
+                .foregroundStyle(isEventToday(date) ? ColorScheme.todaysColor : ColorScheme.tableTextColor)
                 .padding(.leading, 6)
                 .padding(.trailing, 10)
                 .frame(width: 65)

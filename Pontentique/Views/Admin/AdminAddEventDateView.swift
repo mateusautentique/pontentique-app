@@ -87,7 +87,7 @@ struct AdminAddEventDateView: View {
                         VStack {
                             HStack{
                                 Text("Data de início")
-                                    .foregroundColor(ColorScheme.textColor)
+                                    .foregroundStyle(ColorScheme.textColor)
                                     .font(.system(size: 20))
                                 Spacer()
                                 DateTextField(registeredDate: $startRegisteredDate, dayAndMonth: dayAndMonth)
@@ -96,7 +96,7 @@ struct AdminAddEventDateView: View {
                             
                             HStack{
                                 Text("Data de término")
-                                    .foregroundColor(ColorScheme.textColor)
+                                    .foregroundStyle(ColorScheme.textColor)
                                     .font(.system(size: 20))
                                 Spacer()
                                 DateTextField(registeredDate: $endRegisteredDate, dayAndMonth: dayAndMonth)
@@ -117,7 +117,7 @@ struct AdminAddEventDateView: View {
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .cornerRadius(5)
                             .padding(.bottom, 10)
                             .lineLimit(5...10)
@@ -125,10 +125,10 @@ struct AdminAddEventDateView: View {
                         HStack{
                             VStack (alignment: .leading) {
                                 Text("Folga")
-                                    .foregroundColor(ColorScheme.textColor)
+                                    .foregroundStyle(ColorScheme.textColor)
                                     .font(.system(size: 20))
                                 Text("Ative se você tirou folga neste horário")
-                                    .foregroundColor(ColorScheme.tableTextColor)
+                                    .foregroundStyle(ColorScheme.tableTextColor)
                             }
                             Spacer()
                             Toggle("", isOn: $dayOff)
@@ -143,10 +143,10 @@ struct AdminAddEventDateView: View {
                         HStack{
                             VStack (alignment: .leading) {
                                 Text("Médico")
-                                    .foregroundColor(ColorScheme.textColor)
+                                    .foregroundStyle(ColorScheme.textColor)
                                     .font(.system(size: 20))
                                 Text("Ative se você está de atestado/laudo")
-                                    .foregroundColor(ColorScheme.tableTextColor)
+                                    .foregroundStyle(ColorScheme.tableTextColor)
                             }
                             Spacer()
                             Toggle("", isOn: $doctor)
@@ -162,7 +162,7 @@ struct AdminAddEventDateView: View {
                         
                         if let errorMessage = errorMessage {
                             Text("\(errorMessage)")
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                                 .padding(.top, 10)
                                 .padding(.bottom, 15)
                                 .id("ErrorMessage")

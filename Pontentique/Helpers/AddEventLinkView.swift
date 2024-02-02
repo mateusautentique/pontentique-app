@@ -21,9 +21,9 @@ struct AddEventLinkView: View {
         NavigationLink(destination: AddEventView(clockEntry: clockEntry, clockReport: Binding.constant(clockReport), startDate: $startDate, endDate: $endDate, onEventEdited: self.onEventEdited)){
             Image(systemName: "plus")
                 .font(.system(size: 14))
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .frame(width: 35, height: 35)
-                .foregroundColor(ColorScheme.textColor)
+                .foregroundStyle(ColorScheme.textColor)
                 .background(ColorScheme.clockBtnBgColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.leading, 0)

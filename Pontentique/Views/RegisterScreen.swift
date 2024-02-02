@@ -46,14 +46,14 @@ struct RegisterScreen: View {
             NavigationLink(destination: LoginScreen()){}
                 .navigationBarTitle("Retornar para o Login", displayMode: .inline)
                 .font(.subheadline)
-                .foregroundColor(ColorScheme.textColor)
+                .foregroundStyle(ColorScheme.textColor)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "arrow.backward")
                         .aspectRatio(contentMode: .fit)
-                        .foregroundColor(ColorScheme.textColor)
+                        .foregroundStyle(ColorScheme.textColor)
                 })
             
             HStack {
@@ -72,7 +72,7 @@ struct RegisterScreen: View {
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
                             .overlay(
@@ -95,7 +95,7 @@ struct RegisterScreen: View {
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
                             .overlay(
@@ -124,7 +124,7 @@ struct RegisterScreen: View {
                             .keyboardType(.emailAddress)
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
                             .overlay(
@@ -147,7 +147,7 @@ struct RegisterScreen: View {
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
                             .overlay(
@@ -165,7 +165,7 @@ struct RegisterScreen: View {
                             .textFieldStyle(PlainTextFieldStyle())
                             .padding(10)
                             .background(ColorScheme.fieldBgColor)
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                             .cornerRadius(10)
                             .frame(width: 220)
                             .overlay(
@@ -221,7 +221,7 @@ struct RegisterScreen: View {
                         Text("Registrar-se")
                             .padding(12)
                             .background(ColorScheme.primaryColor)
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .cornerRadius(10)
                     }
                     
@@ -229,7 +229,7 @@ struct RegisterScreen: View {
                     
                     if let errorMessage = errorMessage {
                         Text("ⓘ \(errorMessage)")
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                             .padding(.top, 10)
                     }
                 }

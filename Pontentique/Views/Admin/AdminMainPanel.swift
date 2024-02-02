@@ -40,7 +40,7 @@ struct AdminMainPanel: View {
                     selectedButton = .button1
                 }) {
                     Image(systemName: selectedButton == .button1 ? "clock.fill" : "clock")
-                        .foregroundColor(.blue)
+                        .foregroundStyle(.blue)
                         .font(.system(size: 26))
                         .padding(.top, 20)
                 }
@@ -53,7 +53,7 @@ struct AdminMainPanel: View {
                     selectedButton = .button2
                 }) {
                     Image(systemName: selectedButton == .button2 ? "list.bullet.clipboard.fill" : "list.bullet.clipboard")
-                        .foregroundColor(.blue)
+                        .foregroundStyle(.blue)
                         .font(.system(size: 26))
                         .padding(.top, 20)
                 }
@@ -66,7 +66,7 @@ struct AdminMainPanel: View {
                     selectedButton = .button3
                 }) {
                     Image(systemName: selectedButton == .button3 ? "person.2.fill" : "person.2")
-                        .foregroundColor(.blue)
+                        .foregroundStyle(.blue)
                         .font(.system(size: 26))
                         .padding(.top, 20)
                 }

@@ -15,7 +15,7 @@ struct WeekendView: View {
                 .frame(width: 62)
                 .fixedSize()
                 .background(ColorScheme.textColor.opacity(0.17))
-                .foregroundColor(ColorScheme.textColor.opacity(0.50))
+                .foregroundStyle(ColorScheme.textColor.opacity(0.50))
                 .cornerRadius(10)
         }
     }

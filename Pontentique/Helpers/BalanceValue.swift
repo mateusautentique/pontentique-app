@@ -19,13 +19,13 @@ struct BalanceValue: View {
         HStack {
             if checkBalanceValue((balanceHours.isEmpty == false) ? balanceHours : "0:00") > 0 {
                 Text(formattedBalanceHours)
-                    .foregroundColor(Color.green)
+                    .foregroundStyle(Color.green)
             } else if checkBalanceValue((balanceHours.isEmpty == false) ? balanceHours : "0:00") == 0 {
                 Text(formattedBalanceHours)
-                    .foregroundColor(ColorScheme.textColor)
+                    .foregroundStyle(ColorScheme.textColor)
             } else {
                 Text(formattedBalanceHours)
-                    .foregroundColor(Color.red)
+                    .foregroundStyle(Color.red)
             }
         }
     }

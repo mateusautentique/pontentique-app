@@ -36,13 +36,13 @@ struct AdminUsersMainPainel: View {
                 }) {
                     HStack {
                         Text(user.name)
-                            .foregroundColor(ColorScheme.textColor)
+                            .foregroundStyle(ColorScheme.textColor)
                         Spacer()
                         Circle()
                             .fill(colorFromString(userStatus[String(user.id)] ?? "gray"))
                             .frame(width: 10, height: 10)
                         Image(systemName: "chevron.right")
-                            .foregroundColor(ColorScheme.tableTextColor)
+                            .foregroundStyle(ColorScheme.tableTextColor)
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
