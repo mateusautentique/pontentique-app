@@ -41,17 +41,12 @@ func getAllUsers (_ token: String, host: String = "\(API_HOST)/admin/manageUsers
 }
 
 func getUserById (_ token: String, _ userId: Int,
-                  host: String = "\(API_HOST)/admin/manageUsers/user",
                   completion: @escaping (User?, Error?) -> Void)
 {
+    let host: String = "\(API_HOST)/admin/manageUsers/user/\(userId)"
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "GET"
     
-    let parameters: [String: Any] = [
-        "user_id": "\(userId)"
-    ]
-    
-    request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .fragmentsAllowed)
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -135,13 +130,12 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
    }
 
 func deleteUser(userId: Int, token: String, completion: @escaping (Bool, Error?) -> Void) {
-    let url = URL(string: "\(API_HOST)/admin/manageUsers/user/")!
+    let url = URL(string: "\(API_HOST)/admin/manageUsers/user/\(userId)")!
     var request = URLRequest(url: url)
     request.httpMethod = "DELETE"
+    
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-    let bodyData = ["user_id": userId]
-    request.httpBody = try? JSONSerialization.data(withJSONObject: bodyData, options: [])
     
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
         guard error == nil else {

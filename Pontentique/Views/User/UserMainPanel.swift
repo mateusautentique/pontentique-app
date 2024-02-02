@@ -123,6 +123,9 @@ struct UserMainPanel: View {
                               
                 VStack {
                     Button(action: {
+                        //DEBUG
+                        UserDefaults.standard.removeObject(forKey: "userToken")
+                        //DEBUG
                         self.activeAlert = .first
                         showAlert = true
                     }) {
