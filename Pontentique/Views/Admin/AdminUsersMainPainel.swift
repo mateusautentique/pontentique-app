@@ -70,10 +70,12 @@ struct AdminUsersMainPainel: View {
                     DispatchQueue.main.async {
                         self.users = users
                         for user in users {
-                            fetchUserStatus(userId: String(user.id), token: token) { status, error in
+                            fetchUserStatus(userId: user.id, token: token) { status, error in
                                 if let status = status {
+                                    print(status)
                                     self.userStatus[String(user.id)] = status.lowercased()
                                 }
+                                if let error = error { print(error.localizedDescription) }
                             }
                         }
                     }

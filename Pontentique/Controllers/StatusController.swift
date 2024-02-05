@@ -7,9 +7,8 @@
 
 import Foundation
 
-func fetchUserStatus(userId: String, token: String, completion: @escaping (String?, Error?) -> Void) 
+func fetchUserStatus(userId: Int, token: String, completion: @escaping (String?, Error?) -> Void)
 {
-
     let url = URL(string: "\(API_HOST)/admin/manageUsers/user/status/\(userId)")!
     var request = URLRequest(url: url)
 
@@ -22,10 +21,10 @@ func fetchUserStatus(userId: String, token: String, completion: @escaping (Strin
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             completion(nil, error)
-        } else if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
+        } else if let data = data {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
-                    let status = json["message"] as? String
+                    let status = json["status"] as? String
                     completion(status, nil)
                 }
             } catch {
