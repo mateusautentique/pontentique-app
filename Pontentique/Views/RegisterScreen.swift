@@ -179,6 +179,7 @@ struct RegisterScreen: View {
                     
                     Button(action: {
                         Task {
+                            self.errorMessage = nil
                             userRegister(cpf: cpf, name: name, email: email,
                                          password: password, password_confirmation: password_confirmation) { (reponse, statusCode, error) in
                                 fields = [
