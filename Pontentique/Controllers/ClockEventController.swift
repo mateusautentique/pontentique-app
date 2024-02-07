@@ -141,7 +141,7 @@ func deleteClockEvent(_ id: Int, _ token: String, completion: @escaping (String?
 
 func setDayOffForDate(_ userId: Int, _ justification: String, _ startDate: String, _ startTime: String,
                       _ endDate: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool, _ token: String,
-                      host: String = "\(API_HOST)/admin/userEntries/setDayOff", completion: @escaping (String?, Error?)
+                      host: String = "\(API_HOST)/user/setDayOff", completion: @escaping (String?, Error?)
                       -> (Void))
 {
     var request = URLRequest(url: URL(string: host)!)
