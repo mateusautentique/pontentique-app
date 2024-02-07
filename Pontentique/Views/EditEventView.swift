@@ -13,7 +13,7 @@ struct EditEventView: View {
     
     //MARK: - ERROR
     @State private var errorMessage: String?
-    
+    @State private var scrollToError: Bool = false
     //MARK: - ALERT
     enum ActiveAlert { case edit, delete, doneDelete }
     @State private var showAlert: Bool = false
@@ -83,111 +83,134 @@ struct EditEventView: View {
             .background(ColorScheme.fieldBgColor)
             .font(.system(size: 25))
             .padding(.bottom, 10)
-            
-            VStack {
-                HStack{
-                    Text("Horário registrado")
-                        .foregroundStyle(ColorScheme.textColor)
-                    Spacer()
-                    Text("\(dayAndMonth)")
-                        .foregroundStyle(ColorScheme.tableTextColor)
-                    TimeTextField(registeredTime: $registeredTime, time: time)
-                        .gesture(
-                               TapGesture()
-                                   .onEnded { _ in
-                                       UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                   }
-                           )
-                }
-                .background(ColorScheme.appBackgroudColor)
-                .padding(.bottom, 15)
-                .font(.system(size: 18))
-                
-                HStack {
-                    Text("Motivo da alteração")
-                        .font(.system(size: 20))
-                    Spacer()
-                }
-                
-                TextField("Motivo", text: $justification, axis: .vertical)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .padding(10)
-                    .background(ColorScheme.fieldBgColor)
-                    .foregroundStyle(ColorScheme.textColor)
-                    .cornerRadius(5)
-                    .padding(.bottom, 10)
-                    .lineLimit(5...10)
-                    .onChange(of: justification) { oldValue, newValue in
-                        if newValue.count > 200 {
-                            justification = String(newValue.prefix(200))
+            ScrollView {
+                ScrollViewReader { scrollView in
+                    VStack {
+                        HStack{
+                            Text("Horário registrado")
+                                .foregroundStyle(ColorScheme.textColor)
+                            Spacer()
+                            Text("\(dayAndMonth)")
+                                .foregroundStyle(ColorScheme.tableTextColor)
+                            TimeTextField(registeredTime: $registeredTime, time: time)
+                                .gesture(
+                                    TapGesture()
+                                        .onEnded { _ in
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        }
+                                )
                         }
-                    }
-                    .gesture(
-                           TapGesture()
-                               .onEnded { _ in
-                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                               }
-                       )
-                
-                
-                HStack{
-                    VStack (alignment: .leading) {
-                        Text("Folga")
-                            .foregroundStyle(ColorScheme.textColor)
-                            .font(.system(size: 20))
-                        Text("Ative se você tirou folga neste horário")
-                            .foregroundStyle(ColorScheme.tableTextColor)
-                    }
-                    Spacer()
-                    Toggle("", isOn: $dayOff)
-                        .onChange(of: dayOff) { oldValue, newValue in
-                            if newValue {
-                                doctor = false
-                            }
-                        }
-                        .padding()
-                }
-                Divider()
-                
-                HStack{
-                    VStack (alignment: .leading) {
-                        Text("Médico")
-                            .foregroundStyle(ColorScheme.textColor)
-                            .font(.system(size: 20))
-                        Text("Ative se você está de atestado/laudo")
-                            .foregroundStyle(ColorScheme.tableTextColor)
-                    }
-                    Spacer()
-                    Toggle("", isOn: $doctor)
-                        .onChange(of: doctor) { oldValue, newValue in
-                            if newValue {
-                                dayOff = false
-                            }
-                        }
-                        .padding()
-                }
-                Divider()
-                
-                Spacer()
-                
-                if let errorMessage = errorMessage {
-                    Text("\(errorMessage)")
-                        .foregroundStyle(.red)
-                        .padding(.top, 10)
+                        .background(ColorScheme.appBackgroudColor)
                         .padding(.bottom, 15)
-                }
-                
-                Button(action: {
-                    if justification.isEmpty {
-                        errorMessage = "ⓘ A justificativa é obrigatória"
-                    } else {
-                        errorMessage = ""
-                        self.activeAlert = .delete
-                        self.showAlert = true
+                        .font(.system(size: 18))
+                        
+                        HStack {
+                            Text("Motivo da alteração")
+                                .font(.system(size: 20))
+                            Spacer()
+                        }
+                        
+                        TextField("Motivo", text: $justification, axis: .vertical)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding(10)
+                            .background(ColorScheme.fieldBgColor)
+                            .foregroundStyle(ColorScheme.textColor)
+                            .cornerRadius(5)
+                            .padding(.bottom, 10)
+                            .lineLimit(5...10)
+                            .onChange(of: justification) { oldValue, newValue in
+                                if newValue.count > 200 {
+                                    justification = String(newValue.prefix(200))
+                                }
+                            }
+                            .gesture(
+                                TapGesture()
+                                    .onEnded { _ in
+                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                    }
+                            )
+                        
+                        
+                        HStack{
+                            VStack (alignment: .leading) {
+                                Text("Folga")
+                                    .foregroundStyle(ColorScheme.textColor)
+                                    .font(.system(size: 20))
+                                Text("Ative se você tirou folga neste horário")
+                                    .foregroundStyle(ColorScheme.tableTextColor)
+                            }
+                            Spacer()
+                            Toggle("", isOn: $dayOff)
+                                .onChange(of: dayOff) { oldValue, newValue in
+                                    if newValue {
+                                        doctor = false
+                                    }
+                                }
+                                .padding()
+                        }
+                        Divider()
+                        
+                        HStack{
+                            VStack (alignment: .leading) {
+                                Text("Médico")
+                                    .foregroundStyle(ColorScheme.textColor)
+                                    .font(.system(size: 20))
+                                Text("Ative se você está de atestado/laudo")
+                                    .foregroundStyle(ColorScheme.tableTextColor)
+                            }
+                            Spacer()
+                            Toggle("", isOn: $doctor)
+                                .onChange(of: doctor) { oldValue, newValue in
+                                    if newValue {
+                                        dayOff = false
+                                    }
+                                }
+                                .padding()
+                        }
+                        Divider()
+                        
+                        Spacer()
+                        
+                        if let errorMessage = errorMessage {
+                            Text("\(errorMessage)")
+                                .foregroundStyle(.red)
+                                .padding(.top, 10)
+                                .padding(.bottom, 15)
+                                .id("ErrorMessage")
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                        self.errorMessage = nil
+                                    }
+                                }
+                        }
+                        
+                        Button(action: {
+                            if justification.isEmpty {
+                                errorMessage = "ⓘ A justificativa é obrigatória"
+                            } else {
+                                errorMessage = ""
+                                self.activeAlert = .delete
+                                self.showAlert = true
+                            }
+                        }) {
+                            Text("Excluir registro")
+                                .foregroundStyle(.red)
+                        }
+                        .padding(.top, 100)
                     }
-                }) {
-                    Text("Excluir registro")
-                        .foregroundStyle(.red)
+                    .onChange(of: errorMessage) {oldValue, newValue in
+                        if newValue != nil {
+                            withAnimation {
+                                scrollToError = true
+                            }
+                        }
+                    }
+                    .onChange(of: scrollToError) {oldValue, newValue in
+                        if newValue {
+                            scrollView.scrollTo("ErrorMessage", anchor: .bottom)
+                            scrollToError = false
+                        }
+                    }
                 }
             }
             .alert(isPresented: $showAlert) {
@@ -203,16 +226,16 @@ struct EditEventView: View {
                     return Alert(title: Text("Confirmar exclusão"),
                                  message: Text("Tem certeza que deseja deletar esse registro?"),
                                  primaryButton: .destructive(Text("Excluir")) {
-                            errorMessage = ""
-                            if let user = sessionManager.user {
-                                user.role == "admin" ?
-                                deleteEvent(event) :
-                                createDeleteTicket(event, justification, registeredTime)
-                            }
-                            self.activeAlert = .doneDelete
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                self.showAlert = true
-                            }
+                        errorMessage = ""
+                        if let user = sessionManager.user {
+                            user.role == "admin" ?
+                            deleteEvent(event) :
+                            createDeleteTicket(event, justification, registeredTime)
+                        }
+                        self.activeAlert = .doneDelete
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.showAlert = true
+                        }
                     }, secondaryButton: .cancel())
                 case .doneDelete:
                     return Alert(title: Text("Sucesso!"),
