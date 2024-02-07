@@ -70,7 +70,6 @@ struct LoginScreen: View {
                             
                             Button(action: {
                                 Task {
-                                    
                                     userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                         if let token = token {
                                             UserDefaults.standard.set(token, forKey: "userToken")
@@ -90,6 +89,7 @@ struct LoginScreen: View {
                                             }
                                         } else if let error = error {
                                             self.errorMessage = error.localizedDescription
+                                            self.showLoadingScreen = false
                                         }
                                     }
                                 }

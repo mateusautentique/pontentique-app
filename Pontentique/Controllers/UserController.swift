@@ -7,7 +7,8 @@
 
 import Foundation
 
-func getAllUsers (_ token: String, host: String = "\(API_HOST)/admin/manageUsers/", completion: @escaping ([User]?, Error?) -> Void) 
+func getAllUsers (_ token: String, host: String = "\(API_HOST)/admin/manageUsers/",
+                  completion: @escaping ([User]?, Error?) -> Void)
 {
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "GET"
@@ -75,7 +76,10 @@ func getUserById (_ token: String, _ userId: Int,
     task.resume()
 }
 
-func editUser(userId: Int, name: String, email: String, cpf: String, role: String = "user", workJourneyHours: Int = 8, token: String, host: String = "\(API_HOST)/admin/manageUsers/user/", completion: @escaping (User?, Error?) -> Void) {
+func editUser(userId: Int, name: String, email: String, cpf: String, role: String = "user",
+              workJourneyHours: Int = 8, token: String, host: String = "\(API_HOST)/admin/manageUsers/user/",
+              completion: @escaping (User?, Error?) -> Void)
+{
      
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "PUT"
@@ -115,7 +119,6 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
                    completion(user, nil)
                } else if response.statusCode == 401 {
                    print("Received 401 Unauthorized error. The token might be invalid or expired.")
-                   // Handle the 401 error...
                } else {
                    let json = try JSONSerialization.jsonObject(with: data, options: [])
                    let error = createError(from: json as! [String : Any], with: response.statusCode)

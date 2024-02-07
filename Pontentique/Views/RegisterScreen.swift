@@ -179,7 +179,6 @@ struct RegisterScreen: View {
                     
                     Button(action: {
                         Task {
-                            
                             userRegister(cpf: cpf, name: name, email: email,
                                          password: password, password_confirmation: password_confirmation) { (reponse, statusCode, error) in
                                 fields = [
@@ -204,10 +203,12 @@ struct RegisterScreen: View {
                                                 }
                                             } else if let error = error {
                                                 self.errorMessage = error.localizedDescription
+                                                self.showLoadingScreen = false
                                             }
                                         }
                                     } else if let error = error {
                                         self.errorMessage = error.localizedDescription
+                                        self.showLoadingScreen = false
                                     }
                                 } else {
                                     errorMessage = reponse

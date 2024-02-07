@@ -120,6 +120,7 @@ struct AdminRequestMainPanel: View {
             }
         case "update":
             if let timestamp = ticket.requestedData?.timestamp {
+                print(ticket.clockEventTimestamp ?? "erro")
                 details += convertDateFormat(ticket.clockEventTimestamp ?? "")
                 details += " → "
                 details += convertDateFormat(timestamp)

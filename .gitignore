@@ -6,3 +6,4 @@
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 Pontentique.xcodeproj/project.xcworkspace/xcuserdata/*
+.DS_Store
