@@ -72,7 +72,6 @@ struct AdminUsersMainPainel: View {
                         for user in users {
                             fetchUserStatus(userId: user.id, token: token) { status, error in
                                 if let status = status {
-                                    print(status)
                                     self.userStatus[String(user.id)] = status.lowercased()
                                 }
                                 if let error = error { print(error.localizedDescription) }

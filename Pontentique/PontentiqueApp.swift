@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-let API_HOST = "https://pontentique.autentique.com.br/api"
+let API_HOST = "http://192.168.1.250:8000/api"
 //http://192.168.1.250:8000/api
 //https://pontentique.autentique.com.br/api
 

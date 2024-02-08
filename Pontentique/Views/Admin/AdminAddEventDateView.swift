@@ -50,7 +50,7 @@ struct AdminAddEventDateView: View {
         
         var dateString = ""
         if let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) {
-            dateString = createFormatter("d/MM").string(from: date)
+            dateString = createFormatter("dd/MM").string(from: date)
         }
         
         _startRegisteredTime = State(initialValue: "12:00")
@@ -64,9 +64,9 @@ struct AdminAddEventDateView: View {
     //MARK: - DATE FORMATTING
     var dayAndMonth: String {
         guard let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) else {
-            return "12/01"
+            return "08/01"
         }
-        return createFormatter("d/MM").string(from: date)
+        return createFormatter("dd/MM").string(from: date)
     }
     
     //MARK: - VIEW
@@ -91,7 +91,7 @@ struct AdminAddEventDateView: View {
                                     .font(.system(size: 20))
                                 Spacer()
                                 DateTextField(registeredDate: $startRegisteredDate, dayAndMonth: dayAndMonth)
-                                TimeTextField(registeredTime: $startRegisteredTime, time: "12:00")
+                                TimeTextField(registeredTime: $startRegisteredTime, time: "10:00")
                             }
                             
                             HStack{
@@ -216,13 +216,15 @@ struct AdminAddEventDateView: View {
                     if justification.isEmpty {
                         errorMessage = "ⓘ A justificativa é obrigatória"
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                                    errorMessage = nil
-                                }
-                    } else if !isValidTime(startRegisteredTime) || !isValidTime(endRegisteredTime){
+                            errorMessage = nil
+                        }
+                    } else if !isValidTime(startRegisteredTime) ||
+                                !isValidTime(endRegisteredTime) ||
+                                endRegisteredTime < startRegisteredTime {
                         errorMessage = "ⓘ Insira um horário válido"
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                                    errorMessage = nil
-                                }
+                            errorMessage = nil
+                        }
                     } else {
                         errorMessage = ""
                         setDayOff(clockEntry, clockReport, justification, startRegisteredDate, startRegisteredTime,
@@ -241,12 +243,21 @@ struct AdminAddEventDateView: View {
                    _ endDate: String, _ endTime: String, _ dayOff: Bool, _ doctor: Bool){
         if let user = sessionManager.user {
             let startDateConverted = formatDate(startDate, entry.day)
-            let endDateConverted = formatDate(endDate, entry.day)
-            let startTimeFormatted = formatTime(startTime)
-            let endTimeFormatted = formatTime(endTime)
-            
-            setDayOffForDate(report.userId, justification, startDateConverted, startTimeFormatted,
-                             endDateConverted, endTimeFormatted, dayOff, doctor, user.token ?? "")
+            var endDateConverted = formatDate(endDate, entry.day)
+            let startTimeString = formatTime(startTime)
+            let endTimeString = formatTime(endTime)
+
+            if let start = startDateConverted, let end = endDateConverted {
+                if end < start {
+                    endDateConverted = Calendar.current.date(byAdding: .year, value: 1, to: end)
+                }
+            }
+
+            let startDateString = convertDateToString(startDateConverted)
+            let endDateString = convertDateToString(endDateConverted)
+
+            setDayOffForDate(report.userId, justification, startDateString, startTimeString,
+                             endDateString, endTimeString, dayOff, doctor, user.token ?? "")
             { (message, error) in
                 if let error = error {
                     errorMessage = error.localizedDescription
@@ -257,19 +268,23 @@ struct AdminAddEventDateView: View {
             }
         }
     }
-    
-    func formatDate(_ date: String, _ eventDay: String) -> String {
+
+    func formatDate(_ date: String, _ eventDay: String) -> Date? {
         let year = String(eventDay.prefix(4))
         let dateWithYear = date + "/" + year
-        
-        let dateFormatterGet = createFormatter("dd/MM/yyyy")
-        let dateFormatterPrint = createFormatter("yyyy-MM-dd")
-        
-        if let date = dateFormatterGet.date(from: dateWithYear) {
-            return dateFormatterPrint.string(from: date)
-        } else { return "" }
+
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "dd/MM/yyyy"
+
+        return dateFormatterGet.date(from: dateWithYear)
     }
-    
+
+    func convertDateToString(_ date: Date?) -> String {
+        guard let date = date else { return "" }
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "yyyy-MM-dd"
+        return dateFormatterPrint.string(from: date)
+    }
     func formatTime(_ time: String) -> String {
         if time.count == 4 { return "0" + time
         } else { return time }
