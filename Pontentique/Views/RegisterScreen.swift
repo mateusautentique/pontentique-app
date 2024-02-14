@@ -9,10 +9,14 @@ import SwiftUI
 import Combine
 import UIKit
 
+
+
 struct RegisterScreen: View {
     @State private var name: String = ""
     @State private var cpf: String = ""
     @State private var maskedCPF: String = ""
+    @State private var pis: String = ""
+    @State private var formattedpis: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var password_confirmation: String = ""
@@ -33,7 +37,8 @@ struct RegisterScreen: View {
         491: "cpf",
         492: "email",
         493: "password",
-        494: "password_confirmation"
+        494: "password_confirmation",
+        495: "pis"
     ]
     
     let placeHolderEmail = "jair@tuamaeaquelaursa.com"
@@ -118,6 +123,34 @@ struct RegisterScreen: View {
                                                 }
                                         )
                                     
+                                    Text("PIS/PASEP")
+                                        .font(.subheadline)
+                                        .padding(.bottom, 0)
+                                        .padding(.leading, 5)
+                                    TextField("000.00000.00-00", text: $formattedpis)
+                                        .textFieldStyle(PlainTextFieldStyle())
+                                        .padding(10)
+                                        .background(ColorScheme.fieldBgColor)
+                                        .foregroundStyle(ColorScheme.textColor)
+                                        .cornerRadius(10)
+                                        .frame(width: 220)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(fields["pis"] == true ? Color.red : Color.clear, lineWidth: 1)
+                                        )
+                                        .keyboardType(.numberPad)
+                                        .padding(.bottom, 10)
+                                        .gesture(
+                                            TapGesture()
+                                                .onEnded { _ in
+                                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                                }
+                                        )
+                                        .onChange(of: formattedpis) {oldValue, newValue in
+                                                pis = newValue.filter { "0123456789".contains($0) }
+                                                formattedpis = formatPIS(pis)
+                                            }
+                                    
                                     Text("Email")
                                         .font(.subheadline)
                                         .padding(.bottom, 0)
@@ -183,14 +216,15 @@ struct RegisterScreen: View {
                                 Button(action: {
                                     Task {
                                         self.errorMessage = nil
-                                        userRegister(cpf: cpf, name: name, email: email,
+                                        userRegister(cpf: cpf, pis: pis, name: name, email: email,
                                                      password: password, password_confirmation: password_confirmation) { (reponse, statusCode, error) in
                                             fields = [
                                                 "name": false,
                                                 "cpf": false,
                                                 "email": false,
                                                 "password": false,
-                                                "password_confirmation": false
+                                                "password_confirmation": false,
+                                                "pis": false
                                             ]
                                             
                                             if statusCode == 200 {
@@ -286,6 +320,22 @@ struct RegisterScreen: View {
             maskedCPF += String(char)
         }
         return maskedCPF
+    }
+    
+    func formatPIS(_ value: String) -> String {
+        let cleanPIS = value.filter { "0123456789".contains($0) }
+        var formattedPIS = ""
+
+        for (index, char) in cleanPIS.enumerated() {
+            if index == 11 { break }
+            if index == 3 || index == 8 {
+                formattedPIS += "."
+            } else if index == 10 {
+                formattedPIS += "-"
+            }
+            formattedPIS += String(char)
+        }
+        return formattedPIS
     }
 }
 

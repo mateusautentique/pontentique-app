@@ -30,3 +30,4 @@ struct EventForegroundColor: ViewModifier {
             )
     }
 }
+

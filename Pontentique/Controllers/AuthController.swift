@@ -51,7 +51,7 @@ func userLogin (_ cpf: String, _ password: String, host: String = "\(API_HOST)/l
     task.resume()
 }
 
-func userRegister(cpf: String, name: String, email: String, 
+func userRegister(cpf: String, pis: String, name: String, email: String, 
                   password: String, password_confirmation: String,
                   host: String = "\(API_HOST)/register", completion: @escaping
                   (String?, Int?, Error?) -> Void)
@@ -64,7 +64,8 @@ func userRegister(cpf: String, name: String, email: String,
         "email": "\(email)",
         "password": "\(password)",
         "password_confirmation": "\(password_confirmation)",
-        "cpf": "\(cpf)"
+        "cpf": "\(cpf)",
+        "pis": "\(pis)",
     ]
     request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .fragmentsAllowed)
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
