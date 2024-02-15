@@ -83,9 +83,9 @@ struct AdminEditUser: View {
                             .onChange(of: user.pis) {oldValue, newValue in
                                 let filtered = newValue.filter { $0.isNumber }
                                 if filtered.count > 11 {
-                                    user.cpf = String(filtered.prefix(11))
+                                    user.pis = String(filtered.prefix(11))
                                 } else {
-                                    user.cpf = filtered
+                                    user.pis = filtered
                                 }
                             }
                             .onTapGesture {

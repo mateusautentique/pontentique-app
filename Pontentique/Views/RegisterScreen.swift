@@ -9,8 +9,6 @@ import SwiftUI
 import Combine
 import UIKit
 
-
-
 struct RegisterScreen: View {
     @State private var name: String = ""
     @State private var showAlert = false
@@ -23,7 +21,6 @@ struct RegisterScreen: View {
     @State private var password_confirmation: String = ""
     @State private var errorMessage: String?
     @State private var registerUser = false
-    @State private var showLoadingScreen = false
     @State private var scrollToError: Bool = false
     @State private var fields: [String: Bool] = [
         "name": false,
@@ -43,6 +40,7 @@ struct RegisterScreen: View {
     ]
     
     let placeHolderEmail = "user@example.com"
+    var onUserRegistered: () -> Void
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -231,13 +229,12 @@ struct RegisterScreen: View {
                                             if statusCode == 200 {
                                                 DispatchQueue.main.async {
                                                     self.errorMessage = nil
-                                                }
-                                                if reponse != nil {
-                                                    errorMessage = nil
-                                                    self.showAlert = true
-                                                } else if let error = error {
-                                                    self.errorMessage = error.localizedDescription
-                                                    self.showLoadingScreen = false
+                                                    if reponse != nil {
+                                                        errorMessage = nil
+                                                        self.showAlert = true
+                                                    } else if let error = error {
+                                                        self.errorMessage = error.localizedDescription
+                                                    }
                                                 }
                                             } else {
                                                 errorMessage = reponse
@@ -256,6 +253,7 @@ struct RegisterScreen: View {
                                 }
                                 .alert(isPresented: $showAlert) {
                                     Alert(title: Text("Boa deu certo!"), message: Text("Você registrou: \(name)"), dismissButton: .default(Text("OK")) {
+                                        onUserRegistered()
                                         self.presentationMode.wrappedValue.dismiss()
                                     })
                                 }
@@ -292,11 +290,6 @@ struct RegisterScreen: View {
                 
                 .padding()
                 .background(ColorScheme.appBackgroudColor)
-            }
-            .blur(radius: showLoadingScreen ? 3 : 0)
-            if showLoadingScreen {
-                LoadingLoginScreenView()
-                    .edgesIgnoringSafeArea(.all)
             }
         }
     }
@@ -335,6 +328,12 @@ struct RegisterScreen: View {
 }
 
 
-#Preview {
-    RegisterScreen()
+struct RegisterScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        RegisterScreen(onUserRegistered: eusouinutil)
+    }
+
+    static func eusouinutil() {
+        // swift moment
+    }
 }

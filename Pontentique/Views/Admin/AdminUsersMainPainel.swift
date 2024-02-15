@@ -62,7 +62,7 @@ struct AdminUsersMainPainel: View {
                         .fontWeight(.bold)
                         .cornerRadius(10)
                         .fullScreenCover(isPresented: $showRegisterScreen) {
-                            RegisterScreen()
+                            RegisterScreen(onUserRegistered: fetchUsers)
                                 .foregroundStyle(ColorScheme.textColor)
                                 .multilineTextAlignment(.leading)
                                 .transition(.move(edge: .trailing))
