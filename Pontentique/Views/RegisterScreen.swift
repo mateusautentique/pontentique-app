@@ -127,7 +127,7 @@ struct RegisterScreen: View {
                                         .font(.subheadline)
                                         .padding(.bottom, 0)
                                         .padding(.leading, 5)
-                                    TextField("000.00000.00-00", text: $formattedpis)
+                                    TextField("000.00000.00-0", text: $formattedpis)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .padding(10)
                                         .background(ColorScheme.fieldBgColor)
