@@ -226,10 +226,10 @@ struct EditEventView: View {
                     return Alert(title: Text("Confirmar exclusão"),
                                  message: Text("Tem certeza que deseja deletar esse registro?"),
                                  primaryButton: .destructive(Text("Excluir")) {
-                        errorMessage = ""
+                        //errorMessage = ""
                         if let user = sessionManager.user {
                             user.role == "admin" ?
-                            deleteEvent(event) :
+                            deleteEvent(event, justification) :
                             createDeleteTicket(event, justification, registeredTime)
                         }
                         self.activeAlert = .doneDelete
@@ -328,9 +328,9 @@ struct EditEventView: View {
         }
     }
     
-    func deleteEvent(_ event: ClockEvent) {
+    func deleteEvent(_ event: ClockEvent, _ justification: String) {
         if let user = sessionManager.user {
-            deleteClockEvent(event.id, user.token ?? "") { (message, error) in
+            deleteClockEvent(event.id, justification, user.token ?? "") { (message, error) in
                 if let message = message {
                     DispatchQueue.main.async {
                         self.deleteAlertMessage = message
