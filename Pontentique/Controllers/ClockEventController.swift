@@ -103,12 +103,18 @@ func addClockEvent(_ userId: Int,_ timestamp: String,_ justification: String,
     task.resume()
 }
 
-func deleteClockEvent(_ id: Int, _ token: String, completion: @escaping (String?, Error?) -> (Void))
+func deleteClockEvent(_ id: Int, _ justification: String, _ token: String, host: String = "\(API_HOST)/admin/userEntries",
+                      completion: @escaping (String?, Error?) -> (Void))
 {
-    let host = "\(API_HOST)/admin/userEntries/\(id)"
     var request = URLRequest(url: URL(string: host)!)
     request.httpMethod = "DELETE"
     
+    let parameters: [String: Any] = [
+        "id": "\(id)",
+        "justification": "\(justification)"
+    ]
+    
+    request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .fragmentsAllowed)
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
