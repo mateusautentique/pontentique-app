@@ -99,7 +99,7 @@ struct RegisterScreen: View {
                                         .font(.subheadline)
                                         .padding(.bottom, 0)
                                         .padding(.leading, 5)
-                                    TextField("123.456.789-00", text: $maskedCPF)
+                                    TextField("000.000.000-00", text: $maskedCPF)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .padding(10)
                                         .background(ColorScheme.fieldBgColor)
