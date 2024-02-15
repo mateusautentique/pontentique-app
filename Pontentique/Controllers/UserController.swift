@@ -76,7 +76,7 @@ func getUserById (_ token: String, _ userId: Int,
     task.resume()
 }
 
-func editUser(userId: Int, name: String, email: String, cpf: String, role: String = "user",
+func editUser(userId: Int, name: String, email: String, cpf: String, pis: String, role: String = "user",
               workJourneyHours: Int = 8, token: String, host: String = "\(API_HOST)/admin/manageUsers/user/",
               completion: @escaping (User?, Error?) -> Void)
 {
@@ -93,6 +93,7 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
         "name": name,
         "email": email,
         "cpf": cpf,
+        "pis": pis,
         "role": role,
         "work_journey_hours": workJourneyHours
     ]
@@ -111,25 +112,25 @@ func editUser(userId: Int, name: String, email: String, cpf: String, role: Strin
             completion(nil, error)
             return
         }
-           guard let response = response as? HTTPURLResponse, let data = data else { return }
-           
-           do {
-               if response.statusCode == 200 {
-                   let user = try userDecoder().decode(User.self, from: data)
-                   completion(user, nil)
-               } else if response.statusCode == 401 {
-                   print("Received 401 Unauthorized error. The token might be invalid or expired.")
-               } else {
-                   let json = try JSONSerialization.jsonObject(with: data, options: [])
-                   let error = createError(from: json as! [String : Any], with: response.statusCode)
-                   completion(nil, error)
-               }
-           } catch {
-               print("Error parsing JSON: \(error)")
-               completion(nil, error)
-           }
-       }
-       task.resume()
+        guard let response = response as? HTTPURLResponse, let data = data else { return }
+        
+        do {
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                if response.statusCode == 200 {
+                    let user = try userDecoder().decode(User.self, from: data)
+                    completion(user, nil)
+                } else {
+                    let error = createError(from: json, with: response.statusCode)
+                    print("ⓘ\(error)")
+                    completion(nil, error)
+                }
+            }
+        } catch {
+            print("Error parsing JSON: \(error)")
+            completion(nil, error)
+        }
+    }
+    task.resume()
    }
 
 func deleteUser(userId: Int, token: String, completion: @escaping (Bool, Error?) -> Void) {

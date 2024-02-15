@@ -13,6 +13,7 @@ import UIKit
 
 struct RegisterScreen: View {
     @State private var name: String = ""
+    @State private var showAlert = false
     @State private var cpf: String = ""
     @State private var maskedCPF: String = ""
     @State private var pis: String = ""
@@ -41,7 +42,7 @@ struct RegisterScreen: View {
         495: "pis"
     ]
     
-    let placeHolderEmail = "jair@tuamaeaquelaursa.com"
+    let placeHolderEmail = "user@example.com"
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var sessionManager: UserSessionManager
@@ -76,7 +77,7 @@ struct RegisterScreen: View {
                                         .font(.subheadline)
                                         .padding(.bottom, 0)
                                         .padding(.leading, 5)
-                                    TextField("Jair Teste da Silva", text: $name)
+                                    TextField("Nome", text: $name)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .padding(10)
                                         .background(ColorScheme.fieldBgColor)
@@ -147,9 +148,9 @@ struct RegisterScreen: View {
                                                 }
                                         )
                                         .onChange(of: formattedpis) {oldValue, newValue in
-                                                pis = newValue.filter { "0123456789".contains($0) }
-                                                formattedpis = formatPIS(pis)
-                                            }
+                                            pis = newValue.filter { "0123456789".contains($0) }
+                                            formattedpis = formatPIS(pis)
+                                        }
                                     
                                     Text("Email")
                                         .font(.subheadline)
@@ -179,7 +180,7 @@ struct RegisterScreen: View {
                                         .font(.subheadline)
                                         .padding(.bottom, 0)
                                         .padding(.leading, 5)
-                                    SecureField("umasenhabemsegura", text: $password)
+                                    SecureField("Senha", text: $password)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .padding(10)
                                         .background(ColorScheme.fieldBgColor)
@@ -197,7 +198,7 @@ struct RegisterScreen: View {
                                         .font(.subheadline)
                                         .padding(.bottom, 0)
                                         .padding(.leading, 5)
-                                    SecureField("umasenhabemsegura", text: $password_confirmation)
+                                    SecureField("Confirme sua senha", text: $password_confirmation)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .padding(10)
                                         .background(ColorScheme.fieldBgColor)
@@ -230,20 +231,10 @@ struct RegisterScreen: View {
                                             if statusCode == 200 {
                                                 DispatchQueue.main.async {
                                                     self.errorMessage = nil
-                                                    self.showLoadingScreen = true
                                                 }
-                                                if let token = reponse {
+                                                if reponse != nil {
                                                     errorMessage = nil
-                                                    getLoggedUser(token){ (user, error) in
-                                                        if let user = user {
-                                                            DispatchQueue.main.async {
-                                                                self.sessionManager.session = .loggedIn(user)
-                                                            }
-                                                        } else if let error = error {
-                                                            self.errorMessage = error.localizedDescription
-                                                            self.showLoadingScreen = false
-                                                        }
-                                                    }
+                                                    self.showAlert = true
                                                 } else if let error = error {
                                                     self.errorMessage = error.localizedDescription
                                                     self.showLoadingScreen = false
@@ -257,13 +248,17 @@ struct RegisterScreen: View {
                                         }
                                     }
                                 }) {
-                                    Text("Registrar-se")
+                                    Text("Registrar")
                                         .padding(12)
                                         .background(ColorScheme.primaryColor)
                                         .foregroundStyle(.white)
                                         .cornerRadius(10)
                                 }
-                                
+                                .alert(isPresented: $showAlert) {
+                                    Alert(title: Text("Boa deu certo!"), message: Text("Você registrou: \(name)"), dismissButton: .default(Text("OK")) {
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    })
+                                }
                                 Spacer()
                                 
                                 if let errorMessage = errorMessage {
@@ -325,7 +320,7 @@ struct RegisterScreen: View {
     func formatPIS(_ value: String) -> String {
         let cleanPIS = value.filter { "0123456789".contains($0) }
         var formattedPIS = ""
-
+        
         for (index, char) in cleanPIS.enumerated() {
             if index == 11 { break }
             if index == 3 || index == 8 {

@@ -15,7 +15,8 @@ struct AdminUsersMainPainel: View {
     @State private var users: [User] = []
     @State private var userStatus: [String: String] = [:]
     @State private var selectedUser: User? = nil
-    
+    @State private var showRegisterScreen = false
+
     //MARK: - TIMER
     @State private var timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
     
@@ -52,6 +53,23 @@ struct AdminUsersMainPainel: View {
                 }
             }
             .listStyle(PlainListStyle())
+            Button(action: {
+                    showRegisterScreen = true
+                }) {
+                    Text("Adicionar novo usuario")
+                        .padding()
+                        .foregroundStyle(.blue)
+                        .fontWeight(.bold)
+                        .cornerRadius(10)
+                        .fullScreenCover(isPresented: $showRegisterScreen) {
+                            RegisterScreen()
+                                .foregroundStyle(ColorScheme.textColor)
+                                .multilineTextAlignment(.leading)
+                                .transition(.move(edge: .trailing))
+                                .animation(.default, value: showRegisterScreen)
+                        }
+                }
+                .buttonStyle(PlainButtonStyle())
         }
         .onAppear {
             fetchUsers()
@@ -102,6 +120,11 @@ struct AdminUsersMainPainel: View {
 //
 //struct AdminUsersMainPainel_Previews: PreviewProvider {
 //    static var previews: some View {
-//        AdminUsersMainPainel()
+//        let sessionManager = UserSessionManager()")
+//        sessionManager.session = .loggedIn(user)
+//        return AdminUsersMainPainel()
+//            .environmentObject(sessionManager)
 //    }
 //}
+
+

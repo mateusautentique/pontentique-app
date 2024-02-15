@@ -12,7 +12,7 @@ struct AdminEditUser: View {
     //MARK: - ALERT INFO
     @State private var showAlert = false
     @State private var activeAlert: ActiveAlert = .saveConfirmation
-    @State private var errorMessage = ""
+    @State var errorMessage: String? 
     @State private var successMessage = ""
     
     //MARK: - User info
@@ -59,6 +59,28 @@ struct AdminEditUser: View {
                             .padding(.leading,25)
                             .keyboardType(.numberPad)
                             .onChange(of: user.cpf) {oldValue, newValue in
+                                let filtered = newValue.filter { $0.isNumber }
+                                if filtered.count > 11 {
+                                    user.cpf = String(filtered.prefix(11))
+                                } else {
+                                    user.cpf = filtered
+                                }
+                            }
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
+                    }
+                    .padding(.bottom,3)
+                    .padding(.top,3)
+                    Divider()
+                    HStack(){
+                        Text("PIS")
+                            .frame(width: 80, alignment: .leading)
+                            .padding(.leading, 12)
+                        TextField("PIS", text: $user.pis)
+                            .padding(.leading,25)
+                            .keyboardType(.numberPad)
+                            .onChange(of: user.pis) {oldValue, newValue in
                                 let filtered = newValue.filter { $0.isNumber }
                                 if filtered.count > 11 {
                                     user.cpf = String(filtered.prefix(11))
@@ -120,19 +142,33 @@ struct AdminEditUser: View {
                     }
                     .padding(.bottom, 50)
                     
-                    Button(action: {
-                        self.activeAlert = .deleteConfirmation
-                        self.showAlert = true
+                   
+                        Button(action: {
+                            self.activeAlert = .deleteConfirmation
+                            self.showAlert = true
+                            
+                        }) {
+                            Text("Excluir usuário")
+                                .foregroundStyle(.red)
+                        }
                         
-                    }) {
-                        Text("Excluir usuário")
-                            .foregroundStyle(.red)
-                    }
+                        if let errorMessage = errorMessage {
+                            Text("\(errorMessage)")
+                                .foregroundStyle(.red)
+                                .padding(.top, 250)
+                                .id("ErrorMessage")
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                        self.errorMessage = nil
+                                    }
+                                }
+                                .onAppear(){
+                                    hideKeyboard()
+                                }
+                        }
+                        
+                        Spacer()
                     
-                    Text("\(errorMessage)")
-                        .frame(maxWidth: .infinity, alignment: .bottom)
-                        .foregroundStyle(.red)
-                    Spacer()
                 }
             }
             .navigationBarItems(
@@ -158,6 +194,7 @@ struct AdminEditUser: View {
                         deleteUser(userId: user.id, token: self.sessionManager.user?.token ?? "") { (success, error) in
                             if let error = error {
                                 print("Error deleting user: \(error)")
+                                errorMessage = "ⓘ Error ao deletar o usuario: \(error)"
                             } else if success {
                                 self.activeAlert = .deleteSuccess
                                 self.showAlert = true
@@ -177,11 +214,10 @@ struct AdminEditUser: View {
                                  primaryButton: .default(Text("Sim"), action: {
                         saveChanges { (success, error) in
                             if let error = error {
-                                print("Error saving changes: \(error)")
-                                self.errorMessage = "ⓘ Erro ao salvar: \(error.localizedDescription)"
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                    self.errorMessage = ""
+                                DispatchQueue.main.async {
+                                    errorMessage = "ⓘ Erro ao salvar: \(error.localizedDescription)"
                                 }
+                                print("Error saving changes: \(error)")
                             } else if success != nil {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                     self.activeAlert = .saveSuccess
@@ -189,9 +225,8 @@ struct AdminEditUser: View {
                                 }
                             } else {
                                 print("Failed to save changes")
-                                self.errorMessage = "ⓘ Falha ao salvar as mudanças"
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                    self.errorMessage = ""
+                                DispatchQueue.main.async {
+                                    errorMessage = "ⓘ Falha ao salvar as mudanças"
                                 }
                             }
                         }
@@ -214,20 +249,22 @@ struct AdminEditUser: View {
             let name = user.name
             let email = user.email
             let cpf = user.cpf
+            let pis = user.pis
             let role = selectedRole
             let workJourneyHours = Int(self.workJourneyHours)
-            editUser(userId: userId, name: name, email: email, cpf: cpf, role: role, workJourneyHours: workJourneyHours, token: token) {
+            editUser(userId: userId, name: name, email: email, cpf: cpf, pis: pis, role: role, workJourneyHours: workJourneyHours, token: token) {
                 (updatedUser, error) in
                 DispatchQueue.main.async {
-                    if let error = error as? NSError, error.code == 401 {
+                    if let error = error as? NSError {
                         errorMessage = error.localizedDescription
+                        completion(nil, error)
                     } else if let updatedUser = updatedUser {
                         self.user = updatedUser
+                        completion("As alterações foram salvas com sucesso", nil)
                     }
                 }
             }
         }
-        completion("As alterações foram salvas com sucesso", nil)
     }
 }
 

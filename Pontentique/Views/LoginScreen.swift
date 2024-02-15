@@ -107,26 +107,6 @@ struct LoginScreen: View {
                         }
                         .padding(.top, 15)
                         
-                        Button(action: {
-                            showRegisterScreen = true
-                        }) {
-                            Text("Registre-se")
-                                .padding(12)
-                                .foregroundStyle(ColorScheme.primaryColor)
-                                .fontWeight(.bold)
-                                .underline()
-                                .cornerRadius(10)
-                                .fullScreenCover(isPresented: $showRegisterScreen) {
-                                    RegisterScreen()
-                                        .foregroundStyle(ColorScheme.textColor)
-                                        .multilineTextAlignment(.leading)
-                                        .transition(.move(edge: .trailing))
-                                        .animation(.default, value: showRegisterScreen)
-                                }
-                                .padding(.top, 5)
-                            
-                        }
-                        .buttonStyle(PlainButtonStyle())
                         
                         HStack {
                             Spacer()
