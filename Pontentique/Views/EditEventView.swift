@@ -226,7 +226,7 @@ struct EditEventView: View {
                     return Alert(title: Text("Confirmar exclusão"),
                                  message: Text("Tem certeza que deseja deletar esse registro?"),
                                  primaryButton: .destructive(Text("Excluir")) {
-                        //errorMessage = ""
+                        errorMessage = ""
                         if let user = sessionManager.user {
                             user.role == "admin" ?
                             deleteEvent(event, justification) :
