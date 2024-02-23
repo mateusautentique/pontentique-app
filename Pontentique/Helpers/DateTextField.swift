@@ -33,8 +33,6 @@ struct DateTextField: View {
                     let dateWithSeparator = insertSlashInDate(date: filtered)
                     if isValidDate(dateWithSeparator) {
                         localDate = dateWithSeparator
-                    } else {
-                        localDate = "31/12"
                     }
                 } else {
                     localDate = filtered
@@ -48,6 +46,7 @@ struct DateTextField: View {
     
     func isValidDate(_ date: String) -> Bool {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
         formatter.dateFormat = "dd/MM"
         if formatter.date(from: date) == nil {
             return false

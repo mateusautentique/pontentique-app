@@ -33,8 +33,6 @@ struct TimeTextField: View {
                     let timeWithSeparator = insertColonInTime(time: filtered, afterSecondDigit: true)
                     if isValidTime(timeWithSeparator) {
                         localTime = timeWithSeparator
-                    } else {
-                        localTime = "23:59"
                     }
                 } else {
                     localTime = filtered
@@ -58,6 +56,7 @@ struct TimeTextField: View {
     
     func isValidTime(_ time: String) -> Bool {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_GB")
         formatter.dateFormat = time.count == 4 ? "H:mm" : "HH:mm"
         if formatter.date(from: time) == nil {
             return false
@@ -74,7 +73,7 @@ struct TimeTextField: View {
 }
 
 struct TimeTextField_Previews: PreviewProvider {
-    @State static var registeredTime = "12:00"
+    @State static var registeredTime = ""
     @State static var time = "12:00"
 
     static var previews: some View {
