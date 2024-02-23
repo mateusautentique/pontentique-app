@@ -30,7 +30,7 @@ struct LoginScreen: View {
                             Text("Seja bem vindo ao Pontentique!")
                                 .font(.headline)
                                 .padding(.bottom, 10)
-                            Text("Faça login ou registre-se")
+                            Text("Faça seu login!")
                                 .font(.subheadline)
                         }
                         .foregroundStyle(ColorScheme.textColor)
@@ -55,6 +55,13 @@ struct LoginScreen: View {
                                     textFieldLogin = newValue.filter { "0123456789".contains($0) }
                                     maskedCPF = applyMask(on: textFieldLogin)
                                 }
+                                .gesture(
+                                    TapGesture()
+                                        .onEnded { _ in
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        }
+                                )
+                            
                             Text("Senha")
                                 .font(.subheadline)
                                 .padding(.bottom, 0)
@@ -67,6 +74,12 @@ struct LoginScreen: View {
                                 .cornerRadius(10)
                                 .frame(width: 220)
                                 .padding(.bottom, 10)
+                                .gesture(
+                                    TapGesture()
+                                        .onEnded { _ in
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        }
+                                )
                             
                             Button(action: {
                                 Task {

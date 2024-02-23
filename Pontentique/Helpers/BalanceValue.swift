@@ -33,11 +33,18 @@ struct BalanceValue: View {
 
 func checkBalanceValue(_ duration: String) -> Int {
     let components = duration.split(separator: ":")
-    if let hours = Int(components[0]), let minutes = Int(components[1]) {
-        return hours * 60 + minutes
+    if duration.first == "-" {
+        if let hours = Int(String(components[0].dropFirst())), let minutes = Int(components[1]) {
+            let totalMinutes = hours * 60 + minutes
+            return -totalMinutes
+        }
     } else {
-        return 0
+        if let hours = Int(components[0]), let minutes = Int(components[1]) {
+            let totalMinutes = hours * 60 + minutes
+            return totalMinutes
+        }
     }
+    return 0
 }
 
 struct BalanceValue_Previews: PreviewProvider {
