@@ -83,11 +83,11 @@ struct LoginScreen: View {
                             
                             Button(action: {
                                 Task {
+                                    self.errorMessage = nil
                                     userLogin(textFieldLogin, textFieldPassword) { (token, error) in
                                         if let token = token {
                                             UserDefaults.standard.set(token, forKey: "userToken")
                                             DispatchQueue.main.async {
-                                                self.errorMessage = nil
                                                 self.showLoadingScreen = true
                                             }
                                             getLoggedUser(token){ (user, error) in

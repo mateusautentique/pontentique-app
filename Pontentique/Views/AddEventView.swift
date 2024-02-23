@@ -47,7 +47,7 @@ struct AddEventView: View {
         if let date = createFormatter("yyyy-MM-dd").date(from: clockEntry.day) {
             var _ = createFormatter("H:mm").string(from: date)
         }
-        _registeredTime = State(initialValue: "12:00")
+        _registeredTime = State(initialValue: "")
     }
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
